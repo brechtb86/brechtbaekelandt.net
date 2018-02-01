@@ -13,13 +13,15 @@ namespace brechtbaekelandt.Models
 
         public string Title { get; set; }
 
-        public string InternalTitle => this.Title.RemoveSpecialCharacters().Replace(" ", "-").ToLower();
+        public string InternalTitle => this.Title.RemoveSpecialCharactersAndSpaces().ToLower();
 
         public string Description { get; set; }
 
         public string CleanDescription => Regex.Replace(this.Description, "<.*?>", String.Empty);
 
         public string Content { get; set; }
+
+        public string CleanContent => Regex.Replace(this.Content, "<.*?>", String.Empty);
 
         public virtual User User { get; set; }
 

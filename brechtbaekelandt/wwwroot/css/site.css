@@ -188,37 +188,37 @@ textarea:optional, textarea:optional:valid {
 
 
 input[type=checkbox], input[type=radio] {
-    display: none;
+    display: none !important;
 }
 
-input[type="checkbox"] + span, input[type="radio"] + span {
+input[type="checkbox"] + *, input[type="radio"] + span {
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* IE10+/Edge */
     user-select: none; /* Standard */
 }
 
-input[type=checkbox] + span:before, input[type=radio] + span:before {
-    font-family: FontAwesome;
-    display: inline-block;
-    margin-left: -19px;
+input[type=checkbox] + *:before, input[type=radio] + span:before {
+    font-family: FontAwesome !important;
+    display: inline-block !important;
+    margin-left: -19px !important;
 }
 
-input[type=checkbox] + span:before {
-    content: "\f096";
-    letter-spacing: 10px;
+input[type=checkbox] + *:before {
+    content: "\f096" !important;
+    letter-spacing: 10px !important;
 }
 
-input[type=checkbox]:checked + span:before {
-    content: "\f046";
-    letter-spacing: 8px;
+input[type=checkbox]:checked + *:before {
+    content: "\f046" !important;
+    letter-spacing: 8px !important;
 }
 
-input[type=radio] + span:before {
-    content: "\f10c";
-    letter-spacing: 10px;
+input[type=radio] + *:before {
+    content: "\f10c" !important;
+    letter-spacing: 10px !important;
 }
 
-input[type=radio]:checked + span:before {
-    content: "\f192";
+input[type=radio]:checked + *:before {
+    content: "\f192" !important;
 }

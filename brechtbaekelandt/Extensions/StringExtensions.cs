@@ -4,15 +4,18 @@ namespace brechtbaekelandt.Extensions
 {
     public static class StringExtensions
     {
-        public static string RemoveSpecialCharacters(this string str)
+        public static string RemoveSpecialCharactersAndSpaces(this string str, char charToReplaceSpace = '-')
         {
-            StringBuilder sb = new StringBuilder();
-            foreach (char c in str)
+            var sb = new StringBuilder();
+
+            foreach (var c in str)
             {
-                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '.' || c == '_' || c == ' ')
+                if ((c < '0' || c > '9') && (c < 'A' || c > 'Z') && (c < 'a' || c > 'z') && c != '_' && c!= ' ' && c != '-')
                 {
-                    sb.Append(c);
+                    continue;
                 }
+
+                sb.Append(c == ' ' ? charToReplaceSpace : c);
             }
             return sb.ToString();
         }

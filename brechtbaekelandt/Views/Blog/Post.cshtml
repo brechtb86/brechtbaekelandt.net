@@ -24,6 +24,8 @@
 
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
+    <script src="~/js/extensions/string-extensions.js"></script>
+
     <script src="~/js/view-models/post.js"></script>
 
     <script type="text/javascript">
@@ -33,39 +35,38 @@
                 var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
             }
 
-            var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, jsonSerializerSettings));
+            var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
             brechtbaekelandt.post.init(serverViewmodel);
         });
     </script>
 }
 
 @section social{
-
     <meta name="description" content="@this.Model.Post.CleanDescription" />
+    <!-- Open Graph data -->
+    <meta property="og:site_name" content="www.brechtbaekelandt.net" />
+    <meta property="og:title" content="@this.Model.Post.Title" />
+    <meta property="og:image" itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? $"http://www.brechtbaekelandt.net/{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")" />
+    <meta name="medium" content="image">
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="@this.Model.Post.CleanDescription" />
+    <meta property="og:url" content="@("http://www.brechtbaekelandt.net/blog/post" + this.Model.Post.InternalTitle)" />
+    <meta property="article:published_time" content="@this.Model.Post.Created" />
+    <meta property="article:modified_time" content="@this.Model.Post.LastModified" />
+    <meta property="article:section" content="@this.Model.Post.CleanContent" />
+    <meta property="article:tag" content="@string.Join(", ",this.Model.Post.Categories.Select(c => c.Name))" />
+    <meta property="fb:app_id" content="495540337506240">
 
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="@this.Model.Post.Title">
     <meta itemprop="description" content="@this.Model.Post.CleanDescription">
-    <meta itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? this.Model.Post.PictureUrl : "http://www.brechtbaekelandt.net/images/me.png")">
+    <meta itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ?  $"http://www.brechtbaekelandt.net/{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")">
 
     <!-- Twitter Card data -->
-    @*<meta name="twitter:card" content="">*@
-    <meta name="twitter:site" content="Brecht Baekelandt">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="brechtbaekelandt">
+    <meta name="twitter:creator" content="Brecht Baekelandt">
     <meta name="twitter:title" content="@this.Model.Post.Title">
     <meta name="twitter:description" content="@this.Model.Post.CleanDescription">
-    <meta name="twitter:creator" content="Brecht Baekelandt">
-    <meta name="twitter:image:src" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? this.Model.Post.PictureUrl : "http://www.brechtbaekelandt.net/images/me.png")">
-
-    <!-- Open Graph data -->
-    <meta property="og:title" content="@this.Model.Post.Title" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="@("http://www.brechtbaekelandt.net/blog/post" + this.Model.Post.InternalTitle)" />
-    <meta property="og:image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? this.Model.Post.PictureUrl : "http://www.brechtbaekelandt.net/images/me.png")" />
-    <meta property="og:description" content="@this.Model.Post.CleanDescription" />
-    <meta property="og:site_name" content="www.brechtbaekelandt.net" />
-    <meta property="article:published_time" content="@this.Model.Post.Created" />
-    <meta property="article:modified_time" content="@this.Model.Post.LastModified" />
-    <meta property="article:section" content="@this.Model.Post.Content" />
-    <meta property="article:tag" content="@string.Join(", ",this.Model.Post.Categories.Select(c => c.Name))" />
-    @*<meta property="fb:admins" content="Facebook numberic ID" />*@
+    <meta name="twitter:image:src" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ?  $"http://www.brechtbaekelandt.net/{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")">
 }

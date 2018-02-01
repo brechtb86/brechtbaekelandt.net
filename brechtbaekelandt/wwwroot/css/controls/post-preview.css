@@ -31,6 +31,11 @@
         margin: 5px 0;
     }
 
+.post-picture.post-preview-picture {
+    max-width: 30%;
+    vertical-align: top;
+    float: left;
+}
 
 .post-preview-content {
 }

@@ -59,6 +59,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                     "formatUL",
                     "outdent",
                     "indent",
+                    "|",
+                    "insertLink",
                     "-",
                     "undo",
                     "redo",

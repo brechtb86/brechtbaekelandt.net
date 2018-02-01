@@ -14,7 +14,7 @@
         margin-bottom: 10px;
     }
 
-        /*.post-title > h3 > a {
+/*.post-title > h3 > a {
             border-bottom: 2px solid #540804;
             padding-bottom: 2px;
         }
@@ -32,13 +32,19 @@
     }
 
 
+.post-picture {
+    max-width: 20%;
+    vertical-align: top;
+    float: left;
+}
+
 .post-description {
 }
 
 .post-content {
 }
 
-    /*.post-content .img-thumbnail {
+/*.post-content .img-thumbnail {
         max-width: 200px;
         vertical-align: top;
         float: left;

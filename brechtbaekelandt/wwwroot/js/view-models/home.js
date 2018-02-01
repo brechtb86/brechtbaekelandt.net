@@ -2,7 +2,7 @@
 
 brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     "use strict";
-    
+
     function HomeViewModel(serverViewModel) {
         var self = this;
 
@@ -10,7 +10,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.selectedCategoryFilter = ko.observable();
         self.searchFilter = ko.observable();
-
+        
         //self.availableCategories.unshift({ id: null, name: "Any" });
 
         //self.posts = ko.observableArray();
@@ -87,7 +87,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     //        self.isLoading(false);
     //    }).fail(function (jqxhr, textStatus, error) {
 
-          
+
 
     //    });
     //};

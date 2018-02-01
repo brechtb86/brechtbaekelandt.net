@@ -6,6 +6,7 @@ using brechtbaekelandt.Identity;
 using brechtbaekelandt.Identity.Models;
 using brechtbaekelandt.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -34,10 +35,14 @@ namespace brechtbaekelandt.Extensions
 
                 cfg.CreateMap<Identity.Models.ApplicationUser, User>();
 
-                cfg.CreateMap<Data.Entities.Post, Post>().ForMember(
+                cfg.CreateMap<Data.Entities.Post, Post>()
+                    .ForMember(
                     dest => dest.Categories,
                     opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name }))
-                );
+                ).ForMember(
+                        dest => dest.Description,
+                        opt => opt.MapFrom(src => src.PictureUrl != null ?  InsertPictureInDescription(src.Description, src.PictureUrl): src.Description )
+                    );
                 cfg.CreateMap<Data.Entities.Comment, Comment>();
                 cfg.CreateMap<Data.Entities.Category, Category>();
                 cfg.CreateMap<Data.Entities.User, User>();
@@ -73,6 +78,11 @@ namespace brechtbaekelandt.Extensions
             }
 
             return new IdentityBuilder(typeof(Identity.Models.ApplicationUser), typeof(Identity.Models.ApplicationUserRole), services);
+        }
+
+        private static string InsertPictureInDescription(string description, string pictureUrl)
+        {
+            return description.Insert(description.IndexOf('>') + 1, $"<img src='{pictureUrl}' class='post-picture post-preview-picture' />");
         }
     }
 }
