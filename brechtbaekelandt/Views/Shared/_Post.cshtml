@@ -1,0 +1,39 @@
+﻿<article class="post">
+    <div class="post-title">
+        <h3>
+            <a data-bind="attr: { href: '/blog/post/' + internalTitle() }, text: title"></a>
+        </h3>
+        <small>
+            <i><a data-bind="attr: { href: 'mailto://' + user.emailAddress }, text: user.fullName"></a></i>
+            <span>|</span>
+            <i data-bind="text: moment(created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
+            <span>|</span>
+            <!-- ko if: comments().length > 0 -->
+            <i><span>comments:</span> <span data-bind="text: comments().length"></span></i>
+            <!-- /ko -->
+            <!-- ko if: comments().length === 0 -->
+            <i>no comments yet...</i>
+            <!-- /ko -->
+        </small>
+        @if (this.User.Identity.IsAuthenticated)
+        {
+            @*<small class="pull-right"><a asp-area="" asp-controller="blog" asp-action="edit" asp-route-id="@this.Model.Id">edit post</a> | <a asp-area="" asp-controller="blog" asp-action="delete" asp-route-id="@this.Model.Id">delete post</a></small>*@
+        }
+    </div>
+    <div class="post-categories">
+        <!-- ko foreach: categories -->
+        <span class="label label-primary" data-bind="text: name"></span>
+        <!-- /ko -->
+    </div>
+    <hr/>
+    <div class="post-description" data-bind="html: description">
+    </div>
+    <div class="post-content" data-bind="html: content">
+    </div>
+    <div class="clearfix"></div>
+    <div class="post-share">
+        <hr />
+        <div class="addthis_inline_share_toolbox" data-bind="attr: { 'data-title': title, 'data-description': cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + internalTitle() }"></div>
+        <hr />
+    </div>
+</article>

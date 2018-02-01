@@ -194,7 +194,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         [HttpPost]
         [Route("post/add")]
         [ValidationActionFilter]
-        public async Task<IActionResult> CreatUpdateDeleteAsyncActionResult([FromBody]Models.Post post)
+        public async Task<IActionResult> CreatePostAsyncActionResult([FromBody]Models.Post post)
         {
             //var files = HttpContext.Request.Form.Files;
 

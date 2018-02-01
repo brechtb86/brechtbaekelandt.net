@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using brechtbaekelandt.Data.Contexts.Identity;
 using brechtbaekelandt.Identity;
@@ -32,8 +33,11 @@ namespace brechtbaekelandt.Extensions
                 cfg.CreateMap<Models.ApplicationUser, Identity.Models.ApplicationUser>();
 
                 cfg.CreateMap<Identity.Models.ApplicationUser, User>();
-               
-                cfg.CreateMap<Data.Entities.Post, Post>();
+
+                cfg.CreateMap<Data.Entities.Post, Post>().ForMember(
+                    dest => dest.Categories,
+                    opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name }))
+                );
                 cfg.CreateMap<Data.Entities.Comment, Comment>();
                 cfg.CreateMap<Data.Entities.Category, Category>();
                 cfg.CreateMap<Data.Entities.User, User>();

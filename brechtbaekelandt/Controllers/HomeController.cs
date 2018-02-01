@@ -27,6 +27,7 @@ namespace brechtbaekelandt.Controllers
             this._applicationUserManager = applicationUserManager;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var totalPostCount = this._blogDbContext.Posts.Count();
@@ -38,12 +39,15 @@ namespace brechtbaekelandt.Controllers
                 .ThenInclude(pc => pc.Category)
                 .OrderByDescending(p => p.Created).Take(_postsPerPage);
 
+            var categoryEntities = this._blogDbContext.Categories
+                .OrderBy(c => c.Name);
+
             var vm = new HomeViewModel
             {
                 TotalPostCount = totalPostCount,
                 PostsPerPage = _postsPerPage,
                 Posts = Mapper.Map<ICollection<Models.Post>>(postEntities),
-                Categories = Mapper.Map<ICollection<Models.Category>>(this._blogDbContext.Categories).OrderBy(c => c.Name).ToCollection()
+                Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities)
             };
 
             return this.View(vm);

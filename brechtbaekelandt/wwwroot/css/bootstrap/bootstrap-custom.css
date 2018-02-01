@@ -1418,14 +1418,13 @@ textarea {
 }
 
 a {
-    color: #337ab7;
+    color: #540804;
     text-decoration: none;
 }
 
     a:hover,
     a:focus {
-        color: #23527c;
-        text-decoration: underline;
+        color: #a33f3a;
     }
 
     a:focus {
@@ -5924,12 +5923,12 @@ a.label:focus {
     }
 
 .label-primary {
-    background-color: #337ab7;
+    background-color: #540804;
 }
 
     .label-primary[href]:hover,
     .label-primary[href]:focus {
-        background-color: #286090;
+        background-color: #a33f3a;
     }
 
 .label-success {

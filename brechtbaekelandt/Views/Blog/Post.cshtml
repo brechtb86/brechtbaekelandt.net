@@ -1,16 +1,30 @@
-﻿@*@using System.Web.Optimization
-@using Newtonsoft.Json
+﻿@using Newtonsoft.Json
 @using Newtonsoft.Json.Serialization
 
-@model brechtbaekelandt.net.ViewModels.BlogViewModel
+@model brechtbaekelandt.ViewModels.PostViewModel
 
 @{
-    ViewBag.Title = "Post";
+    this.ViewData["Title"] = this.Model.Post.Title;
 }
 
-@section Scripts{
-    
-    @Scripts.Render("~/Scripts/ViewModels/post.js")
+<div style="display: none;" data-bind="visible: true">
+    <a style="cursor: pointer;" onclick="window.history.back();"><i class="fa fa-arrow-circle-left"></i> go back</a>
+
+    <div data-bind="with: post">
+        @{ Html.RenderPartial("_Post"); }
+    </div>
+</div>
+
+@section styles{
+    <link href="~/css/controls/post.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
+
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+    <script src="~/js/view-models/post.js"></script>
 
     <script type="text/javascript">
 
@@ -25,10 +39,33 @@
     </script>
 }
 
-<a style="cursor: pointer;" onclick="window.history.back();"><i class="fa fa-arrow-circle-left"></i> go back</a>
+@section social{
 
-<div data-bind="with: post">
-    @{ Html.RenderPartial("_FullPost"); }
-</div>
+    <meta name="description" content="@this.Model.Post.CleanDescription" />
 
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>*@
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="@this.Model.Post.Title">
+    <meta itemprop="description" content="@this.Model.Post.CleanDescription">
+    <meta itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? this.Model.Post.PictureUrl : "http://www.brechtbaekelandt.net/images/me.png")">
+
+    <!-- Twitter Card data -->
+    @*<meta name="twitter:card" content="">*@
+    <meta name="twitter:site" content="Brecht Baekelandt">
+    <meta name="twitter:title" content="@this.Model.Post.Title">
+    <meta name="twitter:description" content="@this.Model.Post.CleanDescription">
+    <meta name="twitter:creator" content="Brecht Baekelandt">
+    <meta name="twitter:image:src" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? this.Model.Post.PictureUrl : "http://www.brechtbaekelandt.net/images/me.png")">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="@this.Model.Post.Title" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="@Url.Action("Post", "Blog", new { internalTitle = this.Model.Post.InternalTitle }, "http", "www.brechtbaekelandt.net" )" />
+    <meta property="og:image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? this.Model.Post.PictureUrl : "http://www.brechtbaekelandt.net/images/me.png")" />
+    <meta property="og:description" content="@this.Model.Post.CleanDescription" />
+    <meta property="og:site_name" content="www.brechtbaekelandt.net" />
+    <meta property="article:published_time" content="@this.Model.Post.Created" />
+    <meta property="article:modified_time" content="@this.Model.Post.LastModified" />
+    <meta property="article:section" content="@this.Model.Post.Content" />
+    <meta property="article:tag" content="@string.Join(", ",this.Model.Post.Categories.Select(c => c.Name))" />
+    @*<meta property="fb:admins" content="Facebook numberic ID" />*@
+}

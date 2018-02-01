@@ -49,24 +49,14 @@
                     </div>
                 </div>
             </form>
-
-            <h3>latest posts</h3>
-
             <!-- ko if: posts().length === 0 -->
             <p>no posts yet...</p>
             <!-- /ko -->
-            @*@if (this.Model.RecentPosts.Any())
-                {
-                    foreach (var post in this.Model.RecentPosts)
-                    {
-                        @Html.Partial("_PostPreview", post)
-                    }
-                }
-                else
-                {
-
-                }*@
-
+            <!-- ko if: posts().length > 0 -->
+            <!-- ko foreach: posts -->
+            @Html.Partial("_PostPreview")
+            <!-- /ko -->
+            <!-- /ko -->
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
             <img src="~/images/me.png" class="img-responsive" />
@@ -121,11 +111,15 @@
 
 
 @section styles{
+    <link href="~/css/controls/post-preview.css" rel="stylesheet" />
+
     <link href="~/css/home.css" rel="stylesheet" />
 }
 
 @section scripts{
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
+
+    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
     <script src="~/js/view-models/home.js"></script>
 

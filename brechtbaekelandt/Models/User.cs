@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 
 namespace brechtbaekelandt.Models
@@ -7,7 +8,11 @@ namespace brechtbaekelandt.Models
     {
         public string UserName { get; set; }
 
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string FullName => $"{this.FirstName} {this.LastName}";
 
         public string EmailAddress { get; set; }
 
