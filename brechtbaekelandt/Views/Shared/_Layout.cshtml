@@ -10,6 +10,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - brechtbaekelandt</title>
     
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    
+    <meta name="copyright" content="www.brechtbaekelandt.net falls under GNU General Public License version 3"/>
+    @RenderSection("seo", required: false)
+    <meta name="robots" content="index,follow"/>
+
     @RenderSection("social", required: false)
 
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
@@ -198,9 +205,8 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="checkbox check-box-font-awesome">
+                                            <div class="checkbox">
                                                 <label><input name="rememberMe" type="checkbox" value="true" /><span>remember me</span></label>
-                                                <input type="hidden" value="false" name="rememberMe" />
                                             </div>
                                         </div>
                                         <div class="form-group">

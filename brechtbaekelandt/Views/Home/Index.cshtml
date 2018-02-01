@@ -140,3 +140,38 @@
 
 }
 
+@{
+    var keywords = (string[])this.ViewData["Keywords"];
+}
+
+@section seo {
+    <meta name="description" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
+    <meta name="keywords" content="@string.Join(", ", keywords)" />
+}
+
+@section social{    
+    <!-- Open Graph data -->
+    <meta property="og:site_name" content="www.brechtbaekelandt.net" />
+    <meta property="og:title" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
+    <meta property="og:image" itemprop="image" content="http://www.brechtbaekelandt.net/images/me-social.png" />
+    <meta name="medium" content="image">
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="This blog talks about development, electronics and other stuff that I like." />
+    <meta property="og:url" content="http://www.brechtbaekelandt.net" />
+    <meta property="article:tag" content="@string.Join(", ", keywords)" />
+    <meta property="fb:app_id" content="495540337506240">
+
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast.">
+    <meta itemprop="description" content="This blog talks about development, electronics and other stuff that I like.">
+    <meta itemprop="image" content="http://www.brechtbaekelandt.net/images/me-social.png">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="brechtbaekelandt">
+    <meta name="twitter:creator" content="Brecht Baekelandt">
+    <meta name="twitter:title" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast.">
+    <meta name="twitter:description" content="This blog talks about development, electronics and other stuff that I like.">
+    <meta name="twitter:image:src" content="http://www.brechtbaekelandt.net/images/me-social.png">
+}
+

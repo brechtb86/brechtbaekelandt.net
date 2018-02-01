@@ -4,23 +4,23 @@
     width: 100%;
 }
 
-    .post-editor .categories {
+    .post-editor .categories, .post-editor .keywords {
         /*height: auto;
         border: 1px solid #9b1d20;
         padding: 5px 15px;*/
     }
 
-        .post-editor .categories .category {
+        .post-editor .categories .category, .post-editor .keywords .keyword {
             display: inline-block;
             height: 30px;
             margin: 5px 5px 5px 0;
             padding: 5px;
-            color: #ccc;
+            color: #333;
             border: 1px solid #540804;
             cursor: pointer;
         }
 
-            .post-editor .categories .category.selected {
+            .post-editor .categories .category.selected, .post-editor .keywords .keyword.selected {
                 color: #078d13;
                 border: 1px solid #078d13;
             }

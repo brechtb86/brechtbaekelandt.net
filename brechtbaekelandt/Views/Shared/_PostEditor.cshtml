@@ -1,41 +1,57 @@
 ﻿<form>
     <div class="post-editor">
         <div class="form-group">
-            <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: title" />
+            <label>title:</label>
+            <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: title"/>
         </div>
         <div class="form-group">
+            <label>description:</label>
             <textarea data-bind="value: description, froala: description, froalaOptions: $parent.descriptionFroalaOptions"></textarea>
         </div>
         <div class="form-group">
+            <label>content:</label>
             <textarea data-bind="value: content, froala: content, froalaOptions: $parent.contentFroalaOptions"></textarea>
         </div>
-
         <div class="form-group">
+            <label>categories:</label>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: $parent.categoryToAdd" />
+                <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: $parent.categoryToAdd"/>
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="button" data-bind="click: function(){ $parent.addCategory($parent.categoryToAdd); }"><i class="fa fa-plus"></i></button>
                 </span>
             </div>
         </div>
-
         <div class="form-group">
-            <div class="categories" data-bind="visible: $parent.categories().length > 0, validationElement: categories">
+            <!-- ko if: $parent.categories().length > 0 -->
+            <div class="categories input-group" data-bind="validationElement: categories">
                 <!-- ko  foreach: $parent.categories -->
-                @*<button data-bind="css: { selected: isSelected() }, click: function(){ $root.toggleSelectedCategoryForNewPost($data); }" class="category">
-                    <span data-bind="text: name"></span> <i class="fa fa-check"></i>
-                </button>*@
                 <button data-bind="css: { selected: isSelected }, click: function(){ $root.toggleSelectedCategory($data, $parentContext.$data.categories); }" class="category">
                     <span data-bind="text: name"></span> <i class="fa fa-check"></i>
                 </button>
                 <!-- /ko -->
             </div>
+            <!-- /ko -->
+        </div>
+        <div class="form-group">
+            <label>keywords:</label>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: $parent.keywordToAdd"/>
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button" data-bind="click: function(){ $parent.addKeyword($parent.keywordToAdd, keywords); }"><i class="fa fa-plus"></i></button>
+                </span>
+            </div>
+        </div>
 
-
-            @*<div class="validationMessage" data-bind="visible: categories.isModified() && !categories.isValid()">
-                    <i class="fa fa-arrow-circle-up blinking"></i> <span data-bind="validationMessage: categories"></span>
-                </div>*@
-
+        <div class="form-group">
+            <!-- ko if: keywords().length > 0 -->
+            <div class="keywords input-group">
+                <!-- ko  foreach: keywords -->
+                <button data-bind="css: { selected: true }, click: function(){ $root.removeKeyword($data, $parentContext.$data.keywords); }" class="keyword">
+                    <span data-bind="text: $data"></span> <i class="fa fa-check"></i>
+                </button>
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
         </div>
     </div>
 </form>

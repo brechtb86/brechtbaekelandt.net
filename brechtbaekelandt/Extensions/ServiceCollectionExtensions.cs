@@ -41,13 +41,22 @@ namespace brechtbaekelandt.Extensions
                     opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name }))
                 ).ForMember(
                         dest => dest.Description,
-                        opt => opt.MapFrom(src => src.PictureUrl != null ?  InsertPictureInDescription(src.Description, src.PictureUrl): src.Description )
+                        opt => opt.MapFrom(src => src.PictureUrl != null ? InsertPictureInDescription(src.Description, src.PictureUrl) : src.Description)
+                    )
+                    .ForMember(
+                        dest => dest.Keywords,
+                        opt => opt.MapFrom(src => src.Keywords.Split(",", StringSplitOptions.None).ToArray())
                     );
                 cfg.CreateMap<Data.Entities.Comment, Comment>();
                 cfg.CreateMap<Data.Entities.Category, Category>();
                 cfg.CreateMap<Data.Entities.User, User>();
 
-                cfg.CreateMap<Post, Data.Entities.Post>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+                cfg.CreateMap<Post, Data.Entities.Post>()
+                    .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>())
+                    .ForMember(
+                        dest => dest.Keywords,
+                        opt => opt.MapFrom(src => string.Join(',', src.Keywords))
+                    );
                 cfg.CreateMap<Comment, Data.Entities.Comment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<Category, Data.Entities.Category>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<User, Data.Entities.User>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());

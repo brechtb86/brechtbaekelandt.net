@@ -27,6 +27,8 @@ namespace brechtbaekelandt.Models
 
         public string PictureUrl { get; set; }
 
+        public string[] Keywords { get; set; }
+
         public virtual ICollection<Category> Categories { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }

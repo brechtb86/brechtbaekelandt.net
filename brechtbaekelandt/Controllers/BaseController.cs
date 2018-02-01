@@ -11,7 +11,11 @@ namespace brechtbaekelandt.Controllers
     {
         private readonly ApplicationUserManager _userManager;
 
-
+        private readonly string[] _keywords =
+        {
+            "Brecht Baekelandt", "developer", "software", "web application", "web app", "webdesigner", "front-end",
+            "frontend", "back-end", "backend", ".net", "c#", "javascript", "angular", "knockout", "mvc", "asp.net"
+        };
 
         public BaseController(
             ApplicationUserManager userManager)
@@ -25,9 +29,7 @@ namespace brechtbaekelandt.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 var username = User?.Identity.Name;
-
-
-
+                
                 Task
                     .Run(async () =>
                     {
@@ -35,10 +37,12 @@ namespace brechtbaekelandt.Controllers
                             Mapper.Map<Models.ApplicationUser>(await this._userManager.FindByNameAsync(username));
                     })
                     .Wait();
-
-
-                base.OnActionExecuted(context);
             }
+
+            this.ViewData["Keywords"] = this._keywords;
+
+            base.OnActionExecuted(context);
+
         }
     }
 }

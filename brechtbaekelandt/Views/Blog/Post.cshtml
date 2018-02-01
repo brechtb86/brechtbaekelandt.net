@@ -1,4 +1,5 @@
-﻿@using Newtonsoft.Json
+﻿@using brechtbaekelandt.Extensions
+@using Newtonsoft.Json
 @using Newtonsoft.Json.Serialization
 
 @model brechtbaekelandt.ViewModels.PostViewModel
@@ -41,8 +42,17 @@
     </script>
 }
 
-@section social{
+@{
+    var allKeywords = ((string[])this.ViewData["Keywords"]).AddRange(this.Model.Post.Keywords);
+}
+
+@section seo {
     <meta name="description" content="@this.Html.Raw(this.Model.Post.CleanDescription)" />
+    <meta name="keywords" content="@string.Join(", ", allKeywords)" />
+}
+
+@section social{
+
     <!-- Open Graph data -->
     <meta property="og:site_name" content="www.brechtbaekelandt.net" />
     <meta property="og:title" content="@this.Model.Post.Title" />

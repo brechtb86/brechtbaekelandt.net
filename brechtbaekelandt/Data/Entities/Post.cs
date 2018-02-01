@@ -20,6 +20,8 @@ namespace brechtbaekelandt.Data.Entities
         public virtual User User { get; set; }
 
         public string PictureUrl { get; set; }
+
+        public string Keywords { get; set; }
         
         public virtual ICollection<PostCategory> PostCategories { get; set; }
         

@@ -13,7 +13,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 self.categories()[i].isSelected = ko.observable();
             }
         }
-
+        
         self.selectedCategoryFilter = ko.observable();
         self.searchFilter = ko.observable();
 
@@ -24,7 +24,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.newPost.description = ko.observable().extend({ required: { message: "you didn't fill in the description!" } });
         self.newPost.content = ko.observable().extend({ required: { message: "you didn't fill in content!" } });
         self.newPost.categories = ko.observableArray().extend({ minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" } });
-
+        self.newPost.keywords = ko.observableArray();
 
         self.createErrorMessage = ko.observable();
         self.createSucceededMessage = ko.observable();
@@ -32,6 +32,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.createErrors = ko.validation.group(self.newPost);
 
         self.categoryToAdd = ko.observable();
+        self.keywordToAdd = ko.observable();
 
         self.isLoading = ko.observable(true);
 
@@ -145,6 +146,18 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
     };
 
+    AdminViewModel.prototype.addCategory = function (category) {
+        var self = this;
+
+        if (!self.categories().some(function (e) { return e.name().toLowerCase() === category().toLowerCase(); })) {
+            var newCategory = ko.mapping.fromJS({ name: category(), id: "00000000-0000-0000-0000-000000000000", isSelected: true });
+
+            self.categories.push(newCategory);
+        }
+
+        category(null);
+    };
+
     AdminViewModel.prototype.toggleSelectedCategory = function (category, categories) {
         var self = this;
 
@@ -158,16 +171,20 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         }
     };
 
-    AdminViewModel.prototype.addCategory = function (category) {
+    AdminViewModel.prototype.addKeyword = function (keyword, targetKeywordList) {
         var self = this;
 
-        if (!self.categories().some(function (e) { return e.name().toLowerCase() === category().toLowerCase(); })) {
-            var newCategory = ko.mapping.fromJS({ name: category(), id: "00000000-0000-0000-0000-000000000000", isSelected: true });
+        targetKeywordList.push(keyword());
 
-            self.categories.push(newCategory);
+        keyword(null);
+    };
+    
+    AdminViewModel.prototype.removeKeyword = function (keyword, keywords) {
+        var self = this;
+
+        if (keywords.indexOf(keyword) > -1) {
+            keywords.pop(keyword);
         }
-
-        category(null);
     };
 
     function init(serverViewModel) {
