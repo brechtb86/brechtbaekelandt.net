@@ -42,24 +42,24 @@
 }
 
 @section social{
-    <meta name="description" content="@this.Model.Post.CleanDescription" />
+    <meta name="description" content="@this.Html.Raw(this.Model.Post.CleanDescription)" />
     <!-- Open Graph data -->
     <meta property="og:site_name" content="www.brechtbaekelandt.net" />
     <meta property="og:title" content="@this.Model.Post.Title" />
     <meta property="og:image" itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? $"http://www.brechtbaekelandt.net{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")" />
     <meta name="medium" content="image">
     <meta property="og:type" content="article" />
-    <meta property="og:description" content="@this.Model.Post.CleanDescription" />
+    <meta property="og:description" content="@this.Html.Raw(this.Model.Post.CleanDescription)" />
     <meta property="og:url" content="@("http://www.brechtbaekelandt.net/blog/post" + this.Model.Post.InternalTitle)" />
     <meta property="article:published_time" content="@this.Model.Post.Created" />
     <meta property="article:modified_time" content="@this.Model.Post.LastModified" />
-    <meta property="article:section" content="@this.Model.Post.CleanContent" />
+    <meta property="article:section" content="@this.Html.Raw(this.Model.Post.CleanContent)" />
     <meta property="article:tag" content="@string.Join(", ",this.Model.Post.Categories.Select(c => c.Name))" />
     <meta property="fb:app_id" content="495540337506240">
 
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="@this.Model.Post.Title">
-    <meta itemprop="description" content="@this.Model.Post.CleanDescription">
+    <meta itemprop="description" content="@this.Html.Raw(this.Model.Post.CleanDescription)">
     <meta itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ?  $"http://www.brechtbaekelandt.net{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")">
 
     <!-- Twitter Card data -->
@@ -67,6 +67,6 @@
     <meta name="twitter:site" content="brechtbaekelandt">
     <meta name="twitter:creator" content="Brecht Baekelandt">
     <meta name="twitter:title" content="@this.Model.Post.Title">
-    <meta name="twitter:description" content="@this.Model.Post.CleanDescription">
+    <meta name="twitter:description" content="@this.Html.Raw(this.Model.Post.CleanDescription)">
     <meta name="twitter:image:src" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ?  $"http://www.brechtbaekelandt.net{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")">
 }
