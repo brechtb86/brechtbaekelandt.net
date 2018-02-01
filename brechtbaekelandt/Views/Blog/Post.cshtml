@@ -59,7 +59,7 @@
     <!-- Open Graph data -->
     <meta property="og:title" content="@this.Model.Post.Title" />
     <meta property="og:type" content="article" />
-    <meta property="og:url" content="@Url.Action("Post", "Blog", new { internalTitle = this.Model.Post.InternalTitle }, "http", "www.brechtbaekelandt.net" )" />
+    <meta property="og:url" content="@("http://www.brechtbaekelandt.net/blog/post" + this.Model.Post.InternalTitle)" />
     <meta property="og:image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? this.Model.Post.PictureUrl : "http://www.brechtbaekelandt.net/images/me.png")" />
     <meta property="og:description" content="@this.Model.Post.CleanDescription" />
     <meta property="og:site_name" content="www.brechtbaekelandt.net" />

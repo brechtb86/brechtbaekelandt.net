@@ -37,6 +37,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         self.descriptionFroalaOptions = ko.observable(
             {
+                key: "lgtbkaB-9imhejB-13pC-11wh1D1xrl==",
                 height: "200",
                 charCounterCount: false,
                 theme: "brechtbaekelandt",
@@ -67,6 +68,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
         self.contentFroalaOptions = ko.observable(
             {
+                key: "lgtbkaB-9imhejB-13pC-11wh1D1xrl==",
                 height: "350",
                 charCounterCount: false,
                 theme: "brechtbaekelandt",
