@@ -24,12 +24,13 @@
             }*/
 
 .post-categories {
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
-    .post-categories > hr, .post-share > hr {
-        margin: 5px 0;
-    }
+.post-keywords {
+    margin-top: 10px;
+}
 
 
 .post-picture {

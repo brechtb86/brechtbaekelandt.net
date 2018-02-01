@@ -14,23 +14,29 @@
             <!-- ko if: comments().length === 0 -->
             <i>no comments yet...</i>
             <!-- /ko -->
+            <span>|</span>
+            <i>
+                <label>categories:</label>
+                <!-- ko foreach: categories -->
+                <span data-bind="text: name"></span>
+                <!-- /ko -->
+            </i>
         </small>
         @if (this.User.Identity.IsAuthenticated)
         {
             @*<small class="pull-right"><a asp-area="" asp-controller="blog" asp-action="edit" asp-route-id="@this.Model.Id">edit post</a> | <a asp-area="" asp-controller="blog" asp-action="delete" asp-route-id="@this.Model.Id">delete post</a></small>*@
         }
     </div>
-    <div class="post-preview-categories">
-        <!-- ko foreach: categories -->
-        <span class="label label-primary" data-bind="text: name"></span>
-        <!-- /ko -->
-    </div>
-    <hr />
     <div class="post-preview-content" data-bind="html: description">
     </div>
     <!-- ko if: content -->
     <a data-bind="attr: { href: '/blog/post/' + internalTitle() }">read more...</a>
     <!-- /ko -->
+    <div class="post-preview-keywords">
+        <!-- ko foreach: keywords -->
+        <span class="label label-default" data-bind="text: $data"></span>
+        <!-- /ko -->
+    </div>
     <div class="clearfix"></div>
     <div class="post-preview-share">
         <hr />

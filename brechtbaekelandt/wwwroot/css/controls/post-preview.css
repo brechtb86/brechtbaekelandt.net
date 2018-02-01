@@ -14,7 +14,7 @@
         margin-bottom: 10px;
     }
 
-        /*.post-preview-title > h3 > a {
+/*.post-preview-title > h3 > a {
             border-bottom: 2px solid #540804;
             padding-bottom: 2px;
         }
@@ -24,12 +24,13 @@
             }*/
 
 .post-preview-categories {
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
-    .post-preview-categories > hr, .post-preview-share > hr {
-        margin: 5px 0;
-    }
+.post-preview-keywords {
+    margin-top: 10px;
+}
 
 .post-picture.post-preview-picture {
     max-width: 30%;
@@ -40,7 +41,7 @@
 .post-preview-content {
 }
 
-    /*.post-preview-content .img-thumbnail {
+/*.post-preview-content .img-thumbnail {
         max-width: 200px;
         vertical-align: top;
         float: left;

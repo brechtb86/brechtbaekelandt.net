@@ -3312,28 +3312,28 @@ input[type="search"] {
     margin-bottom: 10px;
 }
 
-.radio label,
-.checkbox label {
-    min-height: 20px;
-    padding-left: 20px;
-    margin-bottom: 0;
-    font-weight: normal;
-    cursor: pointer;
-}
+    .radio label,
+    .checkbox label {
+        min-height: 20px;
+        padding-left: 20px;
+        margin-bottom: 0;
+        font-weight: normal;
+        cursor: pointer;
+    }
 
-.radio input[type="radio"],
-.radio-inline input[type="radio"],
-.checkbox input[type="checkbox"],
-.checkbox-inline input[type="checkbox"] {
-    position: absolute;
-    margin-top: 4px \9;
-    margin-left: -20px;
-}
+    .radio input[type="radio"],
+    .radio-inline input[type="radio"],
+    .checkbox input[type="checkbox"],
+    .checkbox-inline input[type="checkbox"] {
+        position: absolute;
+        margin-top: 4px \9;
+        margin-left: -20px;
+    }
 
-.radio + .radio,
-.checkbox + .checkbox {
-    margin-top: -5px;
-}
+    .radio + .radio,
+    .checkbox + .checkbox {
+        margin-top: -5px;
+    }
 
 .radio-inline,
 .checkbox-inline {
@@ -5914,16 +5914,19 @@ a.label:focus {
 }
 
 .label-default {
-    background-color: #777;
+    background-color: #fff;
+    color: #540804;
+    border: 1px solid #540804;
 }
 
     .label-default[href]:hover,
     .label-default[href]:focus {
-        background-color: #5e5e5e;
+        background-color: #a33f3a;
     }
 
 .label-primary {
     background-color: #540804;
+    border: 1px solid #540804;
 }
 
     .label-primary[href]:hover,
@@ -5933,6 +5936,7 @@ a.label:focus {
 
 .label-success {
     background-color: #5cb85c;
+    border: 1px solid #5cb85c;
 }
 
     .label-success[href]:hover,
@@ -5942,6 +5946,7 @@ a.label:focus {
 
 .label-info {
     background-color: #5bc0de;
+    border: 1px solid #5bc0de;
 }
 
     .label-info[href]:hover,
@@ -5951,6 +5956,7 @@ a.label:focus {
 
 .label-warning {
     background-color: #f0ad4e;
+    border: 1px solid #f0ad4e;
 }
 
     .label-warning[href]:hover,
@@ -5960,6 +5966,7 @@ a.label:focus {
 
 .label-danger {
     background-color: #d9534f;
+    border: 1px solid #d9534f;
 }
 
     .label-danger[href]:hover,
