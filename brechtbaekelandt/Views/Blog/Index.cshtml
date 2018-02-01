@@ -1,0 +1,71 @@
+﻿@*@using System.Web.Optimization
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+
+@model brechtbaekelandt.net.ViewModels.BlogViewModel
+
+@{
+    ViewBag.Title = "Blog";
+}
+
+@section Scripts{
+
+    @Scripts.Render("~/Scripts/ViewModels/blog.js")
+
+    <script type="text/javascript">
+
+        $(function () {
+            @{
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+            }
+
+            var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, jsonSerializerSettings));
+            brechtbaekelandt.blog.init(serverViewmodel);
+        });
+    </script>
+}
+
+<div id="post-options">
+    <span>category:</span>
+
+    <select data-bind="options: availableCategories(),
+                    optionsText: 'name',
+                    optionsValue: 'id',
+                    value: selectedCategoryId" class="form-control"></select>
+
+    <span>search:</span>
+    <input type="text" placeholder="search term" class=""  data-bind="value: searchTerm" />
+   
+    <button class="" data-bind="click: function(){search()}">find!</button>
+    <button class="" data-bind="click: function(){reset()}">reset</button>
+    <div class="pull-right">
+        @if (User.Identity.IsAuthenticated)
+        {
+            @Html.ActionLink("create a post", "Create", "Blog")
+        }
+    </div>
+</div>
+
+<div>
+    <div data-bind="if: !isLoading() && !isSearching()">
+        All posts in category <span data-bind="text: selectedCategoryName()"></span> :
+    </div>
+
+    <div data-bind="if: !isLoading() && isSearching()">
+        Search results for &laquo;<span data-bind="text: searchTerm()"></span>&raquo; in category <span data-bind="text: selectedCategoryName()"></span> :
+    </div>
+</div>
+
+<div class="loader" data-bind="visible: isLoading()">
+    <img src="~/Content/Images/loading.gif" />
+</div>
+
+<div data-bind="visible: !isLoading() && posts().length > 0">
+    <!-- ko foreach: posts -->
+    @{ Html.RenderPartial("_Post"); }
+    <!-- /ko -->
+</div>
+
+<div data-bind="visible: !isLoading() && posts().length === 0">
+    <span>No posts are found...</span>
+</div>*@

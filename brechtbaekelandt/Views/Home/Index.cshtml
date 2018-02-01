@@ -1,0 +1,146 @@
+﻿@using System.Globalization
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+
+@model brechtbaekelandt.ViewModels.HomeViewModel
+
+@{
+    this.ViewData["Title"] = "home";
+    this.ViewData["ActivePage"] = "home";
+}
+
+@{
+    var today = DateTime.Today;
+    var bday = DateTime.Parse("07/02/1986", CultureInfo.InvariantCulture);
+
+    var age = today.Year - bday.Year;
+
+    if (bday > today.AddYears(-age))
+    {
+        age--;
+    }
+
+    var yearsActive = today.Year - 2009;
+}
+
+<div style="display: none;" data-bind="visible: true">
+    <h2>brecht's blog</h2>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+
+            <small>a blog about development, electronics and other stuff</small>
+            <hr />
+            <form class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <select class="form-control" data-bind="options: categories, optionsText: 'name', value: selectedCategoryFilter, optionsCaption: '--category--'"></select>
+                            <span class="input-group-addon"><i class="fa fa-filter"></i></span>
+                        </div>
+                    </div>
+                </div> <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchFilter" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <h3>latest posts</h3>
+
+            <!-- ko if: posts().length === 0 -->
+            <p>no posts yet...</p>
+            <!-- /ko -->
+            @*@if (this.Model.RecentPosts.Any())
+                {
+                    foreach (var post in this.Model.RecentPosts)
+                    {
+                        @Html.Partial("_PostPreview", post)
+                    }
+                }
+                else
+                {
+
+                }*@
+
+        </div>
+        <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
+            <img src="~/images/me.png" class="img-responsive" />
+            <hr />
+            <div id="social">
+                <ul>
+                    <li>
+                        <a href="mailto:&#098;&#114;&#101;&#099;&#104;&#116;&#046;&#098;&#097;&#101;&#107;&#101;&#108;&#097;&#110;&#100;&#116;&#064;&#111;&#117;&#116;&#108;&#111;&#111;&#107;&#046;&#099;&#111;&#109;">
+                            <img src="~/images/social-email.png" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://facebook.com/brecht.baekelandt" target="_blank">
+                            <img src="~/images/social-facebook.png" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://twitter.com/BaekelandtB" target="_blank">
+                            <img src="~/images/social-twitter.png" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://be.linkedin.com/pub/brecht-baekelandt/3a/b64/ba0" target="_blank">
+                            <img src="~/images/social-linkedin.png" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/brechtb86" target="_blank">
+                            <img src="~/images/social-github.png" />
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <hr />
+            <p>
+                Hi there! I am Brecht. I am a .Net developer living in Brussels, Belgium. I am also a metal lover, code addict and Microsoft enthousiast.
+                I absolutely love programming and I am very lucky to get to do what I love for a living.
+            </p>
+            <p>
+                I was born @(age) years ago and have been active as a developer for @(yearsActive) years now. I've studied electronics and wrote my thesis about home automation.
+            </p>
+            <p>
+                When I'm not working I enjoy hiking, a good movie and good music, keeping busy with an electronics project, or even experimenting with mobile app development.
+            </p>
+            <p>
+                With this blog I want to share my knowledge, my tips and my thoughts about programming, electronics, and other stuff I'm interested in.
+            </p>
+            <hr />
+        </div>
+    </div>
+</div>
+
+
+@section styles{
+    <link href="~/css/home.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
+
+    <script src="~/js/view-models/home.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            @{
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+            }
+
+            var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
+
+            brechtbaekelandt.home.init(serverViewmodel);
+        });
+    </script>
+
+}
+

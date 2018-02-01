@@ -1,0 +1,26 @@
+﻿
+.post-editor {
+    border: 0;
+    width: 100%;
+}
+
+    .post-editor .categories {
+        /*height: auto;
+        border: 1px solid #9b1d20;
+        padding: 5px 15px;*/
+    }
+
+        .post-editor .categories .category {
+            display: inline-block;
+            height: 30px;
+            margin: 5px 5px 5px 0;
+            padding: 5px;
+            color: #ccc;
+            border: 1px solid #540804;
+            cursor: pointer;
+        }
+
+            .post-editor .categories .category.selected {
+                color: #078d13;
+                border: 1px solid #078d13;
+            }

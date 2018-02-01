@@ -1,0 +1,50 @@
+﻿@model brechtbaekelandt.ViewModels.SignInViewModel
+
+<div class="row">
+    <div class="hidden-xs col-sm-2 col-md-3 col-lg-4"></div>
+
+    <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">sign in</h3>
+            </div>
+            <div class="panel-body">
+
+                @if (this.ViewData["Error"] != null)
+                {
+                    <div class="alert alert-danger" role="alert">
+                        <b>error!</b> <span>@this.ViewData["Error"]</span>
+                    </div>
+                }
+
+                <form method="POST" asp-controller="account" asp-action="signIn" asp-route-returnurl="@this.Context.Request.Query["ReturnUrl"]">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+                            <input asp-for="Username" type="text" placeholder="username or email" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-unlock"></i></span>
+                            <input asp-for="Password" type="password" placeholder="password" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label><input asp-for="RememberMe" type="checkbox" value="true" /> remember me</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">sign in!</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="hidden-xs col-sm-2 col-md-3 col-lg-4"></div>
+</div>

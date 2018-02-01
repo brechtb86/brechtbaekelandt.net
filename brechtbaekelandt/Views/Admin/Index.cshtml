@@ -1,0 +1,123 @@
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+
+@model brechtbaekelandt.ViewModels.AdminViewModel
+
+@{
+    this.ViewData["Title"] = "admin";
+    this.ViewData["ActivePage"] = "admin";
+}
+
+<div style="display: none;" data-bind="visible: true">
+    <h2>admin</h2>
+    <hr />
+    <h4>create</h4>
+    <p>
+        <a href="#" data-bind="click: function(){ showCreate(true); }">create a post...</a>
+    </p>
+    <hr />
+    <h4>posts</h4>
+    <hr />
+
+
+
+    @*<hr />
+    <h3>categories</h3>
+    <hr />*@
+
+
+
+
+
+
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showCreate">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">create a post</h4>
+                </div>
+                <div class="modal-body" data-bind="with: newPost">
+                    @{ Html.RenderPartial("_PostEditor"); }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                    <button type="button" class="btn btn-primary" data-bind="click: function() { createPost(newPost); }">post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section styles{
+
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/froala_editor.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/froala_style.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/char_counter.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/code_view.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/colors.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/emoticons.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/file.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/fullscreen.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/image.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/line_breaker.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/table.min.css" />
+    <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/plugins/video.min.css" />
+
+    <link href="~/css/froala/froala-theme.css" rel="stylesheet" />
+
+    <link href="~/css/controls/post-editor.css" rel="stylesheet" />
+
+    <link href="~/css/admin.css" rel="stylesheet" />
+}
+
+@section scripts{
+    @*<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>*@
+
+    <script src="~/lib/froala-wysiwyg-editor/js/froala_editor.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/align.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/char_counter.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/code_view.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/colors.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/emoticons.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/entities.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/font_family.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/font_size.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/fullscreen.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/image.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/inline_style.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/line_breaker.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/link.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/lists.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/paragraph_format.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/paragraph_style.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/quote.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/save.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/table.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/url.min.js"></script>
+    <script src="~/lib/froala-wysiwyg-editor/js/plugins/video.min.js"></script>
+
+    <script src="~/js/froala/froala_custom_buttons.js"></script>
+
+    <script src="~/js/knockout/knockout.modal-bindings.js"></script>
+    <script src="~/js/knockout/knockout.froala-bindings.js"></script>
+
+    <script src="~/js/view-models/admin.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+
+        @{
+            var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+        }
+
+        var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
+
+        brechtbaekelandt.admin.init(serverViewmodel);
+        });
+    </script>
+
+}

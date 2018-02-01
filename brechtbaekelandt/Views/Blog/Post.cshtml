@@ -1,0 +1,34 @@
+﻿@*@using System.Web.Optimization
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+
+@model brechtbaekelandt.net.ViewModels.BlogViewModel
+
+@{
+    ViewBag.Title = "Post";
+}
+
+@section Scripts{
+    
+    @Scripts.Render("~/Scripts/ViewModels/post.js")
+
+    <script type="text/javascript">
+
+        $(function () {
+            @{
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+            }
+
+            var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, jsonSerializerSettings));
+            brechtbaekelandt.post.init(serverViewmodel);
+        });
+    </script>
+}
+
+<a style="cursor: pointer;" onclick="window.history.back();"><i class="fa fa-arrow-circle-left"></i> go back</a>
+
+<div data-bind="with: post">
+    @{ Html.RenderPartial("_FullPost"); }
+</div>
+
+<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>*@

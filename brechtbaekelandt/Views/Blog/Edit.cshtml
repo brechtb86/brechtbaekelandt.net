@@ -1,0 +1,51 @@
+﻿@*@using System.Web.Optimization
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+
+@model brechtbaekelandt.net.ViewModels.BlogViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@section Styles{
+    @Styles.Render("~/content/css/froala")
+}
+
+@section Scripts{
+
+    @Scripts.Render("~/bundles/froala")
+    @Scripts.Render("~/Scripts/ViewModels/post.js")
+
+    <script type="text/javascript">
+
+        $(function () {
+            @{
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+            }
+
+            var serverViewmodel = ko.mapping.fromJS(@Html.Raw(JsonConvert.SerializeObject(Model, Formatting.None, jsonSerializerSettings)));
+            brechtbaekelandt.post.init(serverViewmodel);
+        });
+    </script>
+}
+
+<a style="cursor: pointer;" onclick="window.history.back();"><i class="fa fa-arrow-circle-left"></i> go back</a>
+
+<h2 class="title" data-bind="visible: !isSucceeded()">Edit the post</h2>
+<hr/>
+
+<div class="message message-error" style="display: none;" data-bind="visible: showErrors">
+    <strong>Error!</strong> <span data-bind="text: errorMessage"></span>
+</div>
+
+<div class="message message-success" style="display: none;" data-bind="visible: isSucceeded">
+    <strong>Success!</strong> <span data-bind="text: succeededMessage"></span>
+</div>
+
+<div data-bind="visible: !isSucceeded()">
+    <div data-bind="with: post">
+        @{ Html.RenderPartial("_PostEditor"); }
+        <button data-bind="click: function() {$parent.editPost()} " style="margin: 15px 0;" class="btn btn-primary pull-right">edit!</button>
+    </div>
+</div>*@
