@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using brechtbaekelandt.Data;
@@ -42,12 +43,16 @@ namespace brechtbaekelandt.Controllers
             var categoryEntities = this._blogDbContext.Categories
                 .OrderBy(c => c.Name);
 
+            var keywords = this._blogDbContext.Posts
+                .SelectMany(post => !string.IsNullOrEmpty(post.Keywords) ? post.Keywords.Split(",", StringSplitOptions.None) : new string[0]).Distinct().ToArray();
+
             var vm = new HomeViewModel
             {
                 TotalPostCount = totalPostCount,
                 PostsPerPage = _postsPerPage,
                 Posts = Mapper.Map<ICollection<Models.Post>>(postEntities),
-                Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities)
+                Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities),
+                Keywords = keywords
             };
 
             return this.View(vm);

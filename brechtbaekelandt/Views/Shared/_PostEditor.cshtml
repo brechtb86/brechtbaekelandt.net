@@ -15,7 +15,7 @@
         <div class="form-group">
             <label>categories:</label>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: $parent.categoryToAdd"/>
+                <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: $parent.categoryToAdd, enterKey: function(){ $parent.addCategory($parent.categoryToAdd); }"/>
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="button" data-bind="click: function(){ $parent.addCategory($parent.categoryToAdd); }"><i class="fa fa-plus"></i></button>
                 </span>
@@ -35,7 +35,7 @@
         <div class="form-group">
             <label>keywords:</label>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: $parent.keywordToAdd"/>
+                <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: $parent.keywordToAdd, enterKey: function() { $parent.addKeyword($parent.keywordToAdd, keywords); }"/>
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="button" data-bind="click: function(){ $parent.addKeyword($parent.keywordToAdd, keywords); }"><i class="fa fa-plus"></i></button>
                 </span>

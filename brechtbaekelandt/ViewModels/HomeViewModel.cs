@@ -12,6 +12,8 @@ namespace brechtbaekelandt.ViewModels
 
         public int PostsPerPage { get; set; }
 
+        public string[] Keywords { get; set; }
+
         public ICollection<Post> Posts { get; set; }
 
         public ICollection<Category> Categories { get; set; }

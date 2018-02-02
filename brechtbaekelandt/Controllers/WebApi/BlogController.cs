@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -30,6 +31,32 @@ namespace brechtbaekelandt.Controllers.WebApi
             this._userManager = userManager;
             this._blogDbContext = blogDbcontext;
 
+        }
+
+        [HttpGet]
+        [Route("posts/filter")]
+        public IActionResult FilterPostsAsyncActionResult(string searchFilterString = "", string categoryName = "", string keywordsString = "")
+        {
+            var searchTerms = !string.IsNullOrEmpty(searchFilterString) ? searchFilterString.Split(',') : new string[0];
+            var keywords = !string.IsNullOrEmpty(keywordsString) ? keywordsString.Split(',') : new string[0];
+
+            var query = this._blogDbContext.Posts.Where(
+                p => p.PostCategories.Any(pc =>
+                    (string.IsNullOrEmpty(categoryName) || pc.Category.Name == categoryName)
+                    || (searchTerms.Length <= 0 ||
+                        searchTerms.Any(s1 => p.Description.Split(" ", StringSplitOptions.None).Contains(s1)))
+                    || (searchTerms.Length <= 0 || searchTerms.Any(s2 =>
+                            !string.IsNullOrEmpty(p.Content) &&
+                            p.Content.Split(" ", StringSplitOptions.None).Contains(s2)))
+                    || (keywords.Length <= 0 ||
+                        keywords.Any(k1 => p.Description.Split(" ", StringSplitOptions.None).Contains(k1)))
+                    || (keywords.Length <= 0 || keywords.Any(k2 =>
+                            !string.IsNullOrEmpty(p.Content) &&
+                            p.Content.Split(" ", StringSplitOptions.None).Contains(k2)))
+                ));
+
+
+            return this.Ok(Mapper.Map<ICollection<Models.Post>>(query));
         }
 
         [HttpGet]
@@ -219,7 +246,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             //        //}
             //    }
             //}
-            
+
             post.Id = Guid.NewGuid();
             post.Created = DateTime.Now;
             post.LastModified = DateTime.Now;

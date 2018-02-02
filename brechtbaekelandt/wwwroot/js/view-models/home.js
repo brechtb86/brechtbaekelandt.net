@@ -1,4 +1,6 @@
-﻿var brechtbaekelandt = brechtbaekelandt || {};
+﻿/// <reference path="../knockout/knockout.extensions.js" />
+
+var brechtbaekelandt = brechtbaekelandt || {};
 
 brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     "use strict";
@@ -9,54 +11,45 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         ko.mapping.fromJS(serverViewModel, {}, self);
 
         self.selectedCategoryFilter = ko.observable();
+        self.selectedCategoryFilter.subscribeChanged(function (newValue, oldValue) {
+            if (newValue !== oldValue) {
+                self.filter();
+            }
+        });
+
         self.searchFilter = ko.observable();
-        
-        //self.availableCategories.unshift({ id: null, name: "Any" });
 
-        //self.posts = ko.observableArray();
-        //self.totalPostCount = ko.observable();
+        self.keywordsFilter = ko.observableArray();
+        self.keywordsFilter.subscribe(function () {
+            self.filter();
+        });
 
-        //self.isSearching = ko.observable(false);
-        //self.searchTerm = ko.observable(null);
-
-        //self.currentIndex = ko.observable(0);
-
-        //self.refreshPosts = ko.observable(false);
-        //self.refreshPosts.subscribe(function (newValue) {
-        //    if (newValue === true) {
-        //        self.currentIndex(0);
-        //        self.posts.removeAll();
-        //    }
-        //});
-
-        //self.selectedCategoryId = ko.observable();
-        //self.selectedCategoryId.subscribe(function (newValue) {
-        //    self.refreshPosts(true);
-        //    history.pushState({ currentIndex: self.currentIndex(), selectedCategoryId: newValue, isSearching: self.isSearching(), searchTerm: self.searchTerm() }, "Blog Posts");
-        //    if (self.isSearching()) {
-        //        self.searchPosts(self.currentIndex() * postsPerPage, postsPerPage, newValue, self.searchTerm());
-        //    } else {
-        //        self.loadPosts(self.currentIndex() * postsPerPage, postsPerPage, newValue);
-        //    }
-        //    self.refreshPosts(false);
-        //});
-
-        //self.selectedCategoryName = ko.dependentObservable(function () {
-
-        //    if (!self.selectedCategoryId()) {
-        //        return "Any";
-        //    }
-
-        //    return self.availableCategories().filter(function (category) {
-
-        //        if (ko.isObservable(category.id)) {
-        //            return category.id() === self.selectedCategoryId();
-        //        }
-        //    })[0].name;
-        //});
-
-        self.isLoading = ko.observable(true);
+        self.isLoading = ko.observable(false);
     };
+
+    HomeViewModel.prototype.filter = function () {
+        var self = this;
+        
+        self.isLoading(true);
+
+        $.getJSON("../api/blog/posts/filter",
+            {
+                searchFilterString: self.searchFilter() ? self.searchFilter().replace("", ",") : "",
+                categoryName: self.selectedCategoryFilter() ? self.selectedCategoryFilter().name : "",
+                keywordsString: self.keywordsFilter() ? self.keywordsFilter().join(",") : ""
+            })
+            .done(function (data, textStatus, jqXhr) {
+                self.posts(ko.mapping.fromJS(data));
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+
+            })
+            .always(function () {
+                self.isLoading(false);
+            });
+    };
+
+
 
     //BlogViewModel.prototype.loadPosts = function (index, count, categoryId) {
     //    var self = this;

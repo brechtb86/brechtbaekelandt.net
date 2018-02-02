@@ -18,7 +18,7 @@
                 <i>
                     <label>categories:</label>
                     <!-- ko foreach: categories -->
-                    <span data-bind="text: name"></span>
+                    <span data-bind="text: name"></span><span data-bind="if: $index() < $parentContext.$data.categories().length - 1">, </span>
                     <!-- /ko -->
                 </i>
         </small>

@@ -174,7 +174,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.addKeyword = function (keyword, targetKeywordList) {
         var self = this;
 
-        targetKeywordList.push(keyword());
+        targetKeywordList.push(keyword().toLowerCase());
 
         keyword(null);
     };

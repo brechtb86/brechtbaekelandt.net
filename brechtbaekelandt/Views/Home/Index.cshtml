@@ -27,7 +27,6 @@
     <h2>brecht's blog</h2>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
-
             <small>a blog about development, electronics and other stuff</small>
             <hr />
             <form class="row">
@@ -41,14 +40,23 @@
                 </div> <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchFilter" />
+                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchFilter, enterKey: function() { filter(); }" />
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+                                <button class="btn btn-default" type="button" data-bind="click: function() { filter(); }"><i class="fa fa-search"></i></button>
                             </span>
                         </div>
                     </div>
                 </div>
             </form>
+            <div class="keywords-filter">
+                <!-- ko if : keywordsFilter().length > 0 -->
+                <label>tags:</label>
+                <!-- ko foreach: keywordsFilter -->
+                <a href="#" class="label label-default" data-bind="click: function() { $root.keywordsFilter.pop($data); }"><span data-bind="text: $data"></span> <i class="fa fa-times"></i></a>
+                <!-- /ko -->
+                <hr />
+                <!-- /ko -->
+            </div>
             <!-- ko if: posts().length === 0 -->
             <p>no posts yet...</p>
             <!-- /ko -->
@@ -56,6 +64,11 @@
             <!-- ko foreach: posts -->
             @Html.Partial("_PostPreview")
             <!-- /ko -->
+            <!-- /ko -->
+            <!-- ko if: isLoading -->
+            @{
+                this.Html.RenderPartial("_Loader");
+            }
             <!-- /ko -->
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
@@ -105,6 +118,13 @@
                 With this blog I want to share my knowledge, my tips and my thoughts about programming, electronics, and other stuff I'm interested in.
             </p>
             <hr />
+            <!-- ko if : keywords().length > 0 -->
+            <label>tags:</label>
+            <!-- ko foreach: keywords -->
+            <a href="#" class="label label-default" data-bind="text: $data, click: function() { $root.keywordsFilter.push($data); }"></a>
+            <!-- /ko -->
+            <hr />
+            <!-- /ko -->
         </div>
     </div>
 </div>
@@ -120,6 +140,9 @@
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
 
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+
+    <script src="~/js/knockout/knockout.extensions.js"></script>
+    <script src="~/js/knockout/knockout.key-binding-handlers.js"></script>
 
     <script src="~/js/extensions/string-extensions.js"></script>
 
@@ -149,7 +172,7 @@
     <meta name="keywords" content="@string.Join(", ", keywords)" />
 }
 
-@section social{    
+@section social{
     <!-- Open Graph data -->
     <meta property="og:site_name" content="www.brechtbaekelandt.net" />
     <meta property="og:title" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
