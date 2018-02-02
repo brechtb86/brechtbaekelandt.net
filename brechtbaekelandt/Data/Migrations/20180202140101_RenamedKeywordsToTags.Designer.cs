@@ -11,9 +11,10 @@ using System;
 namespace brechtbaekelandt.data.migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    partial class BlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180202140101_RenamedKeywordsToTags")]
+    partial class RenamedKeywordsToTags
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

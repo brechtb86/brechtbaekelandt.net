@@ -37,10 +37,10 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpGet]
         [Route("posts")]
-        public IActionResult GetPostsAsyncActionResult(string searchFilterString = "", string categoryName = "", string keywordsString = "")
+        public IActionResult GetPostsAsyncActionResult(string searchTermsString = "", Guid? categoryId = null, string tagsString = "")
         {
-            var searchTerms = !string.IsNullOrEmpty(searchFilterString) ? searchFilterString.Split(',') : new string[0];
-            var keywords = !string.IsNullOrEmpty(keywordsString) ? keywordsString.Split(',') : new string[0];
+            var searchTerms = !string.IsNullOrEmpty(searchTermsString) ? searchTermsString.Split(',') : new string[0];
+            var tags = !string.IsNullOrEmpty(tagsString) ? tagsString.Split(',') : new string[0];
 
             var query = this._blogDbContext.Posts
                 .Include(p => p.User)
@@ -49,13 +49,13 @@ namespace brechtbaekelandt.Controllers.WebApi
                 .ThenInclude(pc => pc.Category)
                 .Where(
                     p => p.PostCategories.Any(pc =>
-                    (string.IsNullOrEmpty(categoryName) || pc.Category.Name == categoryName)
+                    (categoryId == null || categoryId == Guid.Empty || pc.Category.Id == categoryId)
                     && (searchTerms.Length == 0 ||
                         searchTerms.All(s => p.Description.ToLower().Contains(s.ToLower())))
                     && (searchTerms.Length == 0 || searchTerms.All(s =>
                             !string.IsNullOrEmpty(p.Content) && p.Content.ToLower().Contains(s.ToLower())))
-                    && (keywords.Length == 0 ||
-                        keywords.All(k =>  !string.IsNullOrEmpty(p.Keywords) && p.Keywords.Contains(k)))
+                    && (tags.Length == 0 ||
+                        tags.All(k => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(k)))
                 ))
                 .OrderByDescending(p => p.Created);
 

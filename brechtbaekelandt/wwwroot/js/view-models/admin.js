@@ -13,10 +13,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 self.categories()[i].isSelected = ko.observable();
             }
         }
-        
-        self.selectedCategoryFilter = ko.observable();
-        self.searchFilter = ko.observable();
-
+      
         self.showCreate = ko.observable();
 
         self.newPost = {};
@@ -24,7 +21,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.newPost.description = ko.observable().extend({ required: { message: "you didn't fill in the description!" } });
         self.newPost.content = ko.observable().extend({ required: { message: "you didn't fill in content!" } });
         self.newPost.categories = ko.observableArray().extend({ minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" } });
-        self.newPost.keywords = ko.observableArray();
+        self.newPost.tags = ko.observableArray();
 
         self.createErrorMessage = ko.observable();
         self.createSucceededMessage = ko.observable();
@@ -32,7 +29,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.createErrors = ko.validation.group(self.newPost);
 
         self.categoryToAdd = ko.observable();
-        self.keywordToAdd = ko.observable();
+        self.tagToAdd = ko.observable();
 
         self.isLoading = ko.observable(true);
 
@@ -171,19 +168,19 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         }
     };
 
-    AdminViewModel.prototype.addKeyword = function (keyword, targetKeywordList) {
+    AdminViewModel.prototype.addTag = function (tag, targetTagList) {
         var self = this;
 
-        targetKeywordList.push(keyword().toLowerCase());
+        targetTagList.push(tag().toLowerCase());
 
-        keyword(null);
+        tag(null);
     };
     
-    AdminViewModel.prototype.removeKeyword = function (keyword, keywords) {
+    AdminViewModel.prototype.removeTag = function (tag, tags) {
         var self = this;
 
-        if (keywords.indexOf(keyword) > -1) {
-            keywords.pop(keyword);
+        if (tags.indexOf(tag) > -1) {
+            tags.pop(tag);
         }
     };
 

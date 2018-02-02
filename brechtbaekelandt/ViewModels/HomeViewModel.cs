@@ -12,7 +12,11 @@ namespace brechtbaekelandt.ViewModels
 
         public int PostsPerPage { get; set; }
 
-        public string[] Keywords { get; set; }
+        public string[] Tags { get; set; }
+
+        public string[] TagsFilter { get; set; }
+
+        public Guid? CategoryIdFilter { get; set; }
 
         public ICollection<Post> Posts { get; set; }
 

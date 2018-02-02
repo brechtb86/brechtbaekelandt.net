@@ -33,14 +33,14 @@
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <select class="form-control" data-bind="options: categories, optionsText: 'name', value: selectedCategoryFilter, optionsCaption: '--category--'"></select>
+                            <select class="form-control" data-bind="options: categories, optionsText: 'name', optionsValue: 'id', value: categoryIdFilter, optionsCaption: '--category--', valueUpdate: 'change, keyup'"></select>
                             <span class="input-group-addon"><i class="fa fa-filter"></i></span>
                         </div>
                     </div>
                 </div> <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchFilter, enterKey: function() { getPosts(); }" />
+                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchTermsFilter, enterKey: function() { getPosts(); }" />
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" data-bind="click: function() { getPosts(); }"><i class="fa fa-search"></i></button>
                             </span>
@@ -48,11 +48,11 @@
                     </div>
                 </div>
             </form>
-            <div class="keywords-filter">
-                <!-- ko if : keywordsFilter().length > 0 -->
+            <div class="tags-filter">
+                <!-- ko if : tagsFilter().length > 0 -->
                 <label>tags:</label>
-                <!-- ko foreach: keywordsFilter -->
-                <a href="#" class="label label-default" data-bind="click: function() { $root.keywordsFilter.pop($data); }"><span data-bind="text: $data"></span> <i class="fa fa-times"></i></a>
+                <!-- ko foreach: tagsFilter -->
+                <a href="#" class="label label-default" data-bind="click: function() { $root.tagsFilter.pop($data); }"><span data-bind="text: $data"></span> <i class="fa fa-times"></i></a>
                 <!-- /ko -->
                 <!-- /ko -->
             </div>
@@ -115,11 +115,10 @@
                 With this blog I want to share my knowledge, my tips and my thoughts about programming, electronics, and other stuff I'm interested in.
             </p>
             <hr />
-            <!-- ko if : keywords().length > 0 -->
+            <!-- ko if : tags().length > 0 -->
             <label>tags:</label>
-            <!-- ko foreach: keywords -->
-            <a href="#" class="label label-default" data-bind="text: $data,  css: { active: $root.keywordsFilter.indexOf($data) > -1 }, click: function() { $root.keywordsFilter.indexOf($data) === -1 ? $root.keywordsFilter.push($data) : null; }"></a>
-            
+            <!-- ko foreach: tags -->
+            <a href="#" class="label label-default" data-bind="text: $data,  css: { active: $root.tagsFilter.indexOf($data) > -1 }, click: function() { $root.tagsFilter.indexOf($data) === -1 ? $root.tagsFilter.push($data) : null; }"></a>
 
             <!-- /ko -->
             <hr />

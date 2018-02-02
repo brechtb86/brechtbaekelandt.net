@@ -37,7 +37,7 @@
 }
 
 @{
-    var allKeywords = ((string[])this.ViewData["Keywords"]).AddRange(this.Model.Post.Keywords);
+    var allKeywords = ((string[])this.ViewData["Keywords"]).AddRange(this.Model.Post.Tags);
 }
 
 @section seo {

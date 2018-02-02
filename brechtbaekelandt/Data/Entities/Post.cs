@@ -21,7 +21,7 @@ namespace brechtbaekelandt.Data.Entities
 
         public string PictureUrl { get; set; }
 
-        public string Keywords { get; set; }
+        public string Tags { get; set; }
         
         public virtual ICollection<PostCategory> PostCategories { get; set; }
         

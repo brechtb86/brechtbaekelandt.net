@@ -11,19 +11,19 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     function HomeViewModel(serverViewModel) {
         var self = this;
 
+        self.searchTermsFilter = ko.observable();
+        self.categoryIdFilter = ko.observable();
+        self.tagsFilter = ko.observableArray();
+
         ko.mapping.fromJS(serverViewModel, {}, self);
 
-        self.selectedCategoryFilter = ko.observable();
-        self.selectedCategoryFilter.subscribeChanged(function (newValue, oldValue) {
+        self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
             if (newValue !== oldValue) {
                 self.getPosts();
             }
         });
 
-        self.searchFilter = ko.observable();
-
-        self.keywordsFilter = ko.observableArray();
-        self.keywordsFilter.subscribe(function () {
+        self.tagsFilter.subscribe(function () {
             self.getPosts();
         });
 
@@ -32,8 +32,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         addthis.init();
     };
 
-
-
     HomeViewModel.prototype.getPosts = function () {
         var self = this;
 
@@ -41,9 +39,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         $.getJSON("../api/blog/posts",
             {
-                searchFilterString: self.searchFilter() ? self.searchFilter().replace("", ",") : "",
-                categoryName: self.selectedCategoryFilter() ? self.selectedCategoryFilter().name : "",
-                keywordsString: self.keywordsFilter() ? self.keywordsFilter().join(",") : ""
+                searchTermsString: self.searchTermsFilter() ? self.searchTermsFilter().replace("", ",") : "",
+                categoryId: self.categoryIdFilter(),
+                tagsString: self.tagsFilter() ? self.tagsFilter().join(",") : ""
             })
             .done(function (data, textStatus, jqXhr) {
                 ko.mapping.fromJS(data, {}, self.posts);

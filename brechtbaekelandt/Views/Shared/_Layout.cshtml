@@ -255,7 +255,7 @@
                     <i>
                         <label>categories:</label>
                         <!-- ko foreach: categories -->
-                        <span data-bind="text: name"></span><span data-bind="if: $index() < $parentContext.$data.categories().length - 1">, </span>
+                        <a data-bind="text: name, attr: { href: '/home?categoryId=' + id() }"></a><span data-bind="if: $index() < $parentContext.$data.categories().length - 1">, </span>
                         <!-- /ko -->
                     </i>
                 </small>
@@ -268,9 +268,9 @@
             </div>
             <div class="post-content" data-bind="html: content">
             </div>
-            <div class="post-keywords">
-                <!-- ko foreach: keywords -->
-                <span class="label label-default" data-bind="text: $data"></span>
+            <div class="post-tags">
+                <!-- ko foreach: tags -->
+                <a class="label label-default" data-bind="text: $data, attr: { href: '/home?tag=' + $data }"></a>
                 <!-- /ko -->
             </div>
             <div class="clearfix"></div>
@@ -303,7 +303,7 @@
                     <i>
                         <label>categories:</label>
                         <!-- ko foreach: post.categories -->
-                        <span data-bind="text: name"></span><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
+                        <a href="#" data-bind="text: name, click: function() { $parentContext.$data.viewModel.categoryIdFilter($data.id()); }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
                         <!-- /ko -->
                     </i>
                 </small>
@@ -317,9 +317,9 @@
             <!-- ko if: post.content -->
             <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() }">read more...</a>
             <!-- /ko -->
-            <div class="post-preview-keywords">
-                <!-- ko foreach: post.keywords -->
-                <a href="#" class="label label-default" data-bind="text: $data, css: { active: $parentContext.$data.viewModel.keywordsFilter.indexOf($data) > -1 }, click: function() { $parentContext.$data.viewModel.keywordsFilter.indexOf($data) === -1 ? $parentContext.$data.viewModel.keywordsFilter.push($data) : null; }"></a>
+            <div class="post-preview-tags">
+                <!-- ko foreach: post.tags -->
+                <a href="#" class="label label-default" data-bind="text: $data, css: { active: $parentContext.$data.viewModel.tagsFilter.indexOf($data) > -1 }, click: function() { $parentContext.$data.viewModel.tagsFilter.indexOf($data) === -1 ? $parentContext.$data.viewModel.tagsFilter.push($data) : null; }"></a>
                 <!-- /ko -->
             </div>
             <div class="clearfix"></div>
@@ -367,19 +367,19 @@
                     <!-- /ko -->
                 </div>
                 <div class="form-group">
-                    <label>keywords:</label>
+                    <label>tags:</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.keywordToAdd, enterKey: function() { viewModel.addKeyword(viewModel.keywordToAdd, post.keywords); }" />
+                        <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.tagToAdd, enterKey: function() { viewModel.addtag(viewModel.tagToAdd, post.tags); }" />
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addKeyword(viewModel.keywordToAdd, post.keywords); }"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addtag(viewModel.tagToAdd, post.tags); }"><i class="fa fa-plus"></i></button>
                         </span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <!-- ko if: post.keywords().length > 0 -->
-                    <div class="keywords input-group">
-                        <!-- ko  foreach: post.keywords -->
-                        <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removeKeyword($data, $parentContext.$data.post.keywords); }" class="keyword">
+                    <!-- ko if: post.tags().length > 0 -->
+                    <div class="tags input-group">
+                        <!-- ko  foreach: post.tags -->
+                        <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removetag($data, $parentContext.$data.post.tags); }" class="tag">
                             <span data-bind="text: $data"></span> <i class="fa fa-check"></i>
                         </button>
                         <!-- /ko -->

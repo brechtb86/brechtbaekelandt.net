@@ -4,13 +4,13 @@
     width: 100%;
 }
 
-    .post-editor .categories, .post-editor .keywords {
+    .post-editor .categories, .post-editor .tags {
         /*height: auto;
         border: 1px solid #9b1d20;
         padding: 5px 15px;*/
     }
 
-        .post-editor .categories .category, .post-editor .keywords .keyword {
+        .post-editor .categories .category, .post-editor .tags .tag {
             display: inline-block;
             height: 30px;
             margin: 5px 5px 5px 0;
@@ -20,7 +20,7 @@
             cursor: pointer;
         }
 
-            .post-editor .categories .category.selected, .post-editor .keywords .keyword.selected {
+            .post-editor .categories .category.selected, .post-editor .tags .tag.selected {
                 color: #078d13;
                 border: 1px solid #078d13;
             }
