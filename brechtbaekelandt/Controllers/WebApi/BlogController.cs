@@ -17,9 +17,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace brechtbaekelandt.Controllers.WebApi
 {
-
-
-    [Authorize]
     [Route("api/blog")]
     [Produces("application/json")]
     public class BlogController : Controller
