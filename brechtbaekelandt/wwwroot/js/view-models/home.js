@@ -29,17 +29,19 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
     HomeViewModel.prototype.filter = function () {
         var self = this;
-        
+
         self.isLoading(true);
 
-        $.getJSON("../api/blog/posts/filter",
+        $.getJSON("../api/blog/posts",
             {
                 searchFilterString: self.searchFilter() ? self.searchFilter().replace("", ",") : "",
                 categoryName: self.selectedCategoryFilter() ? self.selectedCategoryFilter().name : "",
                 keywordsString: self.keywordsFilter() ? self.keywordsFilter().join(",") : ""
             })
             .done(function (data, textStatus, jqXhr) {
-                self.posts(ko.mapping.fromJS(data));
+                ko.mapping.fromJS(data, {}, self.posts);
+
+                addthis.toolbox(".addthis_inline_share_toolbox");
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 

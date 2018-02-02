@@ -8,9 +8,11 @@ using AutoMapper;
 using brechtbaekelandt.Attributes;
 using brechtbaekelandt.Data;
 using brechtbaekelandt.Data.Entities;
+using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace brechtbaekelandt.Controllers.WebApi
@@ -34,189 +36,117 @@ namespace brechtbaekelandt.Controllers.WebApi
         }
 
         [HttpGet]
-        [Route("posts/filter")]
-        public IActionResult FilterPostsAsyncActionResult(string searchFilterString = "", string categoryName = "", string keywordsString = "")
+        [Route("posts")]
+        public IActionResult GetPostsAsyncActionResult(string searchFilterString = "", string categoryName = "", string keywordsString = "")
         {
             var searchTerms = !string.IsNullOrEmpty(searchFilterString) ? searchFilterString.Split(',') : new string[0];
             var keywords = !string.IsNullOrEmpty(keywordsString) ? keywordsString.Split(',') : new string[0];
 
-            var query = this._blogDbContext.Posts.Where(
-                p => p.PostCategories.Any(pc =>
+            var query = this._blogDbContext.Posts
+                .Include(p => p.User)
+                .Include(p => p.Comments)
+                .Include(p => p.PostCategories)
+                .ThenInclude(pc => pc.Category)
+                .Where(
+                    p => p.PostCategories.Any(pc =>
                     (string.IsNullOrEmpty(categoryName) || pc.Category.Name == categoryName)
-                    || (searchTerms.Length <= 0 ||
-                        searchTerms.Any(s1 => p.Description.Split(" ", StringSplitOptions.None).Contains(s1)))
-                    || (searchTerms.Length <= 0 || searchTerms.Any(s2 =>
-                            !string.IsNullOrEmpty(p.Content) &&
-                            p.Content.Split(" ", StringSplitOptions.None).Contains(s2)))
-                    || (keywords.Length <= 0 ||
-                        keywords.Any(k1 => p.Description.Split(" ", StringSplitOptions.None).Contains(k1)))
-                    || (keywords.Length <= 0 || keywords.Any(k2 =>
-                            !string.IsNullOrEmpty(p.Content) &&
-                            p.Content.Split(" ", StringSplitOptions.None).Contains(k2)))
-                ));
+                    && (searchTerms.Length == 0 ||
+                        searchTerms.All(s => p.Description.ToLower().Contains(s.ToLower())))
+                    && (searchTerms.Length == 0 || searchTerms.All(s =>
+                            !string.IsNullOrEmpty(p.Content) && p.Content.ToLower().Contains(s.ToLower())))
+                    && (keywords.Length == 0 ||
+                        keywords.All(k =>  !string.IsNullOrEmpty(p.Keywords) && p.Keywords.Contains(k)))
+                ))
+                .OrderByDescending(p => p.Created);
 
 
             return this.Ok(Mapper.Map<ICollection<Models.Post>>(query));
         }
 
-        [HttpGet]
-        [Route("posts")]
-        public async Task<IActionResult> GetPostsAsyncActionResult(int index, int count, string categoryId)
-        {
-            //ICollection<Data.Entities.Post> postEntities;
+        //[HttpGet]
+        //public async Task<IActionResult> SearchPostsAsyncActionResult(int index, int count, string categoryId, string searchTerm)
+        //{
+        //    //List<Data.Entities.Post> postEntities;
 
-            //int totalPostCount;
+        //    //int totalPostCount;
 
-            //if (categoryId == null)
-            //{
-            //    var query = this._blogDbContext.Posts.
-            //        OrderByDescending(p => p.Created);
+        //    //if (string.IsNullOrEmpty(searchTerm))
+        //    //{
+        //    //    return await this.GetPostsAsyncActionResult(index, count, categoryId);
+        //    //}
 
-            //    totalPostCount = query.Count();
+        //    //var searchTerms = searchTerm.ToLower().Split(' ');
 
-            //    postEntities = query
-            //        .Skip(index)
-            //        .Take(count)
-            //        .ToList()
-            //        .Select(p => new Data.Entities.Post
-            //        {
-            //            Categories = p.Categories,
-            //            CommentCount = p.Comments.Count,
-            //            Content = p.Content,
-            //            Created = p.Created,
-            //            Description = p.Description,
-            //            Id = p.Id,
-            //            InternalTitle = p.InternalTitle,
-            //            Title = p.Title,
-            //            LastModified = p.LastModified,
-            //            User = p.User
+        //    //if (categoryId == null)
+        //    //{
+        //    //    var query = this._blogDbContext.Posts
+        //    //        .Where(p => searchTerms.Any(s => p.Title.ToLower().Contains(s))
+        //    //                    || searchTerms.Any(s => p.Description.ToLower().Contains(s))
+        //    //                    || searchTerms.Any(s => p.Content.ToLower().Contains(s))
+        //    //                    || searchTerms.Any(s => p.User.Name.ToLower().Contains(s)))
+        //    //        .OrderByDescending(p => p.Created);
 
-            //        }).ToList();
-            //}
-            //else
-            //{
-            //    var categoryGuid = Guid.Parse(categoryId);
+        //    //    totalPostCount = query.Count();
 
-            //    var query = this._blogDbContext.Posts
-            //        .Where(p => p.Categories.Any(c => c.Id == categoryGuid))
-            //        .OrderByDescending(p => p.Created);
+        //    //    postEntities = query
+        //    //       .Skip(index)
+        //    //       .Take(count)
+        //    //       .ToList()
+        //    //       .Select(p => new Data.Entities.Post
+        //    //       {
+        //    //           Categories = p.Categories,
+        //    //           CommentCount = p.Comments.Count,
+        //    //           Content = p.Content,
+        //    //           Created = p.Created,
+        //    //           Description = p.Description,
+        //    //           Id = p.Id,
+        //    //           InternalTitle = p.InternalTitle,
+        //    //           Title = p.Title,
+        //    //           LastModified = p.LastModified,
+        //    //           User = p.User
 
-            //    totalPostCount = query.Count();
+        //    //       }).ToList();
+        //    //}
+        //    //else
+        //    //{
+        //    //    var categoryGuid = Guid.Parse(categoryId);
 
-            //    postEntities = query
-            //        .Skip(index)
-            //        .Take(count)
-            //        .ToList()
-            //        .Select(p => new Data.Entities.Post
-            //        {
-            //            Categories = p.Categories,
-            //            CommentCount = p.Comments.Count,
-            //            Content = p.Content,
-            //            Created = p.Created,
-            //            Description = p.Description,
-            //            Id = p.Id,
-            //            InternalTitle = p.InternalTitle,
-            //            Title = p.Title,
-            //            LastModified = p.LastModified,
-            //            User = p.User
+        //    //    var query = this._blogDbContext.Posts
+        //    //        .Where(p => p.Categories.Any(c => c.Id == categoryGuid))
+        //    //        .Where(p => searchTerms.Any(s => p.Title.ToLower().Contains(s))
+        //    //                    || searchTerms.Any(s => p.Description.ToLower().Contains(s))
+        //    //                    || searchTerms.Any(s => p.Content.ToLower().Contains(s))
+        //    //                    || searchTerms.Any(s => p.User.Name.ToLower().Contains(s)))
+        //    //        .OrderByDescending(p => p.Created);
 
-            //        }).ToList();
-            //}
+        //    //    totalPostCount = query.Count();
 
-            //var posts = Mapper.Map<List<Post>>(postEntities);
+        //    //    postEntities = query
+        //    //       .Skip(index)
+        //    //       .Take(count)
+        //    //       .ToList()
+        //    //       .Select(p => new Data.Entities.Post
+        //    //       {
+        //    //           Categories = p.Categories,
+        //    //           CommentCount = p.Comments.Count,
+        //    //           Content = p.Content,
+        //    //           Created = p.Created,
+        //    //           Description = p.Description,
+        //    //           Id = p.Id,
+        //    //           InternalTitle = p.InternalTitle,
+        //    //           Title = p.Title,
+        //    //           LastModified = p.LastModified,
+        //    //           User = p.User
 
-            //var result = new { TotalPostCount = totalPostCount, Posts = posts };
+        //    //       }).ToList();
+        //    //}
 
-            //return this.Ok(result);
+        //    //var posts = Mapper.Map<List<Post>>(postEntities);
 
-            return null;
-        }
+        //    //return this.Ok(new { TotalPostCount = totalPostCount, Posts = posts });
 
-        [HttpGet]
-
-        public async Task<IActionResult> SearchPostsAsyncActionResult(int index, int count, string categoryId, string searchTerm)
-        {
-            //List<Data.Entities.Post> postEntities;
-
-            //int totalPostCount;
-
-            //if (string.IsNullOrEmpty(searchTerm))
-            //{
-            //    return await this.GetPostsAsyncActionResult(index, count, categoryId);
-            //}
-
-            //var searchTerms = searchTerm.ToLower().Split(' ');
-
-            //if (categoryId == null)
-            //{
-            //    var query = this._blogDbContext.Posts
-            //        .Where(p => searchTerms.Any(s => p.Title.ToLower().Contains(s))
-            //                    || searchTerms.Any(s => p.Description.ToLower().Contains(s))
-            //                    || searchTerms.Any(s => p.Content.ToLower().Contains(s))
-            //                    || searchTerms.Any(s => p.User.Name.ToLower().Contains(s)))
-            //        .OrderByDescending(p => p.Created);
-
-            //    totalPostCount = query.Count();
-
-            //    postEntities = query
-            //       .Skip(index)
-            //       .Take(count)
-            //       .ToList()
-            //       .Select(p => new Data.Entities.Post
-            //       {
-            //           Categories = p.Categories,
-            //           CommentCount = p.Comments.Count,
-            //           Content = p.Content,
-            //           Created = p.Created,
-            //           Description = p.Description,
-            //           Id = p.Id,
-            //           InternalTitle = p.InternalTitle,
-            //           Title = p.Title,
-            //           LastModified = p.LastModified,
-            //           User = p.User
-
-            //       }).ToList();
-            //}
-            //else
-            //{
-            //    var categoryGuid = Guid.Parse(categoryId);
-
-            //    var query = this._blogDbContext.Posts
-            //        .Where(p => p.Categories.Any(c => c.Id == categoryGuid))
-            //        .Where(p => searchTerms.Any(s => p.Title.ToLower().Contains(s))
-            //                    || searchTerms.Any(s => p.Description.ToLower().Contains(s))
-            //                    || searchTerms.Any(s => p.Content.ToLower().Contains(s))
-            //                    || searchTerms.Any(s => p.User.Name.ToLower().Contains(s)))
-            //        .OrderByDescending(p => p.Created);
-
-            //    totalPostCount = query.Count();
-
-            //    postEntities = query
-            //       .Skip(index)
-            //       .Take(count)
-            //       .ToList()
-            //       .Select(p => new Data.Entities.Post
-            //       {
-            //           Categories = p.Categories,
-            //           CommentCount = p.Comments.Count,
-            //           Content = p.Content,
-            //           Created = p.Created,
-            //           Description = p.Description,
-            //           Id = p.Id,
-            //           InternalTitle = p.InternalTitle,
-            //           Title = p.Title,
-            //           LastModified = p.LastModified,
-            //           User = p.User
-
-            //       }).ToList();
-            //}
-
-            //var posts = Mapper.Map<List<Post>>(postEntities);
-
-            //return this.Ok(new { TotalPostCount = totalPostCount, Posts = posts });
-
-            return null;
-        }
+        //    return null;
+        //}
 
         [HttpPost]
         [Route("post/add")]
@@ -280,54 +210,6 @@ namespace brechtbaekelandt.Controllers.WebApi
             await this._blogDbContext.SaveChangesAsync();
 
             return this.Ok();
-
-            //if (!ModelState.IsValid)
-            //{
-
-            //}
-
-            //if (post.Categories.Count == 0)
-            //{
-            //    //throw new HttpResponseException(new HttpResponseMessage
-            //    //{
-            //    //    StatusCode = HttpStatusCode.BadRequest,
-            //    //    ReasonPhrase = "You must at least select one category."
-            //    //});
-            //}
-
-            //if (this._blogDbContext.Posts.Any(p => p.Title.ToLower() == post.Title))
-            //{
-            //    //throw new HttpResponseException(new HttpResponseMessage
-            //    //{
-            //    //    StatusCode = HttpStatusCode.BadRequest,
-            //    //    ReasonPhrase = "This title already exists, please choose another one."
-            //    //});
-            //}
-
-            //var now = DateTime.Now;
-            //post.Created = now;
-            //post.LastModified = now;
-
-            //var postEntity = Mapper.Map<Data.Entities.Post>(post);
-            //postEntity.InternalTitle = postEntity.Title.RemoveSpecialCharacters().Trim().Replace(' ', '-').ToLower();
-
-            //postEntity.Categories.ForEach(c =>
-            //{
-            //    if (this._blogDbContext.Categories.Any(cat => cat.Id == c.Id))
-            //    {
-            //        this._blogDbContext.Categories.Attach(c);
-            //    }
-            //});
-
-            ////var currentUserId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
-            ////postEntity.User = this._blogDbContext.Users.FirstOrDefault(u => u.Id == currentUserId);
-
-            //this._blogDbContext.Posts.Add(postEntity);
-            //this._blogDbContext.SaveChanges();
-
-            //return this.Ok(postEntity.Id);
-
-
         }
 
         [HttpPost]

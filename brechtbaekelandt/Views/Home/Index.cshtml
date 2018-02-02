@@ -54,15 +54,18 @@
                 <!-- ko foreach: keywordsFilter -->
                 <a href="#" class="label label-default" data-bind="click: function() { $root.keywordsFilter.pop($data); }"><span data-bind="text: $data"></span> <i class="fa fa-times"></i></a>
                 <!-- /ko -->
-                <hr />
                 <!-- /ko -->
             </div>
+            <!-- ko ifnot: isLoading -->
             <!-- ko if: posts().length === 0 -->
-            <p>no posts yet...</p>
+            <div class="text-center">no posts found...</div>
             <!-- /ko -->
             <!-- ko if: posts().length > 0 -->
             <!-- ko foreach: posts -->
-            @Html.Partial("_PostPreview")
+            @{
+                this.Html.RenderPartial("_PostPreview");
+            }
+            <!-- /ko -->
             <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: isLoading -->
@@ -137,7 +140,7 @@
 }
 
 @section scripts{
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06" async="async"></script>
 
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
@@ -158,6 +161,8 @@
             var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
 
             brechtbaekelandt.home.init(serverViewmodel);
+
+            addthis.init();
         });
     </script>
 
