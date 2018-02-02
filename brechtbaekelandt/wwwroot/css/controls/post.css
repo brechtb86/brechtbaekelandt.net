@@ -46,7 +46,6 @@
 .post-content {
 }
 
-.post-share > .addthis_inline_share_toolbox {
-    margin-top: 8px;
-    margin-bottom: -1px;
+.post-share > hr:last-child {
+    margin-top: 5px;
 }

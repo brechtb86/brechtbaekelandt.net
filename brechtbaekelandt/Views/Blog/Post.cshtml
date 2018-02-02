@@ -32,8 +32,6 @@
             var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
 
             brechtbaekelandt.post.init(serverViewmodel);
-
-            addthis.init();
         });
     </script>
 }

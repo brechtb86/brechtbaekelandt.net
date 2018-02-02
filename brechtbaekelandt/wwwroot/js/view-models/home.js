@@ -1,4 +1,7 @@
 ﻿/// <reference path="../knockout/knockout.extensions.js" />
+/// <reference path="../references/addthis_widget.js" />
+/// <reference path="../../lib/jquery/dist/jquery.js" />
+/// <reference path="../../lib/knockout-mapping/build/output/knockout.mapping-latest.debug.js" />
 
 var brechtbaekelandt = brechtbaekelandt || {};
 
@@ -13,7 +16,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.selectedCategoryFilter = ko.observable();
         self.selectedCategoryFilter.subscribeChanged(function (newValue, oldValue) {
             if (newValue !== oldValue) {
-                self.filter();
+                self.getPosts();
             }
         });
 
@@ -21,13 +24,17 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.keywordsFilter = ko.observableArray();
         self.keywordsFilter.subscribe(function () {
-            self.filter();
+            self.getPosts();
         });
 
         self.isLoading = ko.observable(false);
+
+        addthis.init();
     };
 
-    HomeViewModel.prototype.filter = function () {
+
+
+    HomeViewModel.prototype.getPosts = function () {
         var self = this;
 
         self.isLoading(true);
@@ -40,6 +47,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             })
             .done(function (data, textStatus, jqXhr) {
                 ko.mapping.fromJS(data, {}, self.posts);
+
+                addthis.layers.refresh();
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 
@@ -48,8 +57,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.isLoading(false);
             });
     };
-
-
 
     //BlogViewModel.prototype.loadPosts = function (index, count, categoryId) {
     //    var self = this;

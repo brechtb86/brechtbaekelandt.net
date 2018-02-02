@@ -40,9 +40,9 @@
                 </div> <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchFilter, enterKey: function() { filter(); }" />
+                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchFilter, enterKey: function() { getPosts(); }" />
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" data-bind="click: function() { filter(); }"><i class="fa fa-search"></i></button>
+                                <button class="btn btn-default" type="button" data-bind="click: function() { getPosts(); }"><i class="fa fa-search"></i></button>
                             </span>
                         </div>
                     </div>
@@ -60,11 +60,7 @@
             <!-- ko if: posts().length === 0 -->
             <div class="text-center">no posts found...</div>
             <!-- /ko -->
-            <!-- ko if: posts().length > 0 -->
-            <!-- ko foreach: posts -->
-            <div data-bind="template: { name: 'postPreviewTemplate' ,data: $data, afterRender: function() {} }"> </div>
-            <!-- /ko -->
-            <!-- /ko -->
+            <div data-bind="template: { name: 'postPreviewTemplate', foreach: posts }"></div>
             <!-- /ko -->
             <!-- ko if: isLoading -->
             <div data-bind="template: { name: 'loaderTemplate' }"> </div>
@@ -153,8 +149,6 @@
             var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
 
             brechtbaekelandt.home.init(serverViewmodel);
-
-            addthis.init();
         });
     </script>
 
