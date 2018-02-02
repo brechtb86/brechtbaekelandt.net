@@ -60,7 +60,9 @@
             <!-- ko if: posts().length === 0 -->
             <div class="text-center">no posts found...</div>
             <!-- /ko -->
-            <div data-bind="template: { name: 'postPreviewTemplate', foreach: posts }"></div>
+            <!-- ko foreach: posts -->
+            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root } }"></div>
+            <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: isLoading -->
             <div data-bind="template: { name: 'loaderTemplate' }"> </div>
@@ -116,7 +118,9 @@
             <!-- ko if : keywords().length > 0 -->
             <label>tags:</label>
             <!-- ko foreach: keywords -->
-            <a href="#" class="label label-default" data-bind="text: $data, click: function() { $root.keywordsFilter.push($data); }"></a>
+            <a href="#" class="label label-default" data-bind="text: $data,  css: { active: $root.keywordsFilter.indexOf($data) > -1 }, click: function() { $root.keywordsFilter.indexOf($data) === -1 ? $root.keywordsFilter.push($data) : null; }"></a>
+            
+
             <!-- /ko -->
             <hr />
             <!-- /ko -->

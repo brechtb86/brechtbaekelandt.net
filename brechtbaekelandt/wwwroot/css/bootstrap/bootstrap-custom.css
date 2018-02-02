@@ -5913,6 +5913,12 @@ a.label:focus {
     top: -1px;
 }
 
+.label.active {
+    color: #fff;
+    background-color: #a33f3a;
+    border: 1px solid #a33f3a;
+}
+
 .label-default {
     background-color: #fff;
     color: #540804;
