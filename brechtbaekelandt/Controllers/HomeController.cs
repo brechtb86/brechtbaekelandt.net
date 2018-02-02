@@ -38,8 +38,8 @@ namespace brechtbaekelandt.Controllers
                 .ThenInclude(pc => pc.Category)
                 .Where(
                     p => p.PostCategories.Any(pc =>
-                        (categoryId == null || categoryId == Guid.Empty || pc.Category.Id == categoryId)
-                        && (string.IsNullOrEmpty(tag) || p.Tags.Contains(tag))
+                        (categoryId == null || categoryId == Guid.Empty || pc.Category.Id == categoryId) ||
+                        (string.IsNullOrEmpty(tag) || p.Tags.Contains(tag))
                     ))
                 .OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)
