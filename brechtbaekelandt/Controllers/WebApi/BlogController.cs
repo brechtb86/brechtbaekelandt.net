@@ -10,6 +10,7 @@ using brechtbaekelandt.Data;
 using brechtbaekelandt.Data.Entities;
 using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Identity;
+using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,8 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         private readonly ApplicationUserManager _userManager;
 
+        private const int _postsPerPage = 5;
+
         public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager)
         {
             this._userManager = userManager;
@@ -34,7 +37,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpGet]
         [Route("posts")]
-        public IActionResult GetPostsAsyncActionResult(string searchTermsString = "", Guid? categoryId = null, string tagsString = "")
+        public IActionResult GetPostsAsyncActionResult(string searchTermsString = "", Guid? categoryId = null, string tagsString = "", int currentPage = 1)
         {
             var searchTerms = !string.IsNullOrEmpty(searchTermsString) ? searchTermsString.Split(',') : new string[0];
             var tags = !string.IsNullOrEmpty(tagsString) ? tagsString.Split(',') : new string[0];
@@ -54,10 +57,21 @@ namespace brechtbaekelandt.Controllers.WebApi
                     && (tags.Length == 0 ||
                         tags.All(k => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(k)))
                 ))
-                .OrderByDescending(p => p.Created);
+                .OrderByDescending(p => p.Created)
+                .Skip((currentPage - 1) * _postsPerPage)
+                .Take(_postsPerPage);
 
+            var totalPostCount = this._blogDbContext.Posts.Count();
 
-            return this.Ok(Mapper.Map<ICollection<Models.Post>>(query));
+            var viewModel = new ApiPostsViewModel
+            {
+                CurrentPage = currentPage,
+                TotalPostCount = totalPostCount,
+                PostsPerPage = _postsPerPage,
+                Posts = Mapper.Map<ICollection<Models.Post>>(query)
+            };
+
+            return this.Ok(viewModel);
         }
 
         //[HttpGet]

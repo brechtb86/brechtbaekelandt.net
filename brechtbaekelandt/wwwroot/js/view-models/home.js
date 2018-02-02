@@ -11,6 +11,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     function HomeViewModel(serverViewModel) {
         var self = this;
 
+        document.addEventListener("scroll", function (event) {
+            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > (self.currentPage() * self.postsPerPage()))) {
+                self.getPosts(self.currentPage() + 1, true);
+            }
+        });
+
         self.searchTermsFilter = ko.observable();
         self.categoryIdFilter = ko.observable();
         self.tagsFilter = ko.observableArray();
@@ -18,7 +24,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         ko.mapping.fromJS(serverViewModel, {}, self);
 
         self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
-            if (newValue !== oldValue) {
+            if ((newValue || oldValue) && (newValue !== oldValue)) {
                 self.getPosts();
             }
         });
@@ -28,29 +34,44 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         });
 
         self.isLoading = ko.observable(false);
+        self.isLoadingMore = ko.observable(false);
 
         self.initAddThis();
     };
 
-    HomeViewModel.prototype.getPosts = function () {
+    HomeViewModel.prototype.getPosts = function (page = 1, getMore = false) {
         var self = this;
 
-        self.isLoading(true);
+        self.isLoading(!getMore);
+        self.isLoadingMore(getMore);
 
         $.getJSON("../api/blog/posts",
             {
                 searchTermsString: self.searchTermsFilter() ? self.searchTermsFilter().replace("", ",") : "",
                 categoryId: self.categoryIdFilter(),
-                tagsString: self.tagsFilter() ? self.tagsFilter().join(",") : ""
+                tagsString: self.tagsFilter() ? self.tagsFilter().join(",") : "",
+                currentPage: page
             })
             .done(function (data, textStatus, jqXhr) {
-                ko.mapping.fromJS(data, {}, self.posts);
+                if (!getMore) {
+                    ko.mapping.fromJS(data.posts, {}, self.posts);
+                } else {
+                    data.posts.forEach(function (post) {
+                        self.posts.push(ko.mapping.fromJS(post));
+                    });
+                }
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 
             })
-            .always(function () {
+            .always(function (data, textStatus, jqXHR) {
+                self.currentPage(data.currentPage);
+                self.totalPostCount(data.totalPostCount);
+                self.postsPerPage(data.postsPerPage);
                 self.isLoading(false);
+                self.isLoadingMore(false);
+
+                self.refreshAddThis();
             });
     };
 
@@ -143,11 +164,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     //    self.refreshPosts(false);
     //};
 
-    HomeViewModel.prototype.initAddThis = function() {
+    HomeViewModel.prototype.initAddThis = function () {
         addthis.init();
     }
 
     HomeViewModel.prototype.refreshAddThis = function () {
+        //addthis.init();
         addthis.layers.refresh();
     }
 

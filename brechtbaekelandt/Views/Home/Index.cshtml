@@ -61,12 +61,16 @@
             <div class="text-center">no posts found...</div>
             <!-- /ko -->
             <!-- ko foreach: posts -->
-            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root }, afterRender: function() { $root.refreshAddThis(); } }"></div>
+            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root } }"></div>
             <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: isLoading -->
-            <div data-bind="template: { name: 'loaderTemplate' }"> </div>
+            <div data-bind="template: { name: 'loaderTemplate' }"></div>
             <!-- /ko -->
+            <!-- ko if: isLoadingMore -->
+            <div data-bind="template: { name: 'loaderTemplate' }"></div>
+            <!-- /ko -->
+
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
             <img src="~/images/me.png" class="img-responsive" />
@@ -127,7 +131,6 @@
     </div>
 </div>
 
-
 @section styles{
     <link href="~/css/controls/post-preview.css" rel="stylesheet" />
 
@@ -135,7 +138,6 @@
 }
 
 @section scripts{
-    <script src="~/js/knockout/knockout.extensions.js"></script>
     <script src="~/js/knockout/knockout.key-binding-handlers.js"></script>
 
     <script src="~/js/extensions/string-extensions.js"></script>
@@ -152,9 +154,9 @@
             var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
 
             brechtbaekelandt.home.init(serverViewmodel);
+
         });
     </script>
-
 }
 
 @{

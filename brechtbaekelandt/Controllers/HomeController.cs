@@ -29,11 +29,9 @@ namespace brechtbaekelandt.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(Guid? categoryId = null, string tag = "")
+        public IActionResult Index(Guid? categoryId = null, string tag = "", int currentPage = 1)
         {
-            var totalPostCount = this._blogDbContext.Posts.Count();
-
-            var postEntities = this._blogDbContext.Posts
+            var query = this._blogDbContext.Posts
                 .Include(p => p.User)
                 .Include(p => p.Comments)
                 .Include(p => p.PostCategories)
@@ -43,7 +41,11 @@ namespace brechtbaekelandt.Controllers
                         (categoryId == null || categoryId == Guid.Empty || pc.Category.Id == categoryId)
                         && (string.IsNullOrEmpty(tag) || p.Tags.Contains(tag))
                     ))
-                .OrderByDescending(p => p.Created).Take(_postsPerPage);
+                .OrderByDescending(p => p.Created)
+                .Skip((currentPage - 1) * _postsPerPage)
+                .Take(_postsPerPage);
+
+            var totalPostCount = this._blogDbContext.Posts.Count();
 
             var categoryEntities = this._blogDbContext.Categories
                 .OrderBy(c => c.Name);
@@ -53,12 +55,13 @@ namespace brechtbaekelandt.Controllers
 
             var vm = new HomeViewModel
             {
+                CurrentPage = currentPage,
                 TotalPostCount = totalPostCount,
                 PostsPerPage = _postsPerPage,
-                Posts = Mapper.Map<ICollection<Models.Post>>(postEntities),
+                Posts = Mapper.Map<ICollection<Models.Post>>(query),
                 Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities),
                 Tags = tags,
-                TagsFilter = !string.IsNullOrEmpty(tag) ? new [] {tag} : new string[0],
+                TagsFilter = !string.IsNullOrEmpty(tag) ? new[] { tag } : new string[0],
                 CategoryIdFilter = !(categoryId == null || categoryId == Guid.Empty) ? categoryId : null
             };
 

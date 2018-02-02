@@ -8,7 +8,6 @@
     "knockout": "v3.4.2",
     "moment": "2.20.1",
     "knockout-mapping": "2.4.1",
-    "jquery-slimscroll": "slimscroll#v1.3.8",
     "jquery.cookie": "jquery-cookie#v1.4.1",
     "froala-wysiwyg-editor": "v2.7.3"
   },

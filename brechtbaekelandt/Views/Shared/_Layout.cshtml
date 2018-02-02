@@ -72,7 +72,6 @@
 
     @*<environment include="Development">*@
     <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/jquery-slimscroll/jquery.slimscroll.js"></script>
     <script src="~/lib/jquery.cookie/jquery.cookie.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/knockout/dist/knockout.js"></script>
@@ -369,9 +368,9 @@
                 <div class="form-group">
                     <label>tags:</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.tagToAdd, enterKey: function() { viewModel.addtag(viewModel.tagToAdd, post.tags); }" />
+                        <input type="text" class="form-control" placeholder="add a new tag or select one or more below" data-bind="textInput: viewModel.tagToAdd, enterKey: function() { viewModel.addTag(viewModel.tagToAdd, post.tags); }" />
                         <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addtag(viewModel.tagToAdd, post.tags); }"><i class="fa fa-plus"></i></button>
+                            <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addTag(viewModel.tagToAdd, post.tags); }"><i class="fa fa-plus"></i></button>
                         </span>
                     </div>
                 </div>
@@ -379,7 +378,7 @@
                     <!-- ko if: post.tags().length > 0 -->
                     <div class="tags input-group">
                         <!-- ko  foreach: post.tags -->
-                        <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removetag($data, $parentContext.$data.post.tags); }" class="tag">
+                        <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removeTag($data, $parentContext.$data.post.tags); }" class="tag">
                             <span data-bind="text: $data"></span> <i class="fa fa-check"></i>
                         </button>
                         <!-- /ko -->
