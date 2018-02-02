@@ -106,16 +106,15 @@ header {
     width: auto !important;
 }
 
-.loading {
+.loader {
     text-align: center;
     width: 100%;
+    color: #540804;
 }
 
-    .loading > p {
+    .loader > p {
         padding: 10px;
     }
-
-
 
 
 /* knockout validation*/

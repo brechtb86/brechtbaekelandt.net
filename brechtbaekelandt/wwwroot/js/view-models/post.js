@@ -11,16 +11,8 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         ko.mapping.fromJS(serverViewModel, {}, self);
 
-        self.initAddThis();
-    };
-
-    PostViewModel.prototype.initAddThis = function () {
         addthis.init();
-    }
-
-    PostViewModel.prototype.refreshAddThis = function () {
-        addthis.layers.refresh();
-    }
+    };
 
     function init(serverViewModel) {
         var viewModel = new PostViewModel(serverViewModel);
