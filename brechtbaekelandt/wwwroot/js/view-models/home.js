@@ -40,8 +40,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             })
             .done(function (data, textStatus, jqXhr) {
                 ko.mapping.fromJS(data, {}, self.posts);
-
-                addthis.toolbox(".addthis_inline_share_toolbox");
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 

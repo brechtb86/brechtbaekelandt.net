@@ -91,7 +91,7 @@ namespace brechtbaekelandt.Extensions
 
         private static string InsertPictureInDescription(string description, string pictureUrl)
         {
-            return description.Insert(description.IndexOf('>') + 1, $"<img src='{pictureUrl}' class='post-picture post-preview-picture' />");
+            return description.Insert(description.IndexOf('>') + 1, $"<img src='{pictureUrl}' class='post-picture post-preview-picture img-thumbnail' />");
         }
     }
 }

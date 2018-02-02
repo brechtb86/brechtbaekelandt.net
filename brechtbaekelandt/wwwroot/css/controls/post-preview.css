@@ -36,19 +36,13 @@
     max-width: 30%;
     vertical-align: top;
     float: left;
+    margin: 0 10px 10px 0;
 }
 
 .post-preview-content {
 }
 
-/*.post-preview-content .img-thumbnail {
-        max-width: 200px;
-        vertical-align: top;
-        float: left;
-        margin: 0 10px 10px 0;
-    }*/
-
-.post-preview-share > .addthis_inline_share_toolbox {
+.post-share.post-preview-share > .addthis_inline_share_toolbox {
     margin-top: 8px;
     margin-bottom: -1px;
 }

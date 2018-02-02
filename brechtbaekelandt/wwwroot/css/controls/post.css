@@ -37,6 +37,7 @@
     max-width: 20%;
     vertical-align: top;
     float: left;
+    margin: 0 10px 10px 0;
 }
 
 .post-description {
@@ -44,13 +45,6 @@
 
 .post-content {
 }
-
-/*.post-content .img-thumbnail {
-        max-width: 200px;
-        vertical-align: top;
-        float: left;
-        margin: 0 10px 10px 0;
-    }*/
 
 .post-share > .addthis_inline_share_toolbox {
     margin-top: 8px;

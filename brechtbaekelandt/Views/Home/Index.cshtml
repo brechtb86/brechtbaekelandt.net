@@ -62,16 +62,12 @@
             <!-- /ko -->
             <!-- ko if: posts().length > 0 -->
             <!-- ko foreach: posts -->
-            @{
-                this.Html.RenderPartial("_PostPreview");
-            }
+            <div data-bind="template: { name: 'postPreviewTemplate' ,data: $data, afterRender: function() {} }"> </div>
             <!-- /ko -->
             <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: isLoading -->
-            @{
-                this.Html.RenderPartial("_Loader");
-            }
+            <div data-bind="template: { name: 'loaderTemplate' }"> </div>
             <!-- /ko -->
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
@@ -140,10 +136,6 @@
 }
 
 @section scripts{
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06" async="async"></script>
-
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-
     <script src="~/js/knockout/knockout.extensions.js"></script>
     <script src="~/js/knockout/knockout.key-binding-handlers.js"></script>
 
@@ -202,4 +194,3 @@
     <meta name="twitter:description" content="This blog talks about development, electronics and other stuff that I like.">
     <meta name="twitter:image:src" content="http://www.brechtbaekelandt.net/images/me-social.png">
 }
-
