@@ -29,7 +29,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.isLoading = ko.observable(false);
 
-        addthis.init();
+        self.initAddThis();
     };
 
     HomeViewModel.prototype.getPosts = function () {
@@ -45,8 +45,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             })
             .done(function (data, textStatus, jqXhr) {
                 ko.mapping.fromJS(data, {}, self.posts);
-
-                addthis.layers.refresh();
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 
@@ -144,6 +142,15 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     //    self.loadPosts(self.currentIndex() * postsPerPage, postsPerPage, self.selectedCategoryId());
     //    self.refreshPosts(false);
     //};
+
+    HomeViewModel.prototype.initAddThis = function() {
+        addthis.init();
+    }
+
+    HomeViewModel.prototype.refreshAddThis = function () {
+        addthis.layers.refresh();
+    }
+
 
     function init(serverViewModel) {
 

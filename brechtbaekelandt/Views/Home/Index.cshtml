@@ -61,7 +61,7 @@
             <div class="text-center">no posts found...</div>
             <!-- /ko -->
             <!-- ko foreach: posts -->
-            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root } }"></div>
+            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root }, afterRender: function() { $root.refreshAddThis(); } }"></div>
             <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: isLoading -->
