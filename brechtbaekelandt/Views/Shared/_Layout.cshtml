@@ -93,12 +93,13 @@
 
     <script type="text/javascript">
         var knockoutValidationSettings = {
-            insertMessages: true,
-            decorateInputElement: true,
+            insertMessages: false,
+            insertMessagesAfterValidationElement: true,
+            decorateInputElement: false,
             decorateElementOnModified: true,
-            //errorMessageClass: 'error',
-            //errorElementClass: 'error',
-            //errorClass: 'error',
+            errorMessageClass: 'input-group-validation-message',
+            errorElementClass: 'has-error',
+            elementClass: 'input-group',
             errorsAsTitle: false,
             parseInputAttributes: false,
             messagesOnModified: true,
@@ -269,7 +270,7 @@
             </div>
             <div class="post-tags">
                 <!-- ko foreach: tags -->
-                <a class="label label-default" data-bind="text: $data, attr: { href: '/home?tag=' + $data }"></a>
+                <a class="label label-default" data-bind="text: $data, attr: { href: '/home?tagsString=' + $data }"></a>
                 <!-- /ko -->
             </div>
             <div class="clearfix"></div>
@@ -311,7 +312,7 @@
                     @*<small class="pull-right"><a asp-area="" asp-controller="blog" asp-action="edit" asp-route-id="@this.Model.Id">edit post</a> | <a asp-area="" asp-controller="blog" asp-action="delete" asp-route-id="@this.Model.Id">delete post</a></small>*@
                 }
             </div>
-           
+
             <div class="post-preview-content" data-bind="html: post.description">
             </div>
             <!-- ko if: post.content -->
@@ -336,11 +337,15 @@
             <div class="post-editor">
                 <div class="form-group">
                     <label>title:</label>
-                    <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: post.title" />
+                    <div class="input-group" data-bind="validationElement: post.title">
+                        <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: post.title" />
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>description:</label>
-                    <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions"></textarea>
+                    <div class="input-group" data-bind="validationElement: post.description">
+                        <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions"></textarea>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>content:</label>
@@ -348,7 +353,7 @@
                 </div>
                 <div class="form-group">
                     <label>categories:</label>
-                    <div class="input-group">
+                    <div class="input-group" data-bind="validationElement: post.categories">
                         <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.categoryToAdd, enterKey: function(){ viewModel.addCategory(viewModel.categoryToAdd); }" />
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addCategory(viewModel.categoryToAdd); }"><i class="fa fa-plus"></i></button>

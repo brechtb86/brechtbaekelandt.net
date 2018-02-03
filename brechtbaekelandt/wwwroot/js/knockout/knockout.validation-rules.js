@@ -362,7 +362,7 @@ ko.validation.rules["existsIn"] = {
             }
         }
 
-        return  array.indexOf(newVal) > -1;
+        return array.indexOf(newVal) > -1;
     },
     message: "The value doesn't exist in target array"
 };
@@ -426,4 +426,18 @@ ko.validation.rules["ipAddress"] = {
         return /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test("" + val + "");
     },
     message: "Please insert a valid ip address"
+};
+
+ko.validation.rules["minimumItemsInArray"] = {
+    validator: function (arr, options) {
+        if (!Array.isArray(arr)) {
+            throw new TypeError("[minimumItemsInArray] must extend an observableArray");
+        }
+
+        if (options.minimum)
+            return arr.length >= 1;
+
+        return arr.length >= options.minimum;
+    },
+    message: null
 };

@@ -13,13 +13,13 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 self.categories()[i].isSelected = ko.observable();
             }
         }
-      
+
         self.showCreate = ko.observable();
 
         self.newPost = {};
         self.newPost.title = ko.observable().extend({ required: { message: "you didn't fill in the title!" } });
         self.newPost.description = ko.observable().extend({ required: { message: "you didn't fill in the description!" } });
-        self.newPost.content = ko.observable().extend({ required: { message: "you didn't fill in content!" } });
+        self.newPost.content = ko.observable();
         self.newPost.categories = ko.observableArray().extend({ minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" } });
         self.newPost.tags = ko.observableArray();
 
@@ -117,28 +117,21 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.createSucceededMessage(null);
         self.createErrorMessage(null);
 
-        //if (self.errors().length > 0) {
-        //    self.errors.showAllMessages();
-        //    return;
-        //}
+        if (self.createErrors().length > 0) {
+            self.createErrors.showAllMessages();
+            return;
+        }
 
         //var postData = ko.mapping.toJSON(self.newPost);
 
-        $.ajax({
-            type: "POST",
-            url: "../api/blog/post/add",
-            contentType: "application/json",
-            dataType: "json",
-            data: ko.toJSON(post)
-        })
+        $.post("../api/blog/post/add", ko.toJSON(post))
             .done(function (data, textStatus, jqXhr) {
-
                 self.createSucceededMessage("the post was successfully created!");
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.createErrorMessage(errorThrown);
             })
-            .always(function () {
+            .always(function (data, textStatus, jqXhr) {
 
             });
     };
@@ -175,7 +168,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         tag(null);
     };
-    
+
     AdminViewModel.prototype.removeTag = function (tag, tags) {
         var self = this;
 
