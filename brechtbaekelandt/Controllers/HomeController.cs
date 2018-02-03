@@ -41,10 +41,10 @@ namespace brechtbaekelandt.Controllers
                 .ThenInclude(pc => pc.Category)
                 .Where(p =>
                     (categoryId == null || p.PostCategories.Any(pc => pc.CategoryId == categoryId)) &&
-                    (searchTerms.Length == 0 || searchTerms.Any(s => p.Title.ToLower().Contains(s.ToLower()))) ||
-                    (searchTerms.Length == 0 || searchTerms.Any(s => p.Description.ToLower().Contains(s.ToLower()))) ||
-                    (searchTerms.Length == 0 || searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && p.Content.ToLower().Contains(s.ToLower()))) ||
-                    (tags.Length == 0 || tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.ToLower().Contains(t.ToLower())))
+                    (searchTerms.Length == 0 || searchTerms.Any(s => p.Title.ToLower().Contains(s.ToLower())) ||
+                     searchTerms.Length == 0 || searchTerms.Any(s => p.Description.ToLower().Contains(s.ToLower())) ||
+                     searchTerms.Length == 0 || searchTerms.Any(s => string.IsNullOrEmpty(p.Content) || p.Content.ToLower().Contains(s.ToLower()))) &&
+                    (tags.Length == 0 || tags.Any(t => string.IsNullOrEmpty(p.Tags) || p.Tags.ToLower().Contains(t.ToLower())))
                 )
                 .OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)
