@@ -36,11 +36,9 @@ namespace brechtbaekelandt.Controllers
                 .Include(p => p.Comments)
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category)
-                .Where(
-                    p => p.PostCategories.Any(pc =>
-                        (categoryId != null && pc.Category.Id == categoryId) ||
-                        (!string.IsNullOrEmpty(tag) && p.Tags.Contains(tag))
-                    ))
+                .Where(p =>
+                    (categoryId == null || p.PostCategories.Any(pc => pc.CategoryId == categoryId)) &&
+                    (string.IsNullOrEmpty(tag) || p.Tags.Contains(tag)))
                 .OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)
                 .Take(_postsPerPage);
