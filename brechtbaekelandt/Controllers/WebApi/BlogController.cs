@@ -76,30 +76,6 @@ namespace brechtbaekelandt.Controllers.WebApi
         [ValidationActionFilter]
         public async Task<IActionResult> CreatePostAsyncActionResult([FromBody]Models.Post post)
         {
-            //var files = HttpContext.Request.Form.Files;
-
-            //foreach (var image in files)
-            //{
-            //    if (image != null && image.Length > 0)
-            //    {
-            //        var file = image;
-            //        //var uploads = Path.Combine(this._hostingEnvironment.WebRootPath, "images\\blog");
-
-            //        //if (file.Length > 0)
-            //        //{
-            //        //    var fileGuid = Guid.NewGuid();
-
-            //        //    var fileName = $"{fileGuid}{file.FileName.Substring(file.FileName.LastIndexOf(".", StringComparison.Ordinal))}";
-
-            //        //    using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
-            //        //    {
-            //        //        await file.CopyToAsync(fileStream);
-            //        //        post.PictureUrl = $@"\images\blog\{fileName}";
-            //        //    }
-            //        //}
-            //    }
-            //}
-
             post.Id = Guid.NewGuid();
             post.Created = DateTime.Now;
             post.LastModified = DateTime.Now;
