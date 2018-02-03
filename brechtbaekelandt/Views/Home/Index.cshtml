@@ -41,7 +41,7 @@
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchTermsFilter, enterKey: function() { getPosts(); }" />
+                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchTermsFilterString, enterKey: function() { getPosts(); }" />
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" data-bind="click: function() { getPosts(); }"><i class="fa fa-search"></i></button>
                             </span>
@@ -62,7 +62,7 @@
             <div class="text-center">no posts found...</div>
             <!-- /ko -->
             <!-- ko foreach: posts -->
-            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root }, afterRender: function() { $root.initFancyBox(); } }"></div>
+            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root }, afterRender: function() { $root.initFancyBox(); $root.initAddThis(); } }"></div>
             <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: isLoading -->

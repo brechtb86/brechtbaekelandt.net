@@ -29,8 +29,11 @@ namespace brechtbaekelandt.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(Guid? categoryId = null, string tag = "", int currentPage = 1)
+        public IActionResult Index(Guid? categoryId = null, string tagsString = "", string searchTermsString = "", int currentPage = 1)
         {
+            var searchTerms = !string.IsNullOrEmpty(searchTermsString) ? searchTermsString.Split(',') : new string[0];
+            var tags = !string.IsNullOrEmpty(tagsString) ? tagsString.Split(',') : new string[0];
+
             var query = this._blogDbContext.Posts
                 .Include(p => p.User)
                 .Include(p => p.Comments)
@@ -38,7 +41,11 @@ namespace brechtbaekelandt.Controllers
                 .ThenInclude(pc => pc.Category)
                 .Where(p =>
                     (categoryId == null || p.PostCategories.Any(pc => pc.CategoryId == categoryId)) &&
-                    (string.IsNullOrEmpty(tag) || p.Tags.Contains(tag)))
+                    (searchTerms.Length == 0 || searchTerms.Any(s => p.Title.ToLower().Contains(s.ToLower()))) ||
+                    (searchTerms.Length == 0 || searchTerms.Any(s => p.Description.ToLower().Contains(s.ToLower()))) ||
+                    (searchTerms.Length == 0 || searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && p.Content.ToLower().Contains(s.ToLower()))) ||
+                    (tags.Length == 0 || tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.ToLower().Contains(t.ToLower())))
+                )
                 .OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)
                 .Take(_postsPerPage);
@@ -48,7 +55,7 @@ namespace brechtbaekelandt.Controllers
             var categoryEntities = this._blogDbContext.Categories
                 .OrderBy(c => c.Name);
 
-            var tags = this._blogDbContext.Posts
+            var allTags = this._blogDbContext.Posts
                 .SelectMany(post => !string.IsNullOrEmpty(post.Tags) ? post.Tags.Split(",", StringSplitOptions.None) : new string[0]).Distinct().ToArray();
 
             var vm = new HomeViewModel
@@ -58,9 +65,10 @@ namespace brechtbaekelandt.Controllers
                 PostsPerPage = _postsPerPage,
                 Posts = Mapper.Map<ICollection<Models.Post>>(query),
                 Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities),
-                Tags = tags,
-                TagsFilter = !string.IsNullOrEmpty(tag) ? new[] { tag } : new string[0],
-                CategoryIdFilter = !(categoryId == null || categoryId == Guid.Empty) ? categoryId : null
+                Tags = allTags,
+                SearchTermsFilter = searchTerms,
+                TagsFilter = tags,
+                CategoryIdFilter = categoryId
             };
 
             return this.View(vm);

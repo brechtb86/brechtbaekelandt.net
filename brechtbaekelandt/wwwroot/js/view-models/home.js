@@ -1,8 +1,8 @@
 ﻿/// <reference path="../knockout/knockout.extensions.js" />
-/// <reference path="../references/addthis_widget.js" />
+/// <reference path="../addthis/addthis_widget.js" />
 /// <reference path="../../lib/jquery/dist/jquery.js" />
 /// <reference path="../../lib/knockout-mapping/build/output/knockout.mapping-latest.debug.js" />
-/// <reference path="~/wwwroot/lib/fancybox/src/js/core.js" />
+/// <reference path="../../lib/fancybox/src/js/core.js" />
 
 var brechtbaekelandt = brechtbaekelandt || {};
 
@@ -13,13 +13,16 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         var self = this;
 
         document.addEventListener("scroll", function (event) {
-            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > (self.currentPage() * self.postsPerPage()))) {
+            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > self.posts().length)) {
                 self.getPosts(self.currentPage() + 1, true);
             }
         });
 
-        self.searchTermsFilter = ko.observable();
         self.categoryIdFilter = ko.observable();
+        self.searchTermsFilterString = ko.observableArray();
+        self.searchTermsFilter = ko.observableArray().subscribe(function(newValue) {
+            self.searchTermsFilterString(searchTermsFilter.join(" "));
+        });
         self.tagsFilter = ko.observableArray();
 
         ko.mapping.fromJS(serverViewModel, {}, self);
@@ -42,10 +45,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriber = {};
         self.subscriber.emailAddress = ko.observable();
         self.subscriber.categories = ko.observableArray();
-
-        addthis.init();
-
-        self.initFancyBox();
     };
 
     HomeViewModel.prototype.getPosts = function (page = 1, getMore = false) {
@@ -54,10 +53,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.isLoading(!getMore);
         self.isLoadingMore(getMore);
 
+        self.isAddThisInitialized = ko.observable();
+
         $.getJSON("../api/blog/posts",
             {
-                searchTermsString: self.searchTermsFilter() ? self.searchTermsFilter().replace("", ",") : "",
                 categoryId: self.categoryIdFilter(),
+                searchTermsString: self.searchTermsFilterString() ? self.searchTermsFilterString().replace(" ", ",") : "",
                 tagsString: self.tagsFilter() ? self.tagsFilter().join(",") : "",
                 currentPage: page
             })
@@ -79,12 +80,10 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.postsPerPage(data.postsPerPage);
                 self.isLoading(false);
                 self.isLoadingMore(false);
-
-                addthis.layers.refresh();
-
-                self.initFancyBox();
             });
     };
+
+
 
     //BlogViewModel.prototype.loadPosts = function (index, count, categoryId) {
     //    var self = this;
@@ -182,6 +181,14 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     HomeViewModel.prototype.generateRssLink = function (categories) {
 
     };
+
+    HomeViewModel.prototype.initAddThis = function () {
+        addthis.init();
+
+        if (addthis.layers.refresh) {
+            addthis.layers.refresh();
+        }
+    }
 
     HomeViewModel.prototype.initFancyBox = function () {
         $("[data-fancybox]").fancybox({

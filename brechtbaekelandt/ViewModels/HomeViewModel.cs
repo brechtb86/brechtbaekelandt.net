@@ -18,6 +18,8 @@ namespace brechtbaekelandt.ViewModels
 
         public string[] TagsFilter { get; set; }
 
+        public string[] SearchTermsFilter { get; set; }
+
         public Guid? CategoryIdFilter { get; set; }
 
         public ICollection<Post> Posts { get; set; }
