@@ -24,9 +24,9 @@
 }
 
 <div style="display: none;" data-bind="visible: true">
-    <h2>brecht's blog</h2>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
+            <h2 class="title">brecht's blog</h2>
             <small>a blog about development, electronics and other stuff</small>
             <hr />
             <form class="row">
@@ -37,7 +37,8 @@
                             <span class="input-group-addon"><i class="fa fa-filter"></i></span>
                         </div>
                     </div>
-                </div> <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
                             <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchTermsFilter, enterKey: function() { getPosts(); }" />
@@ -61,7 +62,7 @@
             <div class="text-center">no posts found...</div>
             <!-- /ko -->
             <!-- ko foreach: posts -->
-            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root } }"></div>
+            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root }, afterRender: function() { $root.initFancyBox(); } }"></div>
             <!-- /ko -->
             <!-- /ko -->
             <!-- ko if: isLoading -->
@@ -73,6 +74,9 @@
 
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
+
+            @*<button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="image-placeholder"></span><span>subscribe</span></button>
+            <hr />*@
             <img src="~/images/me.png" class="img-responsive" />
             <hr />
             <div id="social">
@@ -123,22 +127,75 @@
             <label>tags:</label>
             <!-- ko foreach: tags -->
             <a href="#" class="label label-default" data-bind="text: $data,  css: { active: $root.tagsFilter.indexOf($data) > -1 }, click: function() { $root.tagsFilter.indexOf($data) === -1 ? $root.tagsFilter.push($data) : null; }"></a>
-
             <!-- /ko -->
             <hr />
             <!-- /ko -->
         </div>
     </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal: showSubscribe">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title text-center">subscribe to this blog</h3>
+                </div>
+                <div class="modal-body text-center">
+                    <h4>select the categories you want to subscribe to</h4>
+                    <form>
+                        <div class="well well-sm text-left row">
+                            <!-- ko foreach: categories -->
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                                <div class="col-xs-6">
+                                    <label data-bind="text: $data.name() + ':'"></label>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <!-- /ko -->
+                        </div>
+                        <label>enter your email address</label>
+                        <div class="input-group" data-bind="with: subscriber">
+                            <input type="email" class="form-control" placeholder="your email address" data-bind="textInput: emailAddress" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe($data) }">subscribe!</button>
+                            </span>
+                        </div>
+                        <p class="line-on-sides"><span>or</span></p>
+                        <label>generate an RSS link</label>
+                        <div class="input-group" data-bind="with: subscriber">
+                            <input type="text" class="form-control" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.generateRssLink($data) }">generate!</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section styles{
+
+    <link href="~/lib/fancybox/dist/jquery.fancybox.css" rel="stylesheet" />
     <link href="~/css/controls/post-preview.css" rel="stylesheet" />
 
     <link href="~/css/home.css" rel="stylesheet" />
 }
 
 @section scripts{
+    <script src="~/lib/fancybox/dist/jquery.fancybox.js"></script>
+
     <script src="~/js/knockout/knockout.key-binding-handlers.js"></script>
+    <script src="~/js/knockout/knockout.modal-bindings.js"></script>
 
     <script src="~/js/extensions/string-extensions.js"></script>
 
@@ -154,7 +211,6 @@
             var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
 
             brechtbaekelandt.home.init(serverViewmodel);
-
         });
     </script>
 }

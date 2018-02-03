@@ -17,11 +17,11 @@ namespace brechtbaekelandt.Models
 
         public string Description { get; set; }
 
-        public string CleanDescription => Regex.Replace(this.Description, "<.*?>", String.Empty);
+        public string CleanDescription => !string.IsNullOrEmpty(this.Description) ? Regex.Replace(this.Description, "<.*?>", String.Empty) : string.Empty;
 
         public string Content { get; set; }
 
-        public string CleanContent => Regex.Replace(this.Content, "<.*?>", String.Empty);
+        public string CleanContent => !string.IsNullOrEmpty(this.Content) ? Regex.Replace(this.Content, "<.*?>", String.Empty) : string.Empty;
 
         public virtual User User { get; set; }
 

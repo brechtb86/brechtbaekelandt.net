@@ -311,6 +311,7 @@
                     @*<small class="pull-right"><a asp-area="" asp-controller="blog" asp-action="edit" asp-route-id="@this.Model.Id">edit post</a> | <a asp-area="" asp-controller="blog" asp-action="delete" asp-route-id="@this.Model.Id">delete post</a></small>*@
                 }
             </div>
+           
             <div class="post-preview-content" data-bind="html: post.description">
             </div>
             <!-- ko if: post.content -->

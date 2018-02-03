@@ -12,7 +12,23 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
         ko.mapping.fromJS(serverViewModel, {}, self);
 
         addthis.init();
+
+        self.initFancyBox();
     };
+
+    PostViewModel.prototype.initFancyBox = function () {
+        $("[data-fancybox]").fancybox({
+            buttons: [
+                //'slideShow',
+                "fullScreen",
+                //'thumbs',
+                //'share',
+                "download",
+                "zoom",
+                "close"
+            ]
+        });
+    }
 
     function init(serverViewModel) {
         var viewModel = new PostViewModel(serverViewModel);

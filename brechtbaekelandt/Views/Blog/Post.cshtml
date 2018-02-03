@@ -10,14 +10,18 @@
 
 <div style="display: none;" data-bind="visible: true">
     <a style="cursor: pointer;" onclick="window.history.back();"><i class="fa fa-arrow-circle-left"></i> go back</a>
-    <div data-bind="template: { name: 'postTemplate', data: post }"> </div>
+    <div data-bind="template: { name: 'postTemplate', data: post, afterRender: function() { $root.initFancyBox(); } }"> </div>
 </div>
 
 @section styles{
+    <link href="~/lib/fancybox/dist/jquery.fancybox.css" rel="stylesheet" />
+
     <link href="~/css/controls/post.css" rel="stylesheet" />
 }
 
 @section scripts{
+    <script src="~/lib/fancybox/dist/jquery.fancybox.js"></script>
+
     <script src="~/js/extensions/string-extensions.js"></script>
 
     <script src="~/js/view-models/post.js"></script>

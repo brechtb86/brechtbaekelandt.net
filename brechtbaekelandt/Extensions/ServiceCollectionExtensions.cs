@@ -41,7 +41,7 @@ namespace brechtbaekelandt.Extensions
                     opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name }))
                 ).ForMember(
                         dest => dest.Description,
-                        opt => opt.MapFrom(src => src.PictureUrl != null ? InsertPictureInDescription(src.Description, src.PictureUrl) : src.Description)
+                        opt => opt.MapFrom(src => src.PictureUrl != null ? InsertPictureInDescription(src.Title, src.Description, src.PictureUrl) : src.Description)
                     )
                     .ForMember(
                         dest => dest.Tags,
@@ -89,9 +89,9 @@ namespace brechtbaekelandt.Extensions
             return new IdentityBuilder(typeof(Identity.Models.ApplicationUser), typeof(Identity.Models.ApplicationUserRole), services);
         }
 
-        private static string InsertPictureInDescription(string description, string pictureUrl)
+        private static string InsertPictureInDescription(string title, string description, string pictureUrl)
         {
-            return description.Insert(description.IndexOf('>') + 1, $"<img src='{pictureUrl}' class='post-picture post-preview-picture img-thumbnail' />");
+            return description.Insert(description.IndexOf('>') + 1, $"<a href='{pictureUrl}' data-fancybox data-caption='{title}'><img src='{pictureUrl}' class='post-picture post-preview-picture img-thumbnail' /></a>");
         }
     }
 }

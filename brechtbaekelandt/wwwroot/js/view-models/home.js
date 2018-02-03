@@ -2,6 +2,7 @@
 /// <reference path="../references/addthis_widget.js" />
 /// <reference path="../../lib/jquery/dist/jquery.js" />
 /// <reference path="../../lib/knockout-mapping/build/output/knockout.mapping-latest.debug.js" />
+/// <reference path="~/wwwroot/lib/fancybox/src/js/core.js" />
 
 var brechtbaekelandt = brechtbaekelandt || {};
 
@@ -36,7 +37,15 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(false);
 
+        self.showSubscribe = ko.observable(false);
+
+        self.subscriber = {};
+        self.subscriber.emailAddress = ko.observable();
+        self.subscriber.categories = ko.observableArray();
+
         addthis.init();
+
+        self.initFancyBox();
     };
 
     HomeViewModel.prototype.getPosts = function (page = 1, getMore = false) {
@@ -72,6 +81,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.isLoadingMore(false);
 
                 addthis.layers.refresh();
+
+                self.initFancyBox();
             });
     };
 
@@ -164,6 +175,27 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     //    self.refreshPosts(false);
     //};
 
+    HomeViewModel.prototype.subscribe = function (subscriber) {
+
+    };
+
+    HomeViewModel.prototype.generateRssLink = function (categories) {
+
+    };
+
+    HomeViewModel.prototype.initFancyBox = function () {
+        $("[data-fancybox]").fancybox({
+            buttons: [
+                //'slideShow',
+                "fullScreen",
+                //'thumbs',
+                //'share',
+                "download",
+                "zoom",
+                "close"
+            ]
+        });
+    }
 
     function init(serverViewModel) {
 
