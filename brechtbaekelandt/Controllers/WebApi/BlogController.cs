@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using brechtbaekelandt.Attributes;
@@ -37,22 +38,21 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpGet]
         [Route("posts")]
-        public IActionResult GetPostsAsyncActionResult(Guid? categoryId = null,  string searchTermsString = "", string tagsString = "", int currentPage = 1)
+        public IActionResult GetPostsAsyncActionResult(Guid? categoryId = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1)
         {
-            var searchTerms = !string.IsNullOrEmpty(searchTermsString) ? searchTermsString.Split(',') : new string[0];
-            var tags = !string.IsNullOrEmpty(tagsString) ? tagsString.Split(',') : new string[0];
-
             var query = this._blogDbContext.Posts
                 .Include(p => p.User)
                 .Include(p => p.Comments)
                 .Include(p => p.PostCategories)
-                .ThenInclude(pc => pc.Category)
-                .Where(p =>
+                .ThenInclude(pc => pc.Category).Where(p =>
                     (categoryId == null || p.PostCategories.Any(pc => pc.CategoryId == categoryId)) &&
-                    (searchTerms.Length == 0 || searchTerms.Any(s => p.Title.ToLower().Contains(s.ToLower())) ||
-                    searchTerms.Length == 0 || searchTerms.Any(s => p.Description.ToLower().Contains(s.ToLower())) || 
-                    searchTerms.Length == 0 || searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && p.Content.ToLower().Contains(s.ToLower()))) &&
-                    (tags.Length == 0 || tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.ToLower().Contains(t.ToLower())))
+                    (searchTerms == null ||
+                     searchTerms.Length == 0 ||
+                     searchTerms[0] == null ||
+                     searchTerms.Any(s => Regex.Replace(p.Title, "<.*?>", string.Empty).ToLower().Contains(s.ToLower())) ||
+                     searchTerms.Any(s => Regex.Replace(p.Description, "<.*?>", string.Empty).ToLower().Contains(s.ToLower())) ||
+                     searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && Regex.Replace(p.Description, "<.*?>", string.Empty).ToLower().Contains(s.ToLower()))) &&
+                    (tags == null || tags.Length == 0 || tags[0] == null || tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
                 )
                 .OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)

@@ -41,9 +41,9 @@
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" placeholder="search..." class="form-control" data-bind="textInput: searchTermsFilterString, enterKey: function() { getPosts(); }" />
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" data-bind="click: function() { getPosts(); }"><i class="fa fa-search"></i></button>
+                            <input type="text" placeholder="type to start searching" class="form-control" data-bind="textInput: searchTermsFilterString, enterKey: function() { getPosts(); }, valueUpdate: 'input'" />
+                            <span class="input-group-addon">
+                                <i class="fa fa-search"></i>
                             </span>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
 
             @*<button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="image-placeholder"></span><span>subscribe</span></button>
-            <hr />*@
+                <hr />*@
             <img src="~/images/me.png" class="img-responsive" />
             <hr />
             <div id="social">
@@ -196,6 +196,7 @@
 
     <script src="~/js/knockout/knockout.key-binding-handlers.js"></script>
     <script src="~/js/knockout/knockout.modal-bindings.js"></script>
+    <script src="~/js/knockout/knockout.highlight-bindings.js"></script>
 
     <script src="~/js/extensions/string-extensions.js"></script>
 

@@ -238,45 +238,41 @@
         <article class="post">
             <div class="post-title">
                 <h3>
-                    <a data-bind="attr: { href: '/blog/post/' + internalTitle() }, text: title"></a>
+                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
                 </h3>
                 <small>
-                    <i><a data-bind="attr: { href: 'mailto://' + user.emailAddress }, text: user.fullName"></a></i>
+                    <i><a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
                     <span>|</span>
-                    <i data-bind="text: moment(created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
+                    <i data-bind="text: moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
                     <span>|</span>
-                    <!-- ko if: comments().length > 0 -->
-                    <i><span>comments:</span> <span data-bind="text: comments().length"></span></i>
+                    <!-- ko if: post.comments().length > 0 -->
+                    <i><span>comments:</span> <span data-bind="text: post.comments().length"></span></i>
                     <!-- /ko -->
-                    <!-- ko if: comments().length === 0 -->
+                    <!-- ko if: post.comments().length === 0 -->
                     <i>no comments yet...</i>
                     <!-- /ko -->
                     <span>|</span>
                     <i>
                         <label>categories:</label>
-                        <!-- ko foreach: categories -->
-                        <a data-bind="text: name, attr: { href: '/home?categoryId=' + id() }"></a><span data-bind="if: $index() < $parentContext.$data.categories().length - 1">, </span>
+                        <!-- ko foreach: post.categories -->
+                        <a data-bind="text: name, attr: { href: '/home?category=' + name() }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
                         <!-- /ko -->
                     </i>
                 </small>
-                @if (this.User.Identity.IsAuthenticated)
-                {
-                    @*<small class="pull-right"><a asp-area="" asp-controller="blog" asp-action="edit" asp-route-id="@this.Model.Id">edit post</a> | <a asp-area="" asp-controller="blog" asp-action="delete" asp-route-id="@this.Model.Id">delete post</a></small>*@
-                }
             </div>
-            <div class="post-description" data-bind="html: description">
+            <div class="post-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
             </div>
-            <div class="post-content" data-bind="html: content">
+            <div class="post-content" data-bind=", highlight: { text:  content(), keywords: post.viewModel.searchTermsFilter() }">
             </div>
             <div class="post-tags">
                 <!-- ko foreach: tags -->
-                <a class="label label-default" data-bind="text: $data, attr: { href: '/home?tagsString=' + $data }"></a>
+                <a class="label label-default" data-bind="text: $data, attr: { href: '/home?tags=' + $data }"></a>
                 <!-- /ko -->
             </div>
             <div class="clearfix"></div>
             <div class="post-share">
                 <hr />
-                <div class="addthis_inline_share_toolbox" data-bind="attr: { 'data-title': title, 'data-description': cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + internalTitle() }"></div>
+                <div class="addthis_inline_share_toolbox" data-bind="attr: { 'data-title': post.title, 'data-description': post.cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + internalTitle() }"></div>
                 <hr />
             </div>
         </article>
@@ -286,7 +282,7 @@
         <article class="post-preview">
             <div class="post-preview-title">
                 <h3>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() }, text: post.title"></a>
+                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
                 </h3>
                 <small>
                     <i><a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
@@ -307,16 +303,11 @@
                         <!-- /ko -->
                     </i>
                 </small>
-                @if (this.User.Identity.IsAuthenticated)
-                {
-                    @*<small class="pull-right"><a asp-area="" asp-controller="blog" asp-action="edit" asp-route-id="@this.Model.Id">edit post</a> | <a asp-area="" asp-controller="blog" asp-action="delete" asp-route-id="@this.Model.Id">delete post</a></small>*@
-                }
             </div>
-
-            <div class="post-preview-content" data-bind="html: post.description">
+            <div class="post-preview-content" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <!-- ko if: post.content -->
-            <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() }">read more...</a>
+            <a data-bind="attr: { href: '/blog/post/' + post.internalTitle()  + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }">read more...</a>
             <!-- /ko -->
             <div class="post-preview-tags">
                 <!-- ko foreach: post.tags -->
@@ -337,13 +328,13 @@
             <div class="post-editor">
                 <div class="form-group">
                     <label>title:</label>
-                    <div class="input-group" data-bind="validationElement: post.title">
-                        <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: post.title" />
+                    <div class="input-group stretch-horizontal" data-bind="validationElement: post.Title">
+                        <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: post.Title" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label>description:</label>
-                    <div class="input-group" data-bind="validationElement: post.description">
+                    <div class="input-group stretch-horizontal" data-bind="validationElement: post.description">
                         <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions"></textarea>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AutoMapper;
 using brechtbaekelandt.Data;
 using brechtbaekelandt.Extensions;
@@ -38,13 +39,15 @@ namespace brechtbaekelandt.Controllers
                 .Include(p => p.User)
                 .Include(p => p.Comments)
                 .Include(p => p.PostCategories)
-                .ThenInclude(pc => pc.Category)
-                .Where(p =>
+                .ThenInclude(pc => pc.Category).Where(p =>
                     (categoryId == null || p.PostCategories.Any(pc => pc.CategoryId == categoryId)) &&
-                    (searchTerms.Length == 0 || searchTerms.Any(s => p.Title.ToLower().Contains(s.ToLower())) ||
-                     searchTerms.Length == 0 || searchTerms.Any(s => p.Description.ToLower().Contains(s.ToLower())) ||
-                     searchTerms.Length == 0 || searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && p.Content.ToLower().Contains(s.ToLower()))) &&
-                    (tags.Length == 0 || tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.ToLower().Contains(t.ToLower())))
+                    (searchTerms == null ||
+                     searchTerms.Length == 0 ||
+                     searchTerms[0] == null ||
+                     searchTerms.Any(s => Regex.Replace(p.Title, "<.*?>", string.Empty).ToLower().Contains(s.ToLower())) ||
+                     searchTerms.Any(s => Regex.Replace(p.Description, "<.*?>", string.Empty).ToLower().Contains(s.ToLower())) ||
+                     searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && Regex.Replace(p.Content, "<.*?>", string.Empty).ToLower().Contains(s.ToLower()))) &&
+                    (tags == null || tags.Length == 0 || tags[0] == null || tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
                 )
                 .OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)

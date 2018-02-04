@@ -10,7 +10,8 @@
 
 <div style="display: none;" data-bind="visible: true">
     <a style="cursor: pointer;" onclick="window.history.back();"><i class="fa fa-arrow-circle-left"></i> go back</a>
-    <div data-bind="template: { name: 'postTemplate', data: post, afterRender: function() { $root.initFancyBox(); $root.initAddThis(); } }"> </div>
+
+    <div data-bind="template: { name: 'postTemplate', data: { post: post, viewModel: $root }, afterRender: function() { $root.initFancyBox(); $root.initAddThis(); } }"> </div>
 </div>
 
 @section styles{
@@ -21,6 +22,8 @@
 
 @section scripts{
     <script src="~/lib/fancybox/dist/jquery.fancybox.js"></script>
+
+    <script src="~/js/knockout/knockout.highlight-bindings.js"></script>
 
     <script src="~/js/extensions/string-extensions.js"></script>
 

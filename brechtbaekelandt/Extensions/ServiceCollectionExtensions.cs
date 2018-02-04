@@ -38,11 +38,7 @@ namespace brechtbaekelandt.Extensions
                 cfg.CreateMap<Data.Entities.Post, Post>()
                     .ForMember(
                     dest => dest.Categories,
-                    opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name }))
-                ).ForMember(
-                        dest => dest.Description,
-                        opt => opt.MapFrom(src => src.PictureUrl != null ? InsertPictureInDescription(src.Title, src.Description, src.PictureUrl) : src.Description)
-                    )
+                    opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name })))
                     .ForMember(
                         dest => dest.Tags,
                         opt => opt.MapFrom(src => src.Tags.Split(",", StringSplitOptions.None).ToArray())

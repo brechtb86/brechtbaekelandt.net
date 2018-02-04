@@ -6,17 +6,19 @@
     margin-bottom: 29px;
 }
 
-.btn-subscribe > .image-placeholder {
-    content: url('../images/subscribe.svg');
-    margin-left: -38px;
-    margin-right: 20px;
-    margin-bottom: -3px;
-}
+    .btn-subscribe > .image-placeholder {
+        content: url('../images/subscribe.svg');
+        margin-left: -38px;
+        margin-right: 20px;
+        margin-bottom: -3px;
+    }
 
-.btn-subscribe:hover > .image-placeholder, .btn-subscribe:active > .image-placeholder, .btn-subscribe:focus > .image-placeholder {
-    content: url('../images/subscribe-hover.svg');
-}
+    .btn-subscribe:hover > .image-placeholder, .btn-subscribe:active > .image-placeholder, .btn-subscribe:focus > .image-placeholder {
+        content: url('../images/subscribe-hover.svg');
+    }
 
 .title {
     margin-top: 0;
 }
+
+

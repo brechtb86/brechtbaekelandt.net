@@ -37,7 +37,7 @@ namespace brechtbaekelandt.Controllers
 
 
         [HttpGet("post/{internalTitle}")]
-        public async Task<IActionResult> Post(string internalTitle)
+        public async Task<IActionResult> Post(string internalTitle, string[] searchTerms = null)
         {
             var postEntity = await this._blogDbContext.Posts
                 .Include(p => p.User)
@@ -53,7 +53,8 @@ namespace brechtbaekelandt.Controllers
 
             var vm = new PostViewModel
             {
-                Post = Mapper.Map<Post>(postEntity)
+                Post = Mapper.Map<Post>(postEntity),
+                SearchTermsFilter = searchTerms
             };
 
             return View(vm);

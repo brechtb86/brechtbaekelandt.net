@@ -14,26 +14,72 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         document.addEventListener("scroll", function (event) {
             if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > self.posts().length)) {
-                self.getPosts(self.currentPage() + 1, true);
+                self.getPosts(true);
             }
         });
 
-        self.categoryIdFilter = ko.observable();
-        self.searchTermsFilterString = ko.observableArray();
-        self.searchTermsFilter = ko.observableArray().subscribe(function(newValue) {
-            self.searchTermsFilterString(searchTermsFilter.join(" "));
-        });
-        self.tagsFilter = ko.observableArray();
-
         ko.mapping.fromJS(serverViewModel, {}, self);
+
+        self.categoryQueryString = ko.observable();
 
         self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
             if ((newValue || oldValue) && (newValue !== oldValue)) {
+
+                var categoryQueryString = self.categoryIdFilter() ? "categoryId=" + self.categoryIdFilter() + "&" : "";
+
+                self.categoryQueryString(categoryQueryString);
+
+                self.currentPage(1);
+
                 self.getPosts();
             }
         });
 
+
+
+
+        self.searchTermsFilterString = ko.observable();
+        self.searchTermsFilterString.subscribe(function (newValue) {
+            self.searchTermsFilter(newValue.trim().split(" "));
+        });
+
+        self.searchTermsQueryString = ko.observable();
+
+        self.searchTermsFilter.subscribe(function () {
+            self.getRequests().forEach(function (request) {
+                request.abort();
+            });
+
+            self.getRequests([]);
+
+            var searchTermsQueryString = "";
+
+            self.searchTermsFilter().forEach(function (searchTerm, index) {
+                searchTermsQueryString += "searchTerms=" + searchTerm + "&";
+            });
+
+            self.searchTermsQueryString(searchTermsQueryString);
+
+            self.currentPage(1);
+
+            self.getPosts();
+        });
+
+        self.tagsQueryString = ko.observable();
+
         self.tagsFilter.subscribe(function () {
+            self.currentPage(1);
+
+            var tagsQueryString = "";
+
+            self.tagsFilter().forEach(function (tag, index) {
+                tagsQueryString += "tags=" + tag + "&";
+            });
+
+            self.tagsQueryString(tagsQueryString);
+
+            self.currentPage(1);
+
             self.getPosts();
         });
 
@@ -45,23 +91,40 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriber = {};
         self.subscriber.emailAddress = ko.observable();
         self.subscriber.categories = ko.observableArray();
+
+        //if (self.posts().length > 0 && self.searchTermsFilter().length > 0) {
+        //    self.posts().forEach(function (post) {
+
+        //        var newTitle = post.title();
+        //        var newDescription = post.description();
+
+        //        self.searchTermsFilter().forEach(function (searchTerm) {
+        //            newTitle = self.highlightSearchTermResult(newTitle, searchTerm);
+        //            newDescription = self.highlightSearchTermResult(newDescription, searchTerm);
+        //        });
+
+        //        post.title(newTitle);
+        //        post.description(newDescription);
+        //    });
+        //}
+
+        self.getRequests = ko.observableArray();
     };
 
-    HomeViewModel.prototype.getPosts = function (page = 1, getMore = false) {
+    HomeViewModel.prototype.getPosts = function (getMore = false) {
         var self = this;
 
         self.isLoading(!getMore);
         self.isLoadingMore(getMore);
 
-        self.isAddThisInitialized = ko.observable();
+        var currentPageQuerystring = "currentPage=" + (getMore ? self.currentPage() + 1 : self.currentPage());
 
-        $.getJSON("../api/blog/posts",
-            {
-                categoryId: self.categoryIdFilter(),
-                searchTermsString: self.searchTermsFilterString() ? self.searchTermsFilterString().replace(" ", ",") : "",
-                tagsString: self.tagsFilter() ? self.tagsFilter().join(",") : "",
-                currentPage: page
-            })
+        var request = $.ajax({
+            url: "../api/blog/posts?" + self.searchTermsQueryString() + self.tagsQueryString() + self.categoryQueryString() + currentPageQuerystring,
+            type: "GET",
+            success: function (data, textStatus, jqXhr) { },
+            async: false
+        })
             .done(function (data, textStatus, jqXhr) {
                 if (!getMore) {
                     ko.mapping.fromJS(data.posts, {}, self.posts);
@@ -74,105 +137,36 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             .fail(function (jqXhr, textStatus, errorThrown) {
 
             })
-            .always(function (data, textStatus, jqXHR) {
+            .always(function (data, textStatus, jqXhr) {
                 self.currentPage(data.currentPage);
                 self.totalPostCount(data.totalPostCount);
                 self.postsPerPage(data.postsPerPage);
-                self.isLoading(false);
-                self.isLoadingMore(false);
+
+                $.when.apply($, self.getRequests()).done(function () {
+                    self.isLoading(false);
+                    self.isLoadingMore(false);
+                });
+
+                //if (self.posts().length > 0 && self.searchTermsFilter().length > 0) {
+
+                //    self.posts().forEach(function (post) {
+
+                //        var newTitle = post.title();
+                //        var newDescription = post.description();
+
+                //        self.searchTermsFilter().forEach(function (searchTerm) {
+                //            newTitle = self.highlightSearchTermResult(newTitle, searchTerm, true);
+                //            newDescription = self.highlightSearchTermResult(newDescription, searchTerm, true);
+                //        });
+
+                //        post.title(newTitle);
+                //        post.description(newDescription);
+                //    });
+                //}
             });
+
+        self.getRequests.push(request);
     };
-
-
-
-    //BlogViewModel.prototype.loadPosts = function (index, count, categoryId) {
-    //    var self = this;
-
-    //    self.isLoading = ko.observable(true);
-
-    //    $.getJSON("../api/Blog/GetPosts",
-    //    {
-    //        index: index,
-    //        count: count,
-    //        categoryId: categoryId
-    //    }, function (result) {
-
-    //        self.totalPostCount(result.totalPostCount);
-
-    //        // add the dates
-    //        ko.utils.arrayForEach(result.posts, function (value) {
-    //            value.createdDate = new Date(value.created);
-    //        });
-
-    //        // add each new item to existing items.
-    //        ko.utils.arrayForEach(result.posts, function (item) {
-
-    //            var post = ko.mapping.fromJS(item);
-    //            self.posts.push(post);
-    //        });
-
-    //        self.isLoading(false);
-    //    }).fail(function (jqxhr, textStatus, error) {
-
-
-
-    //    });
-    //};
-
-    //BlogViewModel.prototype.searchPosts = function (index, count, categoryId, searchTerm) {
-    //    var self = this;
-
-    //    self.isLoading(true);
-
-    //    $.getJSON("../api/Blog/SearchPosts",
-    //    {
-    //        index: index,
-    //        count: count,
-    //        categoryId: categoryId,
-    //        searchTerm: searchTerm
-    //    }, function (result) {
-
-    //        self.totalPostCount(result.totalPostCount);
-
-    //        // add the dates
-    //        ko.utils.arrayForEach(result.posts, function (value) {
-    //            value.createdDate = new Date(value.created);
-    //        });
-
-    //        // add each new item to existing items.
-    //        ko.utils.arrayForEach(result.posts, function (item) {
-
-    //            var post = ko.mapping.fromJS(item);
-
-    //            self.posts.push(post);
-    //        });
-
-    //        self.isLoading(false);
-    //    });
-    //};
-
-    //BlogViewModel.prototype.search = function () {
-    //    var self = this;
-
-    //    self.isSearching(true);
-
-    //    self.refreshPosts(true);
-    //    history.pushState({ currentIndex: self.currentIndex(), selectedCategoryId: self.selectedCategoryId(), isSearching: self.isSearching(), searchTerm: self.searchTerm() }, "Blog Posts");
-    //    self.searchPosts(self.currentIndex() * postsPerPage, postsPerPage, self.selectedCategoryId(), self.searchTerm());
-    //    self.refreshPosts(false);
-    //};
-
-    //BlogViewModel.prototype.reset = function () {
-    //    var self = this;
-
-    //    self.isSearching(false);
-    //    self.searchTerm(null);
-
-    //    self.refreshPosts(true);
-    //    history.pushState({ currentIndex: self.currentIndex(), selectedCategoryId: self.selectedCategoryId(), isSearching: self.isSearching(), searchTerm: self.searchTerm() }, "Blog Posts");
-    //    self.loadPosts(self.currentIndex() * postsPerPage, postsPerPage, self.selectedCategoryId());
-    //    self.refreshPosts(false);
-    //};
 
     HomeViewModel.prototype.subscribe = function (subscriber) {
 
@@ -203,6 +197,18 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             ]
         });
     }
+
+    //HomeViewModel.prototype.highlightSearchTermResult = function (text, searchResultTerm, allowSpecialCharacters = false) {
+
+    //    return searchResultTerm === "" ? text : text.replace(/(>[^<]+)/igm, function (newText) {
+
+    //        if (!allowSpecialCharacters) {
+    //            searchResultTerm = searchResultTerm.replace(/([{}()[\]\\.?*+^$|=!:~-])/g, "\\$1");
+    //        }
+
+    //        return newText.replace(new RegExp("(" + searchResultTerm + ")", "igm"), "<span class='heighLightedSearchTermResult'>$1</span>");
+    //    });
+    //}
 
     function init(serverViewModel) {
 

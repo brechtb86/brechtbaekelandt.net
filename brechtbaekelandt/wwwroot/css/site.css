@@ -126,6 +126,10 @@ header {
     height: 100%
 }
 
+.high-lighted {
+    background-color: #FFFF00;
+}
+
 .line-on-sides {
     line-height: 0.5;
     text-align: center;
