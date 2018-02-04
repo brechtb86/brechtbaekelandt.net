@@ -7,10 +7,9 @@ ko.bindingHandlers.highlight = {
 
         var value = valueAccessor();
         var text = value.text || "";
-        var allowSpecialCharacters = value.allowSpecialCharacters || false;
         var keywords = value.keywords || [0];
 
-        var highLightedText = ko.bindingHandlers.highlight.doHighLight(text, keywords, allowSpecialCharacters);
+        var highLightedText = ko.bindingHandlers.highlight.doHighLight(text, keywords);
 
         $(element).html(highLightedText);
 
@@ -19,37 +18,27 @@ ko.bindingHandlers.highlight = {
 
         var value = valueAccessor();
         var text = value.text || "";
-        var allowSpecialCharacters = value.allowSpecialCharacters || false;
         var keywords = value.keywords || [0];
 
-        var highLightedText = ko.bindingHandlers.highlight.doHighLight(text, keywords, allowSpecialCharacters);
+        var highLightedText = ko.bindingHandlers.highlight.doHighLight(text, keywords);
 
         $(element).html(highLightedText);
     },
-    doHighLight: function (text, keywords, allowSpecialCharacters = false) {
-        var result = text;
+    doHighLight: function (text, keywords) {
+        var newText = text;
 
-        if (text && keywords) {
+        if (text && keywords && keywords.length > 0) {
             keywords.forEach(function (keyword) {
                 if (keyword) {
-
-                    result = !result.startsWith("<") && !result.endsWith(">") ? "<p>" + result + "</p>" : result;
-
-                    result = result.replace(/(>[^<]+)/igm,
-                        function (newText) {
-
-                            if (!allowSpecialCharacters) {
-                                keyword = keyword.replace(/([{}()[\]\\.?*+^$|=!:~-])/g, "\\$1");
-                            }
-
-                            return newText.replace(new RegExp("(" + keyword + ")", "igm"),
-                                "<span class='high-lighted'>$1</span>");
+                    newText = (!newText.startsWith("<") ? "<p>" + newText + "</p>" : newText).replace(/(>[^<]+)/igm,
+                        function (result) {
+                            return result.replace(new RegExp("(" + keyword + ")", "igm"), "<span class='high-lighted'>$1</span>");
                         });
                 }
             });
         }
 
-        return result;
+        return newText;
     }
 }
 

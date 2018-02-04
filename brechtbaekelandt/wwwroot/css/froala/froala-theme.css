@@ -20,6 +20,10 @@
     outline: 0;
 }
 
+.brechtbaekelandt-theme > .fr-wrapper > .fr-element.fr-view.fr-disabled {
+    background-color: #eee;
+}
+
 .brechtbaekelandt-theme.fr-box.fr-basic .fr-element {
     color: #222222;
     padding: 10px;

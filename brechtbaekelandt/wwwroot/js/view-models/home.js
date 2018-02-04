@@ -13,14 +13,14 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         var self = this;
 
         document.addEventListener("scroll", function (event) {
-            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > self.posts().length)) {
+            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() >= self.posts().length)) {
                 self.getPosts(true);
             }
         });
 
         ko.mapping.fromJS(serverViewModel, {}, self);
 
-        self.categoryQueryString = ko.observable();
+        self.categoryQueryString = ko.observable("");
 
         self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
             if ((newValue || oldValue) && (newValue !== oldValue)) {
@@ -90,6 +90,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriber.categories = ko.observableArray();
 
         self.getRequests = ko.observableArray();
+
+        self.initAddThis();
+        self.initFancyBox();
     };
 
     HomeViewModel.prototype.getPosts = function (getMore = false) {

@@ -43,6 +43,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         self.isLoading = ko.observable(true);
 
+        self.isPosted = ko.observable(false);
+
         self.descriptionFroalaOptions = ko.observable(
             {
                 key: "lgtbkaB-9imhejB-13pC-11wh1D1xrl==",
@@ -213,6 +215,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         })
             .done(function (data, textStatus, jqXhr) {
                 self.createSucceededMessage("the post was successfully created!");
+                self.isPosted(true);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.createErrorMessage(errorThrown);
@@ -221,6 +224,20 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
             });
     };
+
+    AdminViewModel.prototype.resetNewPost = function (newPost) {
+        var self = this;
+
+        newPost.Title("");
+        newPost.description("");
+        newPost.content("");
+        newPost.categories([]);
+        newPost.tags([]);
+
+        self.categories.forEach(function (category) { category.isSelected(false); })
+
+        self.createErrors.showAllMessages(false);
+    }
 
     AdminViewModel.prototype.addCategory = function (category) {
         var self = this;

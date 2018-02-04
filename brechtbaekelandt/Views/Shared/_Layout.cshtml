@@ -272,7 +272,7 @@
             <div class="clearfix"></div>
             <div class="post-share">
                 <hr />
-                <div class="addthis_inline_share_toolbox" data-bind="attr: { 'data-title': post.title, 'data-description': post.cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + internalTitle() }"></div>
+                <div class="addthis_inline_share_toolbox" data-bind="attr: { 'data-title': post.title, 'data-description': post.cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + post.internalTitle() }"></div>
                 <hr />
             </div>
         </article>
@@ -325,64 +325,66 @@
 
     <script type="text/html" id="postEditorTemplate">
         <form>
-            <div class="post-editor">
-                <div class="form-group">
-                    <label>title:</label>
-                    <div class="input-group stretch-horizontal" data-bind="validationElement: post.Title">
-                        <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: post.Title" />
+            <fieldset data-bind="disable: viewModel.isPosted">
+                <div class="post-editor">
+                    <div class="form-group">
+                        <label>title:</label>
+                        <div class="input-group stretch-horizontal" data-bind="validationElement: post.Title">
+                            <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: post.Title" />
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>description:</label>
-                    <div class="input-group stretch-horizontal" data-bind="validationElement: post.description">
-                        <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions"></textarea>
+                    <div class="form-group">
+                        <label>description:</label>
+                        <div class="input-group stretch-horizontal" data-bind="validationElement: post.description">
+                            <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions, froalaDisable: viewModel.isPosted()"></textarea>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>content:</label>
-                    <textarea data-bind="value: post.content, froala: post.content, froalaOptions: viewModel.contentFroalaOptions"></textarea>
-                </div>
-                <div class="form-group">
-                    <label>categories:</label>
-                    <div class="input-group" data-bind="validationElement: post.categories">
-                        <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.categoryToAdd, enterKey: function(){ viewModel.addCategory(viewModel.categoryToAdd); }" />
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addCategory(viewModel.categoryToAdd); }"><i class="fa fa-plus"></i></button>
-                        </span>
+                    <div class="form-group">
+                        <label>content:</label>
+                        <textarea data-bind="value: post.content, froala: post.content, froalaOptions: viewModel.contentFroalaOptions, froalaDisable: viewModel.isPosted()"></textarea>
                     </div>
-                </div>
-                <div class="form-group">
-                    <!-- ko if: viewModel.categories().length > 0 -->
-                    <div class="categories input-group" data-bind="validationElement: post.categories">
-                        <!-- ko  foreach: viewModel.categories -->
-                        <button data-bind="css: { selected: isSelected }, click: function(){ $parent.viewModel.toggleSelectedCategory($data, $parentContext.$data.post.categories); }" class="category">
-                            <span data-bind="text: name"></span> <i class="fa fa-check"></i>
-                        </button>
+                    <div class="form-group">
+                        <label>categories:</label>
+                        <div class="input-group" data-bind="validationElement: post.categories">
+                            <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.categoryToAdd, enterKey: function(){ viewModel.addCategory(viewModel.categoryToAdd); }" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addCategory(viewModel.categoryToAdd); }"><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <!-- ko if: viewModel.categories().length > 0 -->
+                        <div class="categories input-group" data-bind="validationElement: post.categories">
+                            <!-- ko  foreach: viewModel.categories -->
+                            <button data-bind="css: { selected: isSelected }, click: function(){ $parent.viewModel.toggleSelectedCategory($data, $parentContext.$data.post.categories); }" class="category">
+                                <span data-bind="text: name"></span> <i class="fa fa-check"></i>
+                            </button>
+                            <!-- /ko -->
+                        </div>
                         <!-- /ko -->
                     </div>
-                    <!-- /ko -->
-                </div>
-                <div class="form-group">
-                    <label>tags:</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="add a new tag or select one or more below" data-bind="textInput: viewModel.tagToAdd, enterKey: function() { viewModel.addTag(viewModel.tagToAdd, post.tags); }" />
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addTag(viewModel.tagToAdd, post.tags); }"><i class="fa fa-plus"></i></button>
-                        </span>
+                    <div class="form-group">
+                        <label>tags:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="add a new tag or select one or more below" data-bind="textInput: viewModel.tagToAdd, enterKey: function() { viewModel.addTag(viewModel.tagToAdd, post.tags); }" />
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addTag(viewModel.tagToAdd, post.tags); }"><i class="fa fa-plus"></i></button>
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <!-- ko if: post.tags().length > 0 -->
-                    <div class="tags input-group">
-                        <!-- ko  foreach: post.tags -->
-                        <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removeTag($data, $parentContext.$data.post.tags); }" class="tag">
-                            <span data-bind="text: $data"></span> <i class="fa fa-check"></i>
-                        </button>
+                    <div class="form-group">
+                        <!-- ko if: post.tags().length > 0 -->
+                        <div class="tags input-group">
+                            <!-- ko  foreach: post.tags -->
+                            <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removeTag($data, $parentContext.$data.post.tags); }" class="tag">
+                                <span data-bind="text: $data"></span> <i class="fa fa-check"></i>
+                            </button>
+                            <!-- /ko -->
+                        </div>
                         <!-- /ko -->
                     </div>
-                    <!-- /ko -->
                 </div>
-            </div>
+            </fieldset>
         </form>
     </script>
 

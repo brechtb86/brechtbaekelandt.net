@@ -43,14 +43,19 @@ namespace brechtbaekelandt.Controllers
                      p.PostCategories.Any(pc => pc.Category.Name == categoryName)) &&
                     (searchTerms == null ||
                      searchTerms.Length == 0 ||
+                     searchTerms[0] == null ||
                      searchTerms.Any(s => Regex.Replace(p.Title, "<.*?>", string.Empty).ToLower().Contains(s.ToLower())) ||
                      searchTerms.Any(s => Regex.Replace(p.Description, "<.*?>", string.Empty).ToLower().Contains(s.ToLower())) ||
                      searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && Regex.Replace(p.Content, "<.*?>", string.Empty).ToLower().Contains(s.ToLower()))) &&
                     (tags == null ||
                      tags.Length == 0 ||
+                     tags[0] == null ||
                      tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
-                )
-                .OrderByDescending(p => p.Created)
+                );
+
+            var totalPostCount = query.Count();
+
+            query = query.OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)
                 .Take(_postsPerPage);
 
@@ -58,8 +63,6 @@ namespace brechtbaekelandt.Controllers
             {
                 categoryId = this._blogDbContext.Categories.FirstOrDefault(c => c.Name == categoryName)?.Id;
             }
-
-            var totalPostCount = this._blogDbContext.Posts.Count();
 
             var categoryEntities = this._blogDbContext.Categories
                 .OrderBy(c => c.Name);
@@ -72,8 +75,8 @@ namespace brechtbaekelandt.Controllers
                 CurrentPage = currentPage,
                 TotalPostCount = totalPostCount,
                 PostsPerPage = _postsPerPage,
-                Posts = Mapper.Map<ICollection<Models.Post>>(query),
-                Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities),
+                Posts = Mapper.Map<ICollection<Models.Post>>(query.ToCollection()),
+                Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities.ToCollection()),
                 Tags = allTags,
                 SearchTermsFilter = searchTerms,
                 TagsFilter = tags,
