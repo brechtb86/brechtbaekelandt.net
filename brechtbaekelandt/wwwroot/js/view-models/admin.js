@@ -17,22 +17,34 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.showCreate = ko.observable();
 
         self.newPost = {};
-        self.newPost.Title = ko.observable().extend({ required: { message: "you didn't fill in the title!" } });
+        self.newPost.title = ko.observable().extend({ required: { message: "you didn't fill in the title!" } });
         self.newPost.description = ko.observable().extend({ required: { message: "you didn't fill in the description!" } });
         self.newPost.content = ko.observable();
         self.newPost.categories = ko.observableArray().extend({ minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" } });
         self.newPost.tags = ko.observableArray();
-
-        self.isUploadingPicture = ko.observable(false);
-        self.isUploadingPictureFinished = ko.observable(false);
+        self.newPost.pictureUrl = ko.observable();
+        self.newPost.attachments = ko.observableArray();
 
         self.pictureToUpload = ko.observable();
-        self.pictureUploadProgress = ko.observable(0);
+        self.pictureToUpload.subscribe(function (newValue) {
+            if (newValue) {
+                self.uploadPicture(newValue);
+            }
+        });
 
-        self.pictureUploadAbortedMessage = ko.observable();
+        self.attachmentsToUpload = ko.observableArray();
+        self.attachmentsUploadRequest = ko.observable();
+
+        self.isAttachmentsUploading = ko.observable(false);
+        self.isAttachmentsUploadingFinished = ko.observable(false);
+
+        self.attachmentsUploadProgress = ko.observable(0);
+
         self.pictureUploadErrorMessage = ko.observable();
-        self.pictureUploadRequest = ko.observable();
-
+        self.pictureDeleteErrorMessage = ko.observable();
+        self.attachmentsUploadErrorMessage = ko.observable();
+        self.attachmentsUploadAbortedMessage = ko.observable();
+        self.attachmentDeleteErrorMessage = ko.observable();
         self.createErrorMessage = ko.observable();
         self.createSucceededMessage = ko.observable();
 
@@ -42,7 +54,6 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.tagToAdd = ko.observable();
 
         self.isLoading = ko.observable(true);
-
         self.isPosted = ko.observable(false);
 
         self.descriptionFroalaOptions = ko.observable(
@@ -123,74 +134,180 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
     };
 
-    AdminViewModel.prototype.uploadPicture = function () {
+    AdminViewModel.prototype.uploadPicture = function (picture) {
         var self = this;
 
-        self.isUploadingPictureFinished(false);
-
         self.pictureUploadErrorMessage("");
-        self.pictureUploadAbortedMessage("");
-
-        self.pictureUploadProgress(0);
-
-        self.isUploadingPicture(true);
 
         var formData = new FormData();
-        formData.append("files", self.pictureToUpload());
+        formData.append("picture", picture);
 
-        var jqxhr = $.ajax({
+        $.ajax({
             url: "../api/blog/upload-picture",
-            dataType: "json",
-            type: "post",
+            type: "POST",
             contentType: false,
             data: formData,
+            dataType: "json",
             cache: false,
             processData: false,
+            async: false,
             xhr: function () {
                 var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
                         var progress = Math.round((evt.loaded / evt.total) * 100);
-                        self.progress(progress);
                     }
                 }, false);
                 return xhr;
             }
         })
             .done(function (data, textStatus, jqXhr) {
-                if (data.state === 0) {
-                    self.isUploadingPictureFinished(true);
+                self.pictureToUpload(null);
+                self.newPost.pictureUrl(data);
 
-                    self.pictureToUpload(null);
+                $(".picture-drop-zone input:file").val();
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.pictureUploadErrorMessage("there was an error while uploading the file, please try again.");
+            })
+            .always(function (jqXhr, textStatus, errorThrown) {
+            });
+    };
 
-                    $("input:file").each(function () {
-                        $(this).val("");
-                    });
-                }
+    AdminViewModel.prototype.deletePicture = function (pictureUrl) {
+        var self = this;
+
+        self.pictureDeleteErrorMessage("");
+
+        $.ajax({
+            url: "../api/blog/delete-picture?picture=" + pictureUrl(),
+            type: "POST",
+            success: function (data, textStatus, jqXhr) { },
+            async: false
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.newPost.pictureUrl(null);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.pictureDeleteErrorMessage("there was an error while deleting the file, please try again.");
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    }
+
+    AdminViewModel.prototype.uploadAttachments = function (attachments) {
+        var self = this;
+
+        self.isAttachmentsUploadingFinished(false);
+
+        var formData = new FormData();
+
+        attachments().forEach(function (attachment) {
+            formData.append("attachments", attachment);
+        });
+
+        self.attachmentsUploadProgress(0);
+
+        self.attachmentsUploadErrorMessage("");
+
+        self.attachmentsUploadAbortedMessage("");
+
+        self.isAttachmentsUploading(true);
+
+        var jqxhr = $.ajax({
+            url: "../api/blog/upload-attachments",
+            type: "POST",
+            contentType: false,
+            data: formData,
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            xhr: function () {
+                var xhr = new window.XMLHttpRequest();
+                xhr.upload.addEventListener("progress",
+                    function (evt) {
+                        if (evt.lengthComputable) {
+                            var progress = Math.round((evt.loaded / evt.total) * 100);
+                            self.attachmentsUploadProgress(progress);
+                        }
+                    },
+                    false);
+                return xhr;
+            }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.isAttachmentsUploadingFinished(true);
+
+                data.forEach(function (attachment) {
+                    self.newPost.attachments.push(attachment);
+                });
+
+                self.attachmentsToUpload([]);
+
+                $(".attachments-drop-zone input:file").val();
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 if (errorThrown === "abort") {
-                    self.pictureUploadAbortedMessage("you have aborted the upload...");
+                    self.attachmentsUploadAbortedMessage("you have aborted the upload...");
                 }
                 else {
-                    self.pictureUploadErrorMessage("there was an error while uploading the file, please try again.");
+                    self.attachmentsUploadErrorMessage("there was an error while uploading the file, please try again.");
                 }
             })
             .always(function () {
-                self.isUploadingPicture(false);
+                self.isAttachmentsUploading(false);
 
-                self.pictureUploadProgress(0);
+                self.attachmentsUploadProgress(0);
             });
 
-        self.pictureUploadRequest(jqxhr);
+        self.attachmentsUploadRequest(jqxhr);
     };
 
-    AdminViewModel.prototype.abortPictureUpload = function () {
+    AdminViewModel.prototype.abortAttachmentUpload = function () {
         var self = this;
 
-        self.pictureUploadRequest().abort();
-
+        var xhr = self.attachmentsUploadRequest();
+        xhr.abort();
     };
+
+    AdminViewModel.prototype.deleteSelectedAttachmentToUpload = function (item) {
+        var self = this;
+
+        self.attachmentsToUpload.remove(item);
+
+        $(".attachments-drop-zone input:file").val();
+    };
+
+    AdminViewModel.prototype.deleteUploadedAttachment = function (attachment) {
+        var self = this;
+
+        self.attachmentDeleteErrorMessage("");
+
+        $.ajax({
+            url: "../api/blog/delete-attachment",
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            data: ko.toJSON(attachment),
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                ko.mapping.fromJS(self.newPost.attachments().filter(function (a) {
+                    return a.id !== data.id;
+                }), {}, self.newPost.attachments);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.attachmentDeleteErrorMessage("there was an error while deleting the file, please try again.");
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    }
 
     AdminViewModel.prototype.createPost = function (post) {
         var self = this;
@@ -198,20 +315,23 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.createSucceededMessage(null);
         self.createErrorMessage(null);
 
+        self.isPosted(false);
+
         if (self.createErrors().length > 0) {
             self.createErrors.showAllMessages();
             return;
         }
 
-        //var postData = ko.mapping.toJSON(self.newPost);
-
         $.ajax({
             url: "../api/blog/post/add",
             type: "POST",
-            data: ko.toJSON(post),
             contentType: "application/json; charset=UTF-8",
-            success: function (data, textStatus, jqXhr) { },
-            async: false
+            data: ko.toJSON(post),
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
         })
             .done(function (data, textStatus, jqXhr) {
                 self.createSucceededMessage("the post was successfully created!");
@@ -228,13 +348,15 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.resetNewPost = function (newPost) {
         var self = this;
 
-        newPost.Title("");
+        newPost.title("");
         newPost.description("");
         newPost.content("");
         newPost.categories([]);
         newPost.tags([]);
+        newPost.pictureUrl("");
+        newPost.attachments([]);
 
-        self.categories.forEach(function (category) { category.isSelected(false); })
+        self.categories.forEach(function (category) { category.isSelected(false); });
 
         self.createErrors.showAllMessages(false);
     }

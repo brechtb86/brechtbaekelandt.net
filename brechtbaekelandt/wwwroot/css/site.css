@@ -5,6 +5,10 @@
     -moz-box-sizing: border-box;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     height: 100%;
     line-height: 1.5em;
@@ -117,12 +121,10 @@ header {
     }
 
 .stretch-horizontal {
-    display: block;
     width: 100%
 }
 
 .stretch-vertical {
-    display: block;
     height: 100%
 }
 
@@ -221,18 +223,16 @@ input:checked + .slider:before {
 
 /* knockout validation*/
 
-.validationElement {
-    border: 1px solid #e30002 !important;
-    color: #e30002;
-}
-
-.validationMessage {
+.validation-message {
+    margin: 2px 0;
     color: #e30002;
     font-size: 12px;
     font-style: italic;
+    margin-top: -15px;
+    margin-bottom: 5px;
 }
 
-.validationSummary {
+.validation-summary {
     color: #e30002;
     margin-left: 1em;
     font-size: smaller;

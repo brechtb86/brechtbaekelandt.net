@@ -3219,7 +3219,7 @@ output {
 .form-control {
     display: block;
     width: 100%;
-    height: 34px;
+    height: auto;
     padding: 6px 12px;
     font-size: 14px;
     line-height: 1.42857143;
@@ -3791,6 +3791,27 @@ a.btn.disabled,
 fieldset[disabled] a.btn {
     pointer-events: none;
 }
+
+.btn-muted,
+.btn-muted:focus,
+.btn-muted.focus,
+.btn-muted:hover,
+.btn-muted:active,
+.btn-muted.active {
+    color: #222332;
+    background: transparent;
+    background-image: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+    .btn-muted.disabled, .btn-muted[disabled] {
+        color: #ccc;
+    }
 
 .btn-default {
     color: #540804;

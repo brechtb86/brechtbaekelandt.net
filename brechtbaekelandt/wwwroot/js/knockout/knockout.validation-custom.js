@@ -23,8 +23,8 @@
     }
 }(function (ko, exports) {
 
-    if (typeof (ko) === 'undefined') {
-        throw new Error('Knockout is required, please ensure it is loaded before loading this validation plug-in');
+    if (typeof (ko) === "undefined") {
+        throw new Error("Knockout is required, please ensure it is loaded before loading this validation plug-in");
     }
 
     // create our namespace object
@@ -51,9 +51,9 @@
         decorateInputElement: false,         // false to keep backward compatibility
         decorateElementOnModified: true,// true to keep backward compatibility
         errorClass: null,               // single class for error message and element
-        errorElementClass: 'validationElement',  // class to decorate error element
-        errorMessageClass: 'validationMessage', // class to decorate error message
-        elementClass: 'validationElement',  //custom
+        errorElementClass: "validation-element",  // class to decorate error element
+        errorMessageClass: "validation-message", // class to decorate error message
+        elementClass: "validation-element",  //custom
         allowHtmlMessages: false,		// allows HTML in validation messages
         grouping: {
             deep: false,        //by default grouping is shallow
@@ -68,8 +68,8 @@
     // make a copy  so we can use 'reset' later
     var configuration = extend({}, defaults);
 
-    configuration.html5Attributes = ['required', 'pattern', 'min', 'max', 'step'];
-    configuration.html5InputTypes = ['email', 'number', 'date'];
+    configuration.html5Attributes = ["required", "pattern", "min", "max", "step"];
+    configuration.html5InputTypes = ["email", "number", "date"];
 
     configuration.reset = function () {
         extend(configuration, defaults);
@@ -80,14 +80,14 @@
         var seedId = new Date().getTime();
 
         var domData = {}; //hash of data objects that we reference from dom elements
-        var domDataKey = '__ko_validation__';
+        var domDataKey = "__ko_validation__";
 
         return {
             isArray: function (o) {
-                return o.isArray || Object.prototype.toString.call(o) === '[object Array]';
+                return o.isArray || Object.prototype.toString.call(o) === "[object Array]";
             },
             isObject: function (o) {
-                return o !== null && typeof o === 'object';
+                return o !== null && typeof o === "object";
             },
             isNumber: function (o) {
                 return !isNaN(o);
@@ -111,7 +111,7 @@
                 return r;
             },
             getValue: function (o) {
-                return (typeof o === 'function' ? o() : o);
+                return (typeof o === "function" ? o() : o);
             },
             hasAttribute: function (node, attr) {
                 return node.getAttribute(attr) !== null;
@@ -177,9 +177,9 @@
                 }
             },
             getOriginalElementTitle: function (element) {
-                var savedOriginalTitle = kv.utils.getAttribute(element, 'data-orig-title'),
+                var savedOriginalTitle = kv.utils.getAttribute(element, "data-orig-title"),
                     currentTitle = element.title,
-                    hasSavedOriginalTitle = kv.utils.hasAttribute(element, 'data-orig-title');
+                    hasSavedOriginalTitle = kv.utils.hasAttribute(element, "data-orig-title");
 
                 return hasSavedOriginalTitle ?
                     savedOriginalTitle : currentTitle;
@@ -377,12 +377,9 @@
                 };
 
                 result.isAnyMessageShown = function () {
-                    var invalidAndModifiedPresent;
-
-                    invalidAndModifiedPresent = !!result.find(function (observable) {
+                    return invalidAndModifiedPresent = !!result.find(function (observable) {
                         return utils.isValidatable(observable) && !observable.isValid() && observable.isModified();
                     });
-                    return invalidAndModifiedPresent;
                 };
 
                 result.filter = function (predicate) {
@@ -425,7 +422,7 @@
                  */
                 result._updateState = function (newValue) {
                     if (!utils.isObject(newValue)) {
-                        throw new Error('An object is required.');
+                        throw new Error("An object is required.");
                     }
                     obj = newValue;
                     if (options.observable) {
@@ -443,7 +440,7 @@
                 if (utils.isObject(params) && params.typeAttr) {
                     params = params.value;
                 }
-                if (typeof message === 'function') {
+                if (typeof message === "function") {
                     return message(params, observable);
                 }
                 var replacements = unwrap(params);
@@ -454,7 +451,7 @@
                     replacements = [replacements];
                 }
                 return message.replace(/{(\d+)}/gi, function (match, index) {
-                    if (typeof replacements[index] !== 'undefined') {
+                    if (typeof replacements[index] !== "undefined") {
                         return replacements[index];
                     }
                     return match;
@@ -497,8 +494,8 @@
             //	  }
             //  )};
             addAnonymousRule: function (observable, ruleObj) {
-                if (ruleObj['message'] === undefined) {
-                    ruleObj['message'] = 'Error';
+                if (ruleObj["message"] === undefined) {
+                    ruleObj["message"] = "Error";
                 }
 
                 //make sure onlyIf is honoured
@@ -560,7 +557,7 @@
 
             //creates a span next to the @element with the specified error class
             insertValidationMessage: function (element) {
-                var span = document.createElement('SPAN');
+                var span = document.createElement("SPAN");
                 span.className = utils.getConfigOptions(element).errorMessageClass;
                 utils.insertAfter(element, span);
                 return span;
@@ -574,10 +571,10 @@
 
                         var params = element.getAttribute(attr) || true;
 
-                        if (attr === 'min' || attr === 'max') {
+                        if (attr === "min" || attr === "max") {
                             // If we're validating based on the min and max attributes, we'll
                             // need to know what the 'type' attribute is set to
-                            var typeAttr = element.getAttribute('type');
+                            var typeAttr = element.getAttribute("type");
                             if (typeof typeAttr === "undefined" || !typeAttr) {
                                 // From http://www.w3.org/TR/html-markup/input:
                                 //   An input element with no type attribute specified represents the
@@ -594,11 +591,11 @@
                     }
                 });
 
-                var currentType = element.getAttribute('type');
+                var currentType = element.getAttribute("type");
                 forEach(kv.configuration.html5InputTypes, function (type) {
                     if (type === currentType) {
                         kv.addRule(valueAccessor(), {
-                            rule: (type === 'date') ? 'dateISO' : type,
+                            rule: (type === "date") ? "dateISO" : type,
                             params: true
                         });
                     }
@@ -654,7 +651,7 @@
 
                     init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext);
 
-                    return ko.bindingHandlers['validationCore'].init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext);
+                    return ko.bindingHandlers["validationCore"].init(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext);
                 };
             },
 
@@ -730,7 +727,7 @@
     // };
     //
     kv.rules = {};
-    kv.rules['required'] = {
+    kv.rules["required"] = {
         validator: function (val, required) {
             var testVal;
 
@@ -739,12 +736,12 @@
             }
 
             testVal = val;
-            if (typeof (val) === 'string') {
+            if (typeof (val) === "string") {
                 if (String.prototype.trim) {
                     testVal = val.trim();
                 }
                 else {
-                    testVal = val.replace(/^\s+|\s+$/g, '');
+                    testVal = val.replace(/^\s+|\s+$/g, "");
                 }
             }
 
@@ -752,9 +749,9 @@
                 return true;
             }
 
-            return ((testVal + '').length > 0);
+            return ((testVal + "").length > 0);
         },
-        message: 'This field is required.'
+        message: "This field is required."
     };
 
     function minMaxValidatorFactory(validatorName) {
@@ -851,54 +848,54 @@
         };
     }
 
-    kv.rules['min'] = {
+    kv.rules["min"] = {
         validator: minMaxValidatorFactory("min"),
-        message: 'Please enter a value greater than or equal to {0}.'
+        message: "Please enter a value greater than or equal to {0}."
     };
 
-    kv.rules['max'] = {
+    kv.rules["max"] = {
         validator: minMaxValidatorFactory("max"),
-        message: 'Please enter a value less than or equal to {0}.'
+        message: "Please enter a value less than or equal to {0}."
     };
 
-    kv.rules['minLength'] = {
+    kv.rules["minLength"] = {
         validator: function (val, minLength) {
             if (kv.utils.isEmptyVal(val)) { return true; }
-            var normalizedVal = kv.utils.isNumber(val) ? ('' + val) : val;
+            var normalizedVal = kv.utils.isNumber(val) ? ("" + val) : val;
             return normalizedVal.length >= minLength;
         },
-        message: 'Please enter at least {0} characters.'
+        message: "Please enter at least {0} characters."
     };
 
-    kv.rules['maxLength'] = {
+    kv.rules["maxLength"] = {
         validator: function (val, maxLength) {
             if (kv.utils.isEmptyVal(val)) { return true; }
-            var normalizedVal = kv.utils.isNumber(val) ? ('' + val) : val;
+            var normalizedVal = kv.utils.isNumber(val) ? ("" + val) : val;
             return normalizedVal.length <= maxLength;
         },
-        message: 'Please enter no more than {0} characters.'
+        message: "Please enter no more than {0} characters."
     };
 
-    kv.rules['pattern'] = {
+    kv.rules["pattern"] = {
         validator: function (val, regex) {
             return kv.utils.isEmptyVal(val) || val.toString().match(regex) !== null;
         },
-        message: 'Please check this value.'
+        message: "Please check this value."
     };
 
-    kv.rules['step'] = {
+    kv.rules["step"] = {
         validator: function (val, step) {
 
             // in order to handle steps of .1 & .01 etc.. Modulus won't work
             // if the value is a decimal, so we have to correct for that
-            if (kv.utils.isEmptyVal(val) || step === 'any') { return true; }
+            if (kv.utils.isEmptyVal(val) || step === "any") { return true; }
             var dif = (val * 100) % (step * 100);
             return Math.abs(dif) < 0.00001 || Math.abs(1 - dif) < 0.00001;
         },
-        message: 'The value must increment by {0}.'
+        message: "The value must increment by {0}."
     };
 
-    kv.rules['email'] = {
+    kv.rules["email"] = {
         validator: function (val, validate) {
             if (!validate) { return true; }
 
@@ -909,66 +906,66 @@
                 validate && /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i.test(val)
             );
         },
-        message: 'Please enter a proper email address.'
+        message: "Please enter a proper email address."
     };
 
-    kv.rules['date'] = {
+    kv.rules["date"] = {
         validator: function (value, validate) {
             if (!validate) { return true; }
             return kv.utils.isEmptyVal(value) || (validate && !/Invalid|NaN/.test(new Date(value)));
         },
-        message: 'Please enter a proper date.'
+        message: "Please enter a proper date."
     };
 
-    kv.rules['dateISO'] = {
+    kv.rules["dateISO"] = {
         validator: function (value, validate) {
             if (!validate) { return true; }
             return kv.utils.isEmptyVal(value) || (validate && /^\d{4}[-/](?:0?[1-9]|1[012])[-/](?:0?[1-9]|[12][0-9]|3[01])$/.test(value));
         },
-        message: 'Please enter a proper date.'
+        message: "Please enter a proper date."
     };
 
-    kv.rules['number'] = {
+    kv.rules["number"] = {
         validator: function (value, validate) {
             if (!validate) { return true; }
             return kv.utils.isEmptyVal(value) || (validate && /^-?(?:\d+|\d{1,3}(?:,\d{3})+)?(?:\.\d+)?$/.test(value));
         },
-        message: 'Please enter a number.'
+        message: "Please enter a number."
     };
 
-    kv.rules['digit'] = {
+    kv.rules["digit"] = {
         validator: function (value, validate) {
             if (!validate) { return true; }
             return kv.utils.isEmptyVal(value) || (validate && /^\d+$/.test(value));
         },
-        message: 'Please enter a digit.'
+        message: "Please enter a digit."
     };
 
-    kv.rules['phoneUS'] = {
+    kv.rules["phoneUS"] = {
         validator: function (phoneNumber, validate) {
             if (!validate) { return true; }
             if (kv.utils.isEmptyVal(phoneNumber)) { return true; } // makes it optional, use 'required' rule if it should be required
-            if (typeof (phoneNumber) !== 'string') { return false; }
+            if (typeof (phoneNumber) !== "string") { return false; }
             phoneNumber = phoneNumber.replace(/\s+/g, "");
             return validate && phoneNumber.length > 9 && phoneNumber.match(/^(1-?)?(\([2-9]\d{2}\)|[2-9]\d{2})-?[2-9]\d{2}-?\d{4}$/);
         },
-        message: 'Please specify a valid phone number.'
+        message: "Please specify a valid phone number."
     };
 
-    kv.rules['equal'] = {
+    kv.rules["equal"] = {
         validator: function (val, params) {
             var otherValue = params;
             return val === kv.utils.getValue(otherValue);
         },
-        message: 'Values must equal.'
+        message: "Values must equal."
     };
 
-    kv.rules['notEqual'] = {
+    kv.rules["notEqual"] = {
         validator: function (val, params) {
             var otherValue = params;
             return val !== kv.utils.getValue(otherValue);
         },
-        message: 'Please choose another value.'
+        message: "Please choose another value."
     };
 
     //unique in collection
@@ -978,7 +975,7 @@
     //    valueAccessor: function that returns value from an object stored in collection
     //              if it is null the value is compared directly
     //    external: set to true when object you are validating is automatically updating collection
-    kv.rules['unique'] = {
+    kv.rules["unique"] = {
         validator: function (val, options) {
             var c = kv.utils.getValue(options.collection),
                 external = kv.utils.getValue(options.externalValue),
@@ -992,7 +989,7 @@
             // if value is external even 1 same value in collection means the value is not unique
             return counter < (!!external ? 1 : 2);
         },
-        message: 'Please make sure the value is unique.'
+        message: "Please make sure the value is unique."
     };
 
 
@@ -1003,7 +1000,7 @@
     ;// The core binding handler
     // this allows us to setup any value binding that internally always
     // performs the same functionality
-    ko.bindingHandlers['validationCore'] = (function () {
+    ko.bindingHandlers["validationCore"] = (function () {
 
         return {
             init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
@@ -1015,15 +1012,17 @@
                     kv.utils.async(function () { kv.parseInputValidationAttributes(element, valueAccessor); });
                 }
 
+                var validationMessageElement;
+
                 // if requested insert message element and apply bindings
                 if (config.insertMessages && kv.utils.isValidatable(observable)) {
 
                     // insert the <span></span>
-                    var validationMessageElement = kv.insertValidationMessage(element);
+                    validationMessageElement = kv.insertValidationMessage(element);
 
                     // if we're told to use a template, make sure that gets rendered
                     if (config.messageTemplate) {
-                        ko.renderTemplate(config.messageTemplate, { field: observable }, null, validationMessageElement, 'replaceNode');
+                        ko.renderTemplate(config.messageTemplate, { field: observable }, null, validationMessageElement, "replaceNode");
                     } else {
                         ko.applyBindingsToNode(validationMessageElement, { validationMessage: observable });
                     }
@@ -1042,11 +1041,11 @@
                     if (validationElement) {
 
                         // insert the <span></span>
-                        var validationMessageElement = kv.insertValidationMessage(validationElement);
+                        validationMessageElement = kv.insertValidationMessage(validationElement);
 
                         // if we're told to use a template, make sure that gets rendered
                         if (config.messageTemplate) {
-                            ko.renderTemplate(config.messageTemplate, { field: observable }, null, validationMessageElement, 'replaceNode');
+                            ko.renderTemplate(config.messageTemplate, { field: observable }, null, validationMessageElement, "replaceNode");
                         } else {
                             ko.applyBindingsToNode(validationMessageElement, { validationMessage: observable });
                         }
@@ -1077,7 +1076,7 @@
     kv.makeBindingHandlerValidatable("selectedOptions");
 
 
-    ko.bindingHandlers['validationMessage'] = { // individual error message, if modified or post binding
+    ko.bindingHandlers["validationMessage"] = { // individual error message, if modified or post binding
         update: function (element, valueAccessor) {
             var obsv = valueAccessor(),
                 config = kv.utils.getConfigOptions(element),
@@ -1086,9 +1085,9 @@
                 isModified = false,
                 isValid = false;
 
-            if (obsv === null || typeof obsv === 'undefined') {
-                throw new Error('Cannot bind validationMessage to undefined value. data-bind expression: ' +
-                    element.getAttribute('data-bind'));
+            if (obsv === null || typeof obsv === "undefined") {
+                throw new Error("Cannot bind validationMessage to undefined value. data-bind expression: " +
+                    element.getAttribute("data-bind"));
             }
 
             isModified = obsv.isModified && obsv.isModified();
@@ -1109,9 +1108,9 @@
             }
 
             if (isCurrentlyVisible && !isVisible) {
-                element.style.display = 'none';
+                element.style.display = "none";
             } else if (!isCurrentlyVisible && isVisible) {
-                element.style.display = '';
+                element.style.display = "";
             }
         }
     };
@@ -1124,7 +1123,7 @@
     //      <input type="text" data-bind="value: someValue"/>
     //      <input type="text" data-bind="value: someValue2"/>
     // </div>
-    ko.bindingHandlers['validationOptions'] = (function () {
+    ko.bindingHandlers["validationOptions"] = (function () {
         return {
             init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
                 var options = unwrap(valueAccessor());
@@ -1139,7 +1138,7 @@
         };
     }());
 
-    ko.bindingHandlers['validationElement'] = {
+    ko.bindingHandlers["validationElement"] = {
         init: function (element, valueAccessor, allBindingsAccessor) {
             var obsv = valueAccessor(),
                 config = kv.utils.getConfigOptions(element),
@@ -1158,9 +1157,9 @@
                 isModified = false,
                 isValid = false;
 
-            if (obsv === null || typeof obsv === 'undefined') {
-                throw new Error('Cannot bind validationElement to undefined value. data-bind expression: ' +
-                    element.getAttribute('data-bind'));
+            if (obsv === null || typeof obsv === "undefined") {
+                throw new Error("Cannot bind validationElement to undefined value. data-bind expression: " +
+                    element.getAttribute("data-bind"));
             }
 
             isModified = obsv.isModified && obsv.isModified();
@@ -1209,7 +1208,7 @@
     //          params: true
     //      }
     //  )};
-    ko.extenders['validation'] = function (observable, rules) { // allow single rule or array
+    ko.extenders["validation"] = function (observable, rules) { // allow single rule or array
         forEach(kv.utils.isArray(rules) ? rules : [rules], function (rule) {
             // the 'rule' being passed in here has no name to identify a core Rule,
             // so we add it as an anonymous rule
@@ -1226,12 +1225,12 @@
     //
     // 2. test.extend({validatable: false});
     // this will remove the validation properties from the Observable object should you need to do that.
-    ko.extenders['validatable'] = function (observable, options) {
+    ko.extenders["validatable"] = function (observable, options) {
         if (!kv.utils.isObject(options)) {
             options = { enable: options };
         }
 
-        if (!('enable' in options)) {
+        if (!("enable" in options)) {
             options.enable = true;
         }
 
@@ -1309,15 +1308,15 @@
                 h_change.dispose();
                 h_obsValidationTrigger.dispose();
 
-                delete observable['rules'];
-                delete observable['error'];
-                delete observable['isValid'];
-                delete observable['isValidating'];
-                delete observable['__valid__'];
-                delete observable['isModified'];
-                delete observable['setError'];
-                delete observable['clearError'];
-                delete observable['_disposeValidation'];
+                delete observable["rules"];
+                delete observable["error"];
+                delete observable["isValid"];
+                delete observable["isValidating"];
+                delete observable["__valid__"];
+                delete observable["isModified"];
+                delete observable["setError"];
+                delete observable["clearError"];
+                delete observable["_disposeValidation"];
             };
         } else if (options.enable === false && observable._disposeValidation) {
             observable._disposeValidation();
@@ -1345,7 +1344,7 @@
 
         var callBack = function (valObj) {
             var isValid = false,
-                msg = '';
+                msg = "";
 
             if (!observable.__valid__()) {
 
@@ -1356,7 +1355,7 @@
             }
 
             //we were handed back a complex object
-            if (valObj['message']) {
+            if (valObj["message"]) {
                 isValid = valObj.isValid;
                 msg = valObj.message;
             } else {
@@ -1402,7 +1401,7 @@
             //get the core Rule to use for validation
             rule = ctx.rule ? kv.rules[ctx.rule] : ctx;
 
-            if (rule['async'] || ctx['async']) {
+            if (rule["async"] || ctx["async"]) {
                 //run async validation
                 validateAsync(observable, rule, ctx);
 
@@ -1438,7 +1437,7 @@
                 _currentLocale = name;
             }
             else {
-                throw new Error('Localization ' + name + ' has not been loaded.');
+                throw new Error("Localization " + name + " has not been loaded.");
             }
         }
         return _currentLocale;
@@ -1466,11 +1465,11 @@
                 localeData[ruleName] = rules[ruleName].message;
             }
         }
-        kv.defineLocale('en-us', localeData);
+        kv.defineLocale("en-us", localeData);
     })();
 
     // No need to invoke locale because the messages are already defined along with the rules for en-US
-    _currentLocale = 'en-us';
+    _currentLocale = "en-us";
     ;/**
  * Possible invocations:
  * 		applyBindingsWithValidation(viewModel)

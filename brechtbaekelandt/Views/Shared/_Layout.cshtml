@@ -86,7 +86,6 @@
 
     <script type="text/javascript">
         $.ajaxSetup({
-            // Disable caching of AJAX responses
             cache: false
         });
     </script>
@@ -95,11 +94,14 @@
         var knockoutValidationSettings = {
             insertMessages: false,
             insertMessagesAfterValidationElement: true,
+            //insertMessages: false,
+            //insertMessagesAfterValidationElement: false,
             decorateInputElement: false,
             decorateElementOnModified: true,
-            errorMessageClass: 'input-group-validation-message',
+            errorMessageClass: 'validation-message',
             errorElementClass: 'has-error',
-            elementClass: 'input-group',
+            //errorClass: 'error',
+            elementClass: 'form-group',
             errorsAsTitle: false,
             parseInputAttributes: false,
             messagesOnModified: true,
@@ -229,7 +231,7 @@
     </div>
 
     <script type="text/html" id="validationMessageTemplate">
-        <div class="validationMessage" data-bind="visible: field.isModified() && !field.isValid()">
+        <div class="validation-message" data-bind="visible: field.isModified() && !field.isValid()">
             <i class="fa fa-arrow-circle-up blinking"></i> <span data-bind="text: field.error"></span>
         </div>
     </script>
@@ -327,16 +329,34 @@
         <form>
             <fieldset data-bind="disable: viewModel.isPosted">
                 <div class="post-editor">
-                    <div class="form-group">
+                    <div class="form-group" data-bind="validationElement: post.title">
                         <label>title:</label>
-                        <div class="input-group stretch-horizontal" data-bind="validationElement: post.Title">
-                            <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: post.Title" />
+                        <div class="input-group stretch-horizontal">
+                            <input type="text" class="form-control" placeholder="think of a cool title" data-bind="textInput: post.title" />
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>description:</label>
-                        <div class="input-group stretch-horizontal" data-bind="validationElement: post.description">
-                            <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions, froalaDisable: viewModel.isPosted()"></textarea>
+                    <div class="picture-description">
+                        <div class="picture">
+                            <label>picture:</label>
+                            <!-- ko ifnot: post.pictureUrl -->
+                            <div class="picture-drop-zone" data-bind="dropUpload: viewModel.pictureToUpload, allowedExtensions: ['jpeg', 'jpg', 'png', 'gif']" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                                <label>drop a picture or double click.</label>
+                            </div>
+                            <!-- /ko -->
+                            <!-- ko if: post.pictureUrl -->
+                            <div class="thumbnail-container">
+                                <img data-bind="attr: { src: post.pictureUrl }" alt="thumbnail" class="img-thumbnail" />
+                                <button type="button" class="btn btn-danger btn-delete-picture" data-bind="click: function() { viewModel.deletePicture(post.pictureUrl); }"><i class="fa fa-times"></i></button>
+                            </div>
+                            <!-- /ko -->
+                        </div>
+                        <div class="description">
+                            <div class="form-group" data-bind="validationElement: post.description">
+                                <label>description:</label>
+                                <div class="input-group stretch-horizontal">
+                                    <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions, froalaDisable: viewModel.isPosted()"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -345,23 +365,21 @@
                     </div>
                     <div class="form-group">
                         <label>categories:</label>
-                        <div class="input-group" data-bind="validationElement: post.categories">
+                        <div class="input-group">
                             <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.categoryToAdd, enterKey: function(){ viewModel.addCategory(viewModel.categoryToAdd); }" />
                             <span class="input-group-btn">
                                 <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addCategory(viewModel.categoryToAdd); }"><i class="fa fa-plus"></i></button>
                             </span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <!-- ko if: viewModel.categories().length > 0 -->
-                        <div class="categories input-group" data-bind="validationElement: post.categories">
+                    <div class="form-group categories" data-bind="validationElement: post.categories">
+                        <div class="form-control">
                             <!-- ko  foreach: viewModel.categories -->
                             <button data-bind="css: { selected: isSelected }, click: function(){ $parent.viewModel.toggleSelectedCategory($data, $parentContext.$data.post.categories); }" class="category">
                                 <span data-bind="text: name"></span> <i class="fa fa-check"></i>
                             </button>
                             <!-- /ko -->
                         </div>
-                        <!-- /ko -->
                     </div>
                     <div class="form-group">
                         <label>tags:</label>
@@ -372,18 +390,88 @@
                             </span>
                         </div>
                     </div>
+                    <div class="form-group tags">
+                        <!-- ko  foreach: post.tags -->
+                        <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removeTag($data, $parentContext.$data.post.tags); }" class="tag">
+                            <span data-bind="text: $data"></span> <i class="fa fa-check"></i>
+                        </button>
+                        <!-- /ko -->
+                    </div>
+                    <!-- ko if: viewModel.attachmentsUploadErrorMessage -->
+                    <div class="alert alert-danger">
+                        <strong>error!</strong> <span data-bind="text: viewModel.attachmentsUploadErrorMessage"></span>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: viewModel.attachmentsUploadAbortedMessage -->
+                    <div class="alert alert-info">
+                        <strong>info!</strong> <span data-bind="text: viewModel.attachmentsUploadAbortedMessage"></span>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: viewModel.isAttachmentsUploadingFinished -->
+                    <div class="alert alert-success alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>success!</strong> <span>the file(s) have been successfully uploaded.</span>
+                    </div>
+                    <!-- /ko -->
                     <div class="form-group">
-                        <!-- ko if: post.tags().length > 0 -->
-                        <div class="tags input-group">
-                            <!-- ko  foreach: post.tags -->
-                            <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removeTag($data, $parentContext.$data.post.tags); }" class="tag">
-                                <span data-bind="text: $data"></span> <i class="fa fa-check"></i>
-                            </button>
-                            <!-- /ko -->
+                        <label>attachments:</label>
+                        <div class="attachments-drop-zone" data-bind="dropUpload: viewModel.attachmentsToUpload" unselectable="on" onselectstart="return false;" onmousedown="return false;">
+                            <label>drag & drop files or double click.</label>
+                        </div>
+                        <!-- ko if: viewModel.attachmentsToUpload().length > 0 -->
+                        <!-- ko ifnot: viewModel.isAttachmentsUploading -->
+                        <h4>files waiting to be uploaded</h4>
+                        <!-- /ko -->
+                        <!-- ko if: viewModel.isAttachmentsUploading -->
+                        <h4>files being uploaded</h4>
+                        <!-- /ko -->
+                        <ul class="list-group" data-bind="foreach: viewModel.attachmentsToUpload">
+                            <li class="list-group-item">
+                                <b class="" data-bind="text: name"></b>
+                                <!-- ko ifnot: $parentContext.$data.viewModel.isAttachmentsUploading -->
+                                <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteSelectedAttachmentToUpload($data); }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
+                                <!-- /ko -->
+                            </li>
+                        </ul>
+                        <!-- /ko -->
+                        <!-- ko if: viewModel.isAttachmentsUploading -->
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped" role="progressbar" data-bind="attr: { 'aria-valuenow': viewModel.attachmentsUploadProgress() }, style: { width: viewModel.attachmentsUploadProgress() + '%' }" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="progress-label-container">
+                            <label class="label label-primary" data-bind="text: viewModel.attachmentsUploadProgress() + '% complete...'"></label>
+                            <p></p>
+                            <p>
+                                <a href="#" data-bind="click: function() { viewModel.abortAttachmentUpload(); }">abort</a>
+                            </p>
                         </div>
                         <!-- /ko -->
                     </div>
+                    <div class="form-group">
+                        <!-- ko if: viewModel.attachmentsToUpload().length > 0 -->
+                        <button class="btn btn-primary" data-bind="click: function() { viewModel.uploadAttachments(viewModel.attachmentsToUpload); }, disable: viewModel.isAttachmentsUploading() | viewModel.attachmentsToUpload().length == 0">
+                            <i class="fa fa-upload"></i> <span>upload</span>
+                        </button>
+                        <!-- /ko -->
+                    </div>
+                    <div class="form-group">
+                        <!-- ko if: post.attachments().length > 0 -->
+                        <label>uploaded attachments:</label>
+                        <!-- ko if: viewModel.attachmentDeleteErrorMessage -->
+                        <div class="alert alert-danger">
+                            <strong>error!</strong> <span data-bind="text: viewModel.attachmentDeleteErrorMessage"></span>
+                        </div>
+                        <!-- /ko -->
+                        <ul class="list-group" data-bind="foreach: post.attachments">
+                            <li class="list-group-item">
+                                <b class="" data-bind="text: name"></b>
+                                <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteUploadedAttachment($data); }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
+                            </li>
+                        </ul>
+                        <!-- /ko -->
+                    </div>
                 </div>
+
             </fieldset>
         </form>
     </script>

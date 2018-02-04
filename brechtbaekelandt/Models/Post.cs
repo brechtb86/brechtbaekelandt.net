@@ -7,8 +7,6 @@ namespace brechtbaekelandt.Models
 {
     public class Post : Base
     {
-        private string _description;
-
         public DateTime Created { get; set; }
 
         public DateTime LastModified { get; set; }
@@ -19,11 +17,7 @@ namespace brechtbaekelandt.Models
 
         public string InternalTitle => this.Title.RemoveSpecialCharactersAndSpaces().ToLower();
 
-        public string Description
-        {
-            get => this.InsertPictureInDescription(this.Title, this._description, this.PictureUrl);
-            set => this._description = value;
-        }
+        public string Description { get; set; }
 
         public string CleanDescription => !string.IsNullOrEmpty(this.Description) ? Regex.Replace(this.Description, "<.*?>", string.Empty) : string.Empty;
 
@@ -41,9 +35,6 @@ namespace brechtbaekelandt.Models
 
         public virtual ICollection<Comment> Comments { get; set; }
 
-        private string InsertPictureInDescription(string title, string description, string pictureUrl)
-        {
-            return !string.IsNullOrEmpty(pictureUrl) ? description.Insert(description.IndexOf('>') + 1, $"<a href='{pictureUrl}' data-fancybox data-caption='{title}'><img src='{pictureUrl}' class='post-picture post-preview-picture img-thumbnail' /></a>") : description;
-        }
+        public virtual ICollection<Attachment> Attachments { get; set; }
     }
 }

@@ -42,10 +42,14 @@ namespace brechtbaekelandt.Extensions
                     .ForMember(
                         dest => dest.Tags,
                         opt => opt.MapFrom(src => src.Tags.Split(",", StringSplitOptions.None).ToArray())
+                    ).ForMember(
+                        dest => dest.Description,
+                        opt => opt.MapFrom(src => InsertPictureInDescription(src.Title, src.Description, src.PictureUrl))
                     );
                 cfg.CreateMap<Data.Entities.Comment, Comment>();
                 cfg.CreateMap<Data.Entities.Category, Category>();
                 cfg.CreateMap<Data.Entities.User, User>();
+                cfg.CreateMap<Data.Entities.Attachment, Attachment>();
 
                 cfg.CreateMap<Post, Data.Entities.Post>()
                     .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>())
@@ -56,6 +60,7 @@ namespace brechtbaekelandt.Extensions
                 cfg.CreateMap<Comment, Data.Entities.Comment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<Category, Data.Entities.Category>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<User, Data.Entities.User>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+                cfg.CreateMap<Attachment, Data.Entities.Attachment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<Identity.Models.ApplicationUser, Data.Entities.User>();
             });
         }
@@ -87,7 +92,7 @@ namespace brechtbaekelandt.Extensions
 
         private static string InsertPictureInDescription(string title, string description, string pictureUrl)
         {
-            return description.Insert(description.IndexOf('>') + 1, $"<a href='{pictureUrl}' data-fancybox data-caption='{title}'><img src='{pictureUrl}' class='post-picture post-preview-picture img-thumbnail' /></a>");
+            return !string.IsNullOrEmpty(pictureUrl) ? description.Insert(description.IndexOf('>') + 1, $"<a href='{pictureUrl}' data-fancybox data-caption='{title}'><img src='{pictureUrl}' class='post-picture post-preview-picture img-thumbnail' /></a>") : description;
         }
     }
 }

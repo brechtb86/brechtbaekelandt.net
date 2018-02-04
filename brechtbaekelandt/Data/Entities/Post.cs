@@ -22,9 +22,11 @@ namespace brechtbaekelandt.Data.Entities
         public string PictureUrl { get; set; }
 
         public string Tags { get; set; }
-        
+
         public virtual ICollection<PostCategory> PostCategories { get; set; }
-        
+
+        public virtual ICollection<Attachment> Attachments { get; set; }
+
         public virtual ICollection<Comment> Comments { get; set; }
     }
 }

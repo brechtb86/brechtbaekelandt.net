@@ -429,15 +429,15 @@ ko.validation.rules["ipAddress"] = {
 };
 
 ko.validation.rules["minimumItemsInArray"] = {
-    validator: function (arr, options) {
+    validator: function (arr, params) {
         if (!Array.isArray(arr)) {
             throw new TypeError("[minimumItemsInArray] must extend an observableArray");
         }
 
-        if (options.minimum)
+        if (params.minimum)
             return arr.length >= 1;
 
-        return arr.length >= options.minimum;
+        return arr.length >= params.minimum;
     },
-    message: null
+    message: "The There must be minimum one element in the array"
 };

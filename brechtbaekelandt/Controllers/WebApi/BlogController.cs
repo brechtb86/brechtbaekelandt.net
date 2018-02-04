@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -11,10 +13,17 @@ using brechtbaekelandt.Data;
 using brechtbaekelandt.Data.Entities;
 using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Identity;
+using brechtbaekelandt.Models;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Attachment = brechtbaekelandt.Data.Entities.Attachment;
+using Category = brechtbaekelandt.Data.Entities.Category;
+using Post = brechtbaekelandt.Data.Entities.Post;
+using User = brechtbaekelandt.Data.Entities.User;
 
 
 namespace brechtbaekelandt.Controllers.WebApi
@@ -27,13 +36,15 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         private readonly ApplicationUserManager _userManager;
 
+        private readonly IHostingEnvironment _hostingEnvironment;
+
         private const int _postsPerPage = 5;
 
-        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager)
+        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, IHostingEnvironment hostingEnvironment)
         {
             this._userManager = userManager;
             this._blogDbContext = blogDbcontext;
-
+            this._hostingEnvironment = hostingEnvironment;
         }
 
         [HttpGet]
@@ -82,8 +93,102 @@ namespace brechtbaekelandt.Controllers.WebApi
         }
 
         [HttpPost]
+        [Route("upload-picture")]
+        public async Task<IActionResult> UploadPictureAsyncActionResult(IFormFile picture)
+        {
+            var rootPath = $"{this._hostingEnvironment.WebRootPath}";
+
+            var relativePath = "/images/blog";
+
+            var fullPath = $"{rootPath}{relativePath}";
+
+            var fileName = this.EnsureCorrectFilename(ContentDispositionHeaderValue.Parse(picture.ContentDisposition).FileName.Trim('"'));
+            var fileExtension = fileName.Substring(fileName.LastIndexOf('.'));
+            var newFileName = $"{Guid.NewGuid()}{fileExtension}";
+
+            var fullFilePath = Path.Combine(fullPath, newFileName);
+
+            using (var stream = new FileStream(fullFilePath, FileMode.Create))
+            {
+                await picture.CopyToAsync(stream);
+            }
+
+            return this.Json($"{relativePath}/{newFileName}");
+        }
+
+        [HttpPost]
+        [Route("delete-picture")]
+        public IActionResult DeletePictureAsyncActionResult(string picture)
+        {
+            try
+            {
+                var picturePath = $"{this._hostingEnvironment.WebRootPath}{picture.Replace("/", "\\")}";
+
+                System.IO.File.Delete(picturePath);
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return this.Ok();
+        }
+
+        [HttpPost]
+        [Route("upload-attachments")]
+        public async Task<IActionResult> UploadAttachmentsAsyncActionResult(List<IFormFile> attachments)
+        {
+            var rootPath = $"{this._hostingEnvironment.WebRootPath}";
+
+            var relativePath = "/attachments/blog";
+
+            var fullPath = $"{rootPath}{relativePath}";
+
+            var results = new Collection<Models.Attachment>();
+
+            foreach (var attachment in attachments)
+            {
+                var fileName = this.EnsureCorrectFilename(ContentDispositionHeaderValue.Parse(attachment.ContentDisposition).FileName.Trim('"'));
+
+                var fullFilePath = Path.Combine(fullPath, fileName);
+
+                if (attachment.Length <= 0)
+                {
+                    continue;
+                }
+
+                using (var stream = new FileStream(fullFilePath, FileMode.Create))
+                {
+                    await attachment.CopyToAsync(stream);
+                }
+
+                var newAttachement = new Models.Attachment
+                {
+                    Id = Guid.NewGuid(),
+                    Name = fileName,
+                    Url = $"{relativePath}/{fileName}"
+                };
+
+                results.Add(newAttachement);
+            }
+
+            return this.Json(results);
+        }
+
+        [HttpPost]
+        [Route("delete-attachment")]
+        public async Task<IActionResult> DeleteAttachmentAsyncActionResult([FromBody]Models.Attachment attachment)
+        {
+            var attachmentPath = $"{this._hostingEnvironment.WebRootPath}{attachment.Url.Replace("/", "\\")}";
+
+            System.IO.File.Delete(attachmentPath);
+            
+            return this.Json(attachment);
+        }
+
+        [HttpPost]
         [Route("post/add")]
-        [ValidationActionFilter]
+        //[ValidationActionFilter]
         public async Task<IActionResult> CreatePostAsyncActionResult([FromBody]Models.Post post)
         {
             post.Id = Guid.NewGuid();
@@ -118,7 +223,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             await this._blogDbContext.SaveChangesAsync();
 
-            return this.Ok();
+            return this.Json(post);
         }
 
         [HttpPost]
@@ -191,6 +296,14 @@ namespace brechtbaekelandt.Controllers.WebApi
             //return this.Ok(postEntity.Id);
 
             return null;
+        }
+
+        private string EnsureCorrectFilename(string filename)
+        {
+            if (filename.Contains("\\"))
+                filename = filename.Substring(filename.LastIndexOf("\\", StringComparison.Ordinal) + 1);
+
+            return filename;
         }
     }
 }

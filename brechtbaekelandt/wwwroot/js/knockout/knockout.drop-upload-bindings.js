@@ -10,6 +10,10 @@ ko.bindingHandlers.dropUpload = {
                 element.getAttribute("data-bind"));
         }
 
+        var unwrappedValue = ko.unwrap(value);
+
+        var isValueArray = unwrappedValue instanceof Array;
+
         var allowedExtensions = allBindings.get("allowedExtensions") || [];
 
         var allowedExtensionsWithDot = allowedExtensions.map(function (extension) {
@@ -20,22 +24,41 @@ ko.bindingHandlers.dropUpload = {
 
         $(element).on("drop dragdrop", function (event) {
             event.preventDefault();
-            for (var i = 0; i < event.originalEvent.dataTransfer.files.length; i++) {
 
-                var file = event.originalEvent.dataTransfer.files[i];
+            if (!isValueArray) {
+
+                var file = event.originalEvent.dataTransfer.files[0];
 
                 if (allowedExtensions.length > 0) {
                     var extension = file.name.split(".").pop();
 
                     if ($.inArray(extension, allowedExtensions) > -1) {
-                        value.push(file);
+                        value(file);
                     }
                 }
                 else {
-                    value.push(file);
+                    value(file);
                 }
             }
-            $(this).removeClass("drop-background");
+            else {
+                for (var i = 0; i < event.originalEvent.dataTransfer.files.length; i++) {
+
+                    var currentFile = event.originalEvent.dataTransfer.files[i];
+
+                    if (allowedExtensions.length > 0) {
+                        var extension = currentFile.name.split(".").pop();
+
+                        if ($.inArray(extension, allowedExtensions) > -1) {
+                            value.push(currentFile);
+                        }
+                    }
+                    else {
+                        value.push(currentFile);
+                    }
+                }
+            }
+
+            $(this).removeClass("enter-drag");
         });
 
         var $inputElement = $("<input type='file' class='hidden' />");
@@ -54,11 +77,15 @@ ko.bindingHandlers.dropUpload = {
             var val = $(this).val();
 
             if (val) {
-                value.push($(this).get(0).files[0]);
+                if (!isValueArray) {
+                    value($(this).get(0).files[0]);
+                } else {
+                    value.push($(this).get(0).files[0]);
+                }
             }
         });
         $(element).on("dragenter", function () {
-            $(this).addClass("drop-background");
+            $(this).addClass("enter-drag");
         });
         $(element).on("dragleave", function () {
             //$(this).css("background-color", "red");
