@@ -38,21 +38,25 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpGet]
         [Route("posts")]
-        public IActionResult GetPostsAsyncActionResult(Guid? categoryId = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1)
+        public IActionResult GetPostsAsyncActionResult(Guid? categoryId = null, string categoryName = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1)
         {
             var query = this._blogDbContext.Posts
                 .Include(p => p.User)
                 .Include(p => p.Comments)
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category).Where(p =>
-                    (categoryId == null || p.PostCategories.Any(pc => pc.CategoryId == categoryId)) &&
+                    (categoryId == null ||
+                     p.PostCategories.Any(pc => pc.Category.Id == categoryId) ||
+                     categoryName == null ||
+                     p.PostCategories.Any(pc => pc.Category.Name == categoryName)) &&
                     (searchTerms == null ||
                      searchTerms.Length == 0 ||
-                     searchTerms[0] == null ||
                      searchTerms.Any(s => Regex.Replace(p.Title, "<.*?>", string.Empty).ToLower().Contains(s.ToLower())) ||
                      searchTerms.Any(s => Regex.Replace(p.Description, "<.*?>", string.Empty).ToLower().Contains(s.ToLower())) ||
-                     searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && Regex.Replace(p.Description, "<.*?>", string.Empty).ToLower().Contains(s.ToLower()))) &&
-                    (tags == null || tags.Length == 0 || tags[0] == null || tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
+                     searchTerms.Any(s => !string.IsNullOrEmpty(p.Content) && Regex.Replace(p.Content, "<.*?>", string.Empty).ToLower().Contains(s.ToLower()))) &&
+                    (tags == null ||
+                     tags.Length == 0 ||
+                     tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
                 )
                 .OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)

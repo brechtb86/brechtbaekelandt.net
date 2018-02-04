@@ -15,7 +15,7 @@ namespace brechtbaekelandt.Models
 
         public string Title { get; set; }
 
-       
+        public string CleanTitle => !string.IsNullOrEmpty(this.Title) ? Regex.Replace(this.Title, "<.*?>", string.Empty) : string.Empty;
 
         public string InternalTitle => this.Title.RemoveSpecialCharactersAndSpaces().ToLower();
 

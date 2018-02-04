@@ -255,17 +255,17 @@
                     <i>
                         <label>categories:</label>
                         <!-- ko foreach: post.categories -->
-                        <a data-bind="text: name, attr: { href: '/home?category=' + name() }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
+                        <a data-bind="text: name, attr: { href: '/home?categoryName=' + name() }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
                         <!-- /ko -->
                     </i>
                 </small>
             </div>
             <div class="post-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
             </div>
-            <div class="post-content" data-bind=", highlight: { text:  content(), keywords: post.viewModel.searchTermsFilter() }">
+            <div class="post-content" data-bind=", highlight: { text:  post.content(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <div class="post-tags">
-                <!-- ko foreach: tags -->
+                <!-- ko foreach: post.tags -->
                 <a class="label label-default" data-bind="text: $data, attr: { href: '/home?tags=' + $data }"></a>
                 <!-- /ko -->
             </div>
@@ -282,7 +282,7 @@
         <article class="post-preview">
             <div class="post-preview-title">
                 <h3>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
+                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
                 </h3>
                 <small>
                     <i><a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
@@ -307,7 +307,7 @@
             <div class="post-preview-content" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <!-- ko if: post.content -->
-            <a data-bind="attr: { href: '/blog/post/' + post.internalTitle()  + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }">read more...</a>
+            <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }">read more...</a>
             <!-- /ko -->
             <div class="post-preview-tags">
                 <!-- ko foreach: post.tags -->

@@ -35,15 +35,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             }
         });
 
-
-
-
         self.searchTermsFilterString = ko.observable();
         self.searchTermsFilterString.subscribe(function (newValue) {
             self.searchTermsFilter(newValue.trim().split(" "));
         });
 
-        self.searchTermsQueryString = ko.observable();
+        self.searchTermsQueryString = ko.observable("");
 
         self.searchTermsFilter.subscribe(function () {
             self.getRequests().forEach(function (request) {
@@ -65,7 +62,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             self.getPosts();
         });
 
-        self.tagsQueryString = ko.observable();
+        self.tagsQueryString = ko.observable("");
 
         self.tagsFilter.subscribe(function () {
             self.currentPage(1);
@@ -91,22 +88,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriber = {};
         self.subscriber.emailAddress = ko.observable();
         self.subscriber.categories = ko.observableArray();
-
-        //if (self.posts().length > 0 && self.searchTermsFilter().length > 0) {
-        //    self.posts().forEach(function (post) {
-
-        //        var newTitle = post.title();
-        //        var newDescription = post.description();
-
-        //        self.searchTermsFilter().forEach(function (searchTerm) {
-        //            newTitle = self.highlightSearchTermResult(newTitle, searchTerm);
-        //            newDescription = self.highlightSearchTermResult(newDescription, searchTerm);
-        //        });
-
-        //        post.title(newTitle);
-        //        post.description(newDescription);
-        //    });
-        //}
 
         self.getRequests = ko.observableArray();
     };
@@ -147,22 +128,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                     self.isLoadingMore(false);
                 });
 
-                //if (self.posts().length > 0 && self.searchTermsFilter().length > 0) {
-
-                //    self.posts().forEach(function (post) {
-
-                //        var newTitle = post.title();
-                //        var newDescription = post.description();
-
-                //        self.searchTermsFilter().forEach(function (searchTerm) {
-                //            newTitle = self.highlightSearchTermResult(newTitle, searchTerm, true);
-                //            newDescription = self.highlightSearchTermResult(newDescription, searchTerm, true);
-                //        });
-
-                //        post.title(newTitle);
-                //        post.description(newDescription);
-                //    });
-                //}
+                history.pushState(null, "", location.href.split("?")[0]);
             });
 
         self.getRequests.push(request);
