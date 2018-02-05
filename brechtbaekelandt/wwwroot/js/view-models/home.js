@@ -49,7 +49,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             self.getRequests([]);
 
-            var searchTermsQueryString = this.createSearchTermsQueryString(self.searchTermsFilter());
+            var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
 
             self.searchTermsQueryString(searchTermsQueryString);
 
@@ -63,7 +63,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.tagsFilter.subscribe(function () {
             self.currentPage(1);
 
-            var tagsQueryString = this.createTagsQueryString(self.tagsFilter());
+            var tagsQueryString = self.createTagsQueryString(self.tagsFilter());
 
             self.tagsQueryString(tagsQueryString);
 
@@ -72,10 +72,10 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             self.getPosts();
         });
 
-        var searchTermsQueryString = this.createSearchTermsQueryString(self.searchTermsFilter());
+        var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
         self.searchTermsQueryString(searchTermsQueryString);
 
-        var tagsQueryString = this.createTagsQueryString(self.tagsFilter());
+        var tagsQueryString = self.createTagsQueryString(self.tagsFilter());
         self.tagsQueryString(tagsQueryString);
 
         var categoryQueryString = self.createCaregoryIdQueryString(self.categoryIdFilter());
