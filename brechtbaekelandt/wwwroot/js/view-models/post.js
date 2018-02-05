@@ -13,6 +13,7 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         self.initAddThis();
         self.initFancyBox();
+        self.initPrettify();
     };
 
     PostViewModel.prototype.initFancyBox = function () {
@@ -37,11 +38,17 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
         }
     }
 
+    PostViewModel.prototype.initPrettify = function() {
+        PR.prettyPrint();
+    }
+
     function init(serverViewModel) {
         var viewModel = new PostViewModel(serverViewModel);
 
         ko.applyBindings(viewModel);
     }
+
+   
 
     return {
         PostViewModel: PostViewModel,
