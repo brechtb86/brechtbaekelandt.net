@@ -11,6 +11,8 @@ namespace brechtbaekelandt.Data.Entities
 
         public string Url { get; set; }
 
+        public long Size { get; set; }
+
         public virtual Post Post { get; set; }
     }
 }

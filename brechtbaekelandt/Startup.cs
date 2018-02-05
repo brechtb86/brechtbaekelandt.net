@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Diagnostics;
 using brechtbaekelandt.Data;
 using brechtbaekelandt.Data.Contexts.Identity;
@@ -12,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -156,12 +158,13 @@ namespace brechtbaekelandt
                         {
                             options.RequireHttpsPermanent = true;
                         }
+
+                        options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                        options.OutputFormatters.Add(new JsonOutputFormatter(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Ignore }, ArrayPool<char>.Shared));
                     })
                 .AddJsonOptions(
                     options =>
                     {
-                        options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                         options.SerializerSettings.Converters.Add(new StringEnumConverter());
                     });
         }

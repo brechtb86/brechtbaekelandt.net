@@ -236,41 +236,59 @@
         </div>
     </script>
 
-    <script type="text/html" id="postTemplate">
-        <article class="post">
-            <div class="post-title">
-                <h3>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
-                </h3>
-                <small>
-                    <i><a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
-                    <span>|</span>
-                    <i data-bind="text: moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
-                    <span>|</span>
-                    <!-- ko if: post.comments().length > 0 -->
-                    <i><span>comments:</span> <span data-bind="text: post.comments().length"></span></i>
+<script type="text/html" id="postTemplate">
+    <article class="post">
+        <div class="post-title">
+            <h3>
+                <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
+            </h3>
+            <small>
+                <i><a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
+                <span>|</span>
+                <i data-bind="text: moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
+                <span>|</span>
+                <!-- ko if: post.comments().length > 0 -->
+                <i><span>comments:</span> <span data-bind="text: post.comments().length"></span></i>
+                <!-- /ko -->
+                <!-- ko if: post.comments().length === 0 -->
+                <i>no comments yet...</i>
+                <!-- /ko -->
+                <span>|</span>
+                <i>
+                    <label>categories:</label>
+                    <!-- ko foreach: post.categories -->
+                    <a data-bind="text: name, attr: { href: '/home?categoryName=' + name() }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
                     <!-- /ko -->
-                    <!-- ko if: post.comments().length === 0 -->
-                    <i>no comments yet...</i>
-                    <!-- /ko -->
-                    <span>|</span>
-                    <i>
-                        <label>categories:</label>
-                        <!-- ko foreach: post.categories -->
-                        <a data-bind="text: name, attr: { href: '/home?categoryName=' + name() }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
-                        <!-- /ko -->
-                    </i>
-                </small>
-            </div>
-            <div class="post-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
-            </div>
-            <div class="post-content" data-bind=", highlight: { text:  post.content(), keywords: viewModel.searchTermsFilter() }">
-            </div>
-            <div class="post-tags">
+                </i>
+            </small>
+        </div>
+        <div class="post-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
+        </div>
+        <div class="post-content" data-bind=", highlight: { text:  post.content(), keywords: viewModel.searchTermsFilter() }">
+        </div>
+        <div class="clearfix" />
+        <!-- ko if: post.attachments().length > 0 -->
+        <div class="post-attachments">
+            <label><small><i>attachments:</i></small></label>
+            <div class="clearfix" />
+            <ul class="list-group">
+                <!-- ko foreach: post.attachments -->
+                <li class="list-group-item">
+                    <a class="" data-bind="attr: { href: $data.url }" download><b data-bind="text: $data.name"></b></a> <span data-bind="text: '(' + bytesToSizeString($data.size()) + ')'"></span>
+                </li>
+                <!-- /ko -->
+            </ul>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: post.tags().length > 0 -->
+        <div class="post-tags">
+            <label><small><i>tags:</i></small></label>
+            <div class="clearfix" />
                 <!-- ko foreach: post.tags -->
                 <a class="label label-default" data-bind="text: $data, attr: { href: '/home?tags=' + $data }"></a>
                 <!-- /ko -->
             </div>
+            <!-- /ko -->
             <div class="clearfix"></div>
             <div class="post-share">
                 <hr />
@@ -280,42 +298,47 @@
         </article>
     </script>
 
-    <script type="text/html" id="postPreviewTemplate">
-        <article class="post-preview">
-            <div class="post-preview-title">
-                <h3>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
-                </h3>
-                <small>
-                    <i><a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
-                    <span>|</span>
-                    <i data-bind="text: moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
-                    <span>|</span>
-                    <!-- ko if: post.comments().length > 0 -->
-                    <i><span>comments:</span> <span data-bind="text: post.comments().length"></span></i>
+<script type="text/html" id="postPreviewTemplate">
+    <article class="post-preview">
+        <div class="post-preview-title">
+            <h3>
+                <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
+            </h3>
+            <small>
+                <i><a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
+                <span>|</span>
+                <i data-bind="text: moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
+                <span>|</span>
+                <!-- ko if: post.comments().length > 0 -->
+                <i><span>comments:</span> <span data-bind="text: post.comments().length"></span></i>
+                <!-- /ko -->
+                <!-- ko if: post.comments().length === 0 -->
+                <i>no comments yet...</i>
+                <!-- /ko -->
+                <span>|</span>
+                <i>
+                    <label>categories:</label>
+                    <!-- ko foreach: post.categories -->
+                    <a href="#" data-bind="text: name, click: function() { $parentContext.$data.viewModel.categoryIdFilter($data.id()); }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
                     <!-- /ko -->
-                    <!-- ko if: post.comments().length === 0 -->
-                    <i>no comments yet...</i>
-                    <!-- /ko -->
-                    <span>|</span>
-                    <i>
-                        <label>categories:</label>
-                        <!-- ko foreach: post.categories -->
-                        <a href="#" data-bind="text: name, click: function() { $parentContext.$data.viewModel.categoryIdFilter($data.id()); }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
-                        <!-- /ko -->
-                    </i>
-                </small>
-            </div>
-            <div class="post-preview-content" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
-            </div>
-            <!-- ko if: post.content -->
-            <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }">read more...</a>
-            <!-- /ko -->
-            <div class="post-preview-tags">
+                </i>
+            </small>
+        </div>
+        <div class="post-preview-content" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
+        </div>
+        <!-- ko if: post.content -->
+        <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }">read more...</a>
+        <!-- /ko -->
+        <div class="clearfix" />
+        <!-- ko if: post.tags().length > 0 -->
+        <div class="post-preview-tags">
+            <label><small><i>tags:</i></small></label>
+            <div class="clearfix" />
                 <!-- ko foreach: post.tags -->
                 <a href="#" class="label label-default" data-bind="text: $data, css: { active: $parentContext.$data.viewModel.tagsFilter.indexOf($data) > -1 }, click: function() { $parentContext.$data.viewModel.tagsFilter.indexOf($data) === -1 ? $parentContext.$data.viewModel.tagsFilter.push($data) : null; }"></a>
                 <!-- /ko -->
             </div>
+            <!-- /ko -->
             <div class="clearfix"></div>
             <div class="post-preview-share">
                 <hr />
@@ -425,13 +448,15 @@
                         <!-- ko if: viewModel.isAttachmentsUploading -->
                         <h4>files being uploaded</h4>
                         <!-- /ko -->
-                        <ul class="list-group" data-bind="foreach: viewModel.attachmentsToUpload">
+                        <ul class="list-group">
+                            <!-- ko foreach: viewModel.attachmentsToUpload -->
                             <li class="list-group-item">
                                 <b class="" data-bind="text: name"></b>
                                 <!-- ko ifnot: $parentContext.$data.viewModel.isAttachmentsUploading -->
                                 <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteSelectedAttachmentToUpload($data); }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
                                 <!-- /ko -->
                             </li>
+                            <!-- /ko -->
                         </ul>
                         <!-- /ko -->
                         <!-- ko if: viewModel.isAttachmentsUploading -->
@@ -462,16 +487,17 @@
                             <strong>error!</strong> <span data-bind="text: viewModel.attachmentDeleteErrorMessage"></span>
                         </div>
                         <!-- /ko -->
-                        <ul class="list-group" data-bind="foreach: post.attachments">
+                        <ul class="list-group">
+                            <!-- ko foreach: post.attachments -->
                             <li class="list-group-item">
                                 <b class="" data-bind="text: name"></b>
                                 <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteUploadedAttachment($data); }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
                             </li>
+                            <!-- /ko -->
                         </ul>
                         <!-- /ko -->
                     </div>
                 </div>
-
             </fieldset>
         </form>
     </script>
@@ -484,3 +510,4 @@
     </script>
 </body>
 </html>
+

@@ -35,6 +35,7 @@ namespace brechtbaekelandt.Controllers
             var query = this._blogDbContext.Posts
                 .Include(p => p.User)
                 .Include(p => p.Comments)
+                .Include(p => p.Attachments)
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category).Where(p =>
                     (categoryId == null ||

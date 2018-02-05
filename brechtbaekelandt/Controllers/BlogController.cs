@@ -42,6 +42,7 @@ namespace brechtbaekelandt.Controllers
             var postEntity = await this._blogDbContext.Posts
                 .Include(p => p.User)
                 .Include(p => p.Comments)
+                .Include(p => p.Attachments)
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category)
                 .FirstOrDefaultAsync(p => p.InternalTitle == internalTitle);

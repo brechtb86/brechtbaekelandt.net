@@ -54,6 +54,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             var query = this._blogDbContext.Posts
                 .Include(p => p.User)
                 .Include(p => p.Comments)
+                .Include(p => p.Attachments)
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category).Where(p =>
                     (categoryId == null ||
@@ -166,7 +167,8 @@ namespace brechtbaekelandt.Controllers.WebApi
                 {
                     Id = Guid.NewGuid(),
                     Name = fileName,
-                    Url = $"{relativePath}/{fileName}"
+                    Url = $"{relativePath}/{fileName}",
+                    Size = attachment.Length
                 };
 
                 results.Add(newAttachement);
