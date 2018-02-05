@@ -13,7 +13,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         var self = this;
 
         document.addEventListener("scroll", function (event) {
-            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() >= self.posts().length)) {
+            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > self.posts().length)) {
                 self.getPosts(true);
             }
         });
