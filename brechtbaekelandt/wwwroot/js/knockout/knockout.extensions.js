@@ -1,6 +1,4 @@
-﻿/// <reference path="../../lib/knockout/dist/knockout.debug.js" />
-
-ko.subscribable.fn.subscribeChanged = function (callback) {
+﻿ko.subscribable.fn.subscribeChanged = function (callback) {
     var oldVal;
 
     this.subscribe(function (oldValue) {

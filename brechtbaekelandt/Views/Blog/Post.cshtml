@@ -1,4 +1,5 @@
 ﻿@using brechtbaekelandt.Extensions
+@using Microsoft.AspNetCore.Html
 @using Newtonsoft.Json
 @using Newtonsoft.Json.Serialization
 
@@ -36,11 +37,11 @@
         $(function () {
             @{
                 var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+
+                var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
             }
 
-            var serverViewmodel = @Html.Raw(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings));
-
-            brechtbaekelandt.post.init(serverViewmodel);
+            brechtbaekelandt.post.init(@serverViewmodel);
         });
     </script>
 }

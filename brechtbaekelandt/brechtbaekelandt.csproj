@@ -35,6 +35,7 @@
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
     <Folder Include="Filters\" />
+    <Folder Include="Helpers\" />
     <Folder Include="wwwroot\attachments\blog\" />
     <Folder Include="wwwroot\images\blog\" />
   </ItemGroup>

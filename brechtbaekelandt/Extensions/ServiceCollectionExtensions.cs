@@ -92,7 +92,7 @@ namespace brechtbaekelandt.Extensions
 
         private static string InsertPictureInDescription(string title, string description, string pictureUrl)
         {
-            return !string.IsNullOrEmpty(pictureUrl) ? description.Insert(description.IndexOf('>') + 1, $"<a href='{pictureUrl}' data-fancybox data-caption='{title}'><img src='{pictureUrl}' class='post-picture post-preview-picture img-thumbnail' /></a>") : description;
+            return !string.IsNullOrEmpty(pictureUrl) ? description.Insert(description.IndexOf('>') + 1, $"<a href=\"{pictureUrl}\" data-fancybox data-caption=\"{title}\"><img src=\"{pictureUrl}\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>") : description;
         }
     }
 }
