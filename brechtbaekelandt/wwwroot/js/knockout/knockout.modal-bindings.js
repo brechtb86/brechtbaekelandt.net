@@ -1,31 +1,56 @@
-﻿/// <reference path="../../lib/jquery/dist/jquery.js" />
-/// <reference path="../../lib/knockout/dist/knockout.debug.js" />
+﻿(function () {
+    "use strict";
 
-ko.bindingHandlers.modal = {
-    init: function (element, valueAccessor) {
-        $(element).modal({
+    // locals
+    var unwrap = ko.utils.unwrapObservable;
+
+    /**
+    * initiate        
+    *
+    * @param {element} element
+    * @param {object} value
+    * @param {object} bindings
+    * @api public
+    */
+    function init(element, value, bindings) {
+        var $el = $(element);
+        var model = value();
+        var modelValue = unwrap(value());
+
+        $el.modal({
             show: false
         });
 
-        var value = valueAccessor();
-
-
-        if (typeof value === "function") {
-            $(element).on("hide.bs.modal", function () {
-                value(false);
-            });
-        }
-        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-            $(element).modal("destroy");
+        $el.on("hide.bs.modal", function () {
+            model(false);
         });
 
-    },
-    update: function (element, valueAccessor) {
-        var value = valueAccessor();
-        if (ko.utils.unwrapObservable(value)) {
-            $(element).modal("show");
+        ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+            $el.modal("destroy");
+        });
+    }
+
+    /**
+    * update
+    *
+    * @param {element} element
+    * @param {object} value
+    * @param {object} bindings
+    * @api public
+    */
+    function update(element, value, bindings) {
+        var $el = $(element);
+        var modelValue = unwrap(value());
+
+        if (modelValue) {
+            $el.modal("show");
         } else {
-            $(element).modal("hide");
+            $el.modal("hide");
         }
     }
-}
+
+    ko.bindingHandlers.modal = {
+        init: init,
+        update: update
+    }
+})();
