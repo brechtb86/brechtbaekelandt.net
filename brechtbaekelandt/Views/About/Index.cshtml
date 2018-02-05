@@ -1,0 +1,64 @@
+﻿@{
+    this.ViewData["Title"] = "about";
+    this.ViewData["ActivePage"] = "about";
+}
+
+<div class="text-center about-container">
+    <h4>these are the frame works I used to create this blog:</h4>
+    <div class="row row-eq-height front-end">
+        <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths">
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths col-vertical-center text-center">
+            <a href="https://getbootstrap.com/" target="_blank"><img src="~/images/about/bootstrap.svg" class="img-responsive" alt="bootstrap" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths col-vertical-center text-center">
+            <a href="https://jquery.com/" target="_blank"> <img src="~/images/about/jquery.svg" class="img-responsive" alt="jquery" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths col-vertical-center text-center">
+            <a href="https://knockoutjs.com/" target="_blank"> <img src="~/images/about/knockout.svg" class="img-responsive" alt="knockout" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths">
+        </div>
+    </div>
+    <div class="row row-eq-height back-end">
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3"></div>
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
+            <a href="https://docs.microsoft.com/en-us/ef/core/" target="_blank"> <img src="~/images/about/ef-core.svg" class="img-responsive" alt="entity framework core" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
+            <a href="https://www.microsoft.com/net/learn/get-started/windows" target="_blank"><img src="~/images/about/net-core.svg" class="img-responsive" alt=".net core" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3"></div>
+    </div>
+    <h4>database:</h4>
+    <div class="row row-eq-height front-end">
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        </div>
+
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-vertical-center text-center">
+            <a href="https://www.microsoft.com/en-us/sql-server/sql-server-2017" target="_blank"><img src="~/images/about/ms-sql.svg" class="img-responsive" alt="sql server 2017" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        </div>
+    </div>
+    <h4>noteworthy mentions:</h4>
+    <div class="row row-eq-height noteworthy-mentions">
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
+            <a href="http://automapper.org/" target="_blank"><img src="~/images/about/auto-mapper.svg" alt="automapper" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
+            <a href="http://fontawesome.io" target="_blank"><img src="~/images/about/font-awesome.svg" class="img-responsive" alt="font awesome" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
+            <a href="http://froala.com" target="_blank"><img src="~/images/about/froala.svg" class="img-responsive" alt="froala" /></a>
+        </div>
+        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
+            <a href="https://www.newtonsoft.com/json" target="_blank"><img src="~/images/about/json-net.svg" class="img-responsive" alt="JSON.net" /></a>
+        </div>
+    </div>
+    <h6>this blog is also open source, see my <a href="https://github.com/brechtb86/brechtbaekelandt.net" targent="_blank">Github</a> page.</h6>
+</div>
+
+@section styles{
+    <link href="~/css/about.css" rel="stylesheet" />
+}
