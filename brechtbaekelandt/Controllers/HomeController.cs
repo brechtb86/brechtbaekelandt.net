@@ -39,8 +39,8 @@ namespace brechtbaekelandt.Controllers
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category).Where(p =>
                     (categoryId == null ||
-                     p.PostCategories.Any(pc => pc.Category.Id == categoryId) ||
-                     categoryName == null ||
+                     p.PostCategories.Any(pc => pc.Category.Id == categoryId)) &&
+                    (categoryName == null ||
                      p.PostCategories.Any(pc => pc.Category.Name == categoryName)) &&
                     (searchTerms == null ||
                      searchTerms.Length == 0 ||

@@ -58,8 +58,8 @@ namespace brechtbaekelandt.Controllers.WebApi
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category).Where(p =>
                     (categoryId == null ||
-                     p.PostCategories.Any(pc => pc.Category.Id == categoryId) ||
-                     categoryName == null ||
+                     p.PostCategories.Any(pc => pc.Category.Id == categoryId)) &&
+                    (categoryName == null ||
                      p.PostCategories.Any(pc => pc.Category.Name == categoryName)) &&
                     (searchTerms == null ||
                      searchTerms.Length == 0 ||
@@ -184,7 +184,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             var attachmentPath = $"{this._hostingEnvironment.WebRootPath}{attachment.Url.Replace("/", "\\")}";
 
             System.IO.File.Delete(attachmentPath);
-            
+
             return this.Json(attachment);
         }
 
