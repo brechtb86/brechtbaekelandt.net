@@ -67,8 +67,8 @@
 
     @RenderSection("styles", required: false)
 
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
-    <script type="text/javascript" src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+    <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
     @*<environment include="Development">*@
     <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -325,7 +325,7 @@
                 </i>
             </small>
         </div>
-        <div class="post-preview-content" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
+        <div class="post-preview-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
         </div>
         <!-- ko if: post.content -->
         <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }">read more...</a>

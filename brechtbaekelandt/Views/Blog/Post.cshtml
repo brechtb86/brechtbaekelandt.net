@@ -63,7 +63,7 @@
     <meta name="medium" content="image">
     <meta property="og:type" content="article" />
     <meta property="og:description" content="@this.Html.Raw(this.Model.Post.CleanDescription)" />
-    <meta property="og:url" content="@("http://www.brechtbaekelandt.net/blog/post" + this.Model.Post.InternalTitle)" />
+    <meta property="og:url" content="@("http://www.brechtbaekelandt.net/blog/post/" + this.Model.Post.InternalTitle)" />
     <meta property="article:published_time" content="@this.Model.Post.Created" />
     <meta property="article:modified_time" content="@this.Model.Post.LastModified" />
     <meta property="article:section" content="@this.Html.Raw(this.Model.Post.CleanContent)" />
