@@ -25,7 +25,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
             if ((newValue || oldValue) && (newValue !== oldValue)) {
 
-                var categoryQueryString = self.categoryIdFilter() ? "categoryId=" + self.categoryIdFilter() + "&" : "";
+                var categoryQueryString = self.createCaregoryIdQueryString(self.categoryIdFilter());
 
                 self.categoryQueryString(categoryQueryString);
 
@@ -49,11 +49,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             self.getRequests([]);
 
-            var searchTermsQueryString = "";
-
-            self.searchTermsFilter().forEach(function (searchTerm, index) {
-                searchTermsQueryString += "searchTerms=" + searchTerm + "&";
-            });
+            var searchTermsQueryString = this.createSearchTermsQueryString(self.searchTermsFilter());
 
             self.searchTermsQueryString(searchTermsQueryString);
 
@@ -67,11 +63,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.tagsFilter.subscribe(function () {
             self.currentPage(1);
 
-            var tagsQueryString = "";
-
-            self.tagsFilter().forEach(function (tag, index) {
-                tagsQueryString += "tags=" + tag + "&";
-            });
+            var tagsQueryString = this.createTagsQueryString(self.tagsFilter());
 
             self.tagsQueryString(tagsQueryString);
 
@@ -79,6 +71,15 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             self.getPosts();
         });
+
+        var searchTermsQueryString = this.createSearchTermsQueryString(self.searchTermsFilter());
+        self.searchTermsQueryString(searchTermsQueryString);
+
+        var tagsQueryString = this.createTagsQueryString(self.tagsFilter());
+        self.tagsQueryString(tagsQueryString);
+
+        var categoryQueryString = self.createCaregoryIdQueryString(self.categoryIdFilter());
+        self.categoryQueryString(categoryQueryString);
 
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(false);
@@ -101,7 +102,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.isLoading(!getMore);
         self.isLoadingMore(getMore);
 
-        var currentPageQuerystring = "currentPage=" + (getMore ? self.currentPage() + 1 : self.currentPage());
+        var currentPageQuerystring = self.createCurrentPageQueryString(self.createCurrentPageQueryString(), getMore);
 
         var request = $.ajax({
             url: "../api/blog/posts?" + self.searchTermsQueryString() + self.tagsQueryString() + self.categoryQueryString() + currentPageQuerystring,
@@ -165,6 +166,38 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 "close"
             ]
         });
+    }
+
+    HomeViewModel.prototype.createSearchTermsQueryString = function (searchTermsFilter) {
+        var searchTermsQueryString = "";
+
+        searchTermsFilter.forEach(function (searchTerm, index) {
+            searchTermsQueryString += "searchTerms=" + searchTerm + "&";
+        });
+
+        return searchTermsQueryString;
+    }
+
+    HomeViewModel.prototype.createTagsQueryString = function (tagsFilter) {
+        var tagsQueryString = "";
+
+        tagsFilter.forEach(function (tag, index) {
+            tagsQueryString += "tags=" + tag + "&";
+        });
+
+        return tagsQueryString;
+    }
+
+    HomeViewModel.prototype.createCaregoryNameQueryString = function (categoryNameFilter) {
+        return categoryNameFilter ? "categoryName=" + categoryNameFilter + "&" : "";
+    }
+
+    HomeViewModel.prototype.createCaregoryIdQueryString = function (categoryIdFilter) {
+        return categoryIdFilter ? "categoryId=" + categoryIdFilter + "&" : "";
+    }
+
+    HomeViewModel.prototype.createCurrentPageQueryString = function (currentPage, getMore = false) {
+        return "currentPage=" + (getMore ? currentPage + 1 : currentPage);
     }
 
     //HomeViewModel.prototype.highlightSearchTermResult = function (text, searchResultTerm, allowSpecialCharacters = false) {

@@ -1,0 +1,5 @@
+User-Agent: *
+Disallow: 
+Allow: /
+
+Sitemap: http://www.brechtbaekelandt.net/sitemap/sitemap.xml

@@ -1,0 +1,8 @@
+﻿{
+  "publishOptions": {
+    "exclude": [
+      "wwwroot/images/blog",
+      "wwwroot/attachments"
+    ]
+  }
+}

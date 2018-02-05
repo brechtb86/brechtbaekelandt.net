@@ -39,6 +39,8 @@ namespace brechtbaekelandt.Controllers
         [HttpGet("post/{internalTitle}")]
         public async Task<IActionResult> Post(string internalTitle, string[] searchTerms = null)
         {
+
+
             var postEntity = await this._blogDbContext.Posts
                 .Include(p => p.User)
                 .Include(p => p.Comments)
