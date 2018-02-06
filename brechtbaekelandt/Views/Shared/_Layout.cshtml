@@ -378,14 +378,14 @@
                             <div class="form-group" data-bind="validationElement: post.description">
                                 <label>description:</label>
                                 <div class="input-group stretch-horizontal">
-                                    <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions, froalaDisable: viewModel.isPosted()"></textarea>
+                                    <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions, disable: viewModel.isPosted"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>content:</label>
-                        <textarea data-bind="value: post.content, froala: post.content, froalaOptions: viewModel.contentFroalaOptions, froalaDisable: viewModel.isPosted()"></textarea>
+                        <textarea data-bind="value: post.content, froala: post.content, froalaOptions: viewModel.contentFroalaOptions, disable: viewModel.isPosted"></textarea>
                     </div>
                     <div class="form-group">
                         <label>categories:</label>

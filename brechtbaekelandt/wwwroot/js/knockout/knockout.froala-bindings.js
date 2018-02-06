@@ -24,10 +24,11 @@
         var model = value();
         var allBindings = unwrap(bindings());
         var options = ko.toJS(allBindings.froalaOptions);
-        
+        var disable = allBindings.disable || false;
+
         // initialize the editor
         $el.froalaEditor(options || {});
-        
+
         // provide froala editor instance for flexibility
         if (allBindings.froalaInstance && ko.isWritableObservable(allBindings.froalaInstance)) {
             allBindings.froalaInstance($el.data("froala.editor"));
@@ -47,6 +48,14 @@
         // cleanup editor, when dom node is removed
         ko.utils.domNodeDisposal.addDisposeCallback(element, destroy(element));
 
+        disable.subscribe(function(newValue) {
+            if (newValue) {
+                $el.froalaEditor("edit.off");
+            } else {
+                $el.froalaEditor("edit.on");
+            }
+        });
+
         // do not handle child nodes
         return { controlsDescendantBindings: true };
     }
@@ -63,9 +72,11 @@
 
     function update(element, value, bindings) {
         var $el = $(element);
-       var modelValue = unwrap(value());
+        var modelValue = unwrap(value());
+        var allBindings = unwrap(bindings());
+
         var editorInstance = $el.data("froala.editor");
-        
+
         if (editorInstance == null) {
             return;
         }
@@ -102,42 +113,6 @@
      */
 
     ko.bindingHandlers.froala = {
-        init: init,
-        update: update
-    }
-
-})();
-
-(function () {
-    "use strict";
-
-    function init(element, value, bindings) {
-        var $el = $(element);
-        var disable = value();
-
-        if (disable) {
-            $el.froalaEditor("edit.off");
-        } else {
-            $el.froalaEditor("edit.on");
-        }
-    }
-
-    function update(element, value, bindings) {
-        var $el = $(element);
-        var disable = value();
-
-        if (disable) {
-            $el.froalaEditor("edit.off");
-        } else {
-            $el.froalaEditor("edit.on");
-        }
-    }
-
-    /**
-     * expose `froala` binding handler methods
-     */
-
-    ko.bindingHandlers.froalaDisable = {
         init: init,
         update: update
     }
