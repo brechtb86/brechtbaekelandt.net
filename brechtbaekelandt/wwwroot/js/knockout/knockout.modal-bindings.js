@@ -2,7 +2,7 @@
     "use strict";
 
     // locals
-    var unwrap = ko.utils.unwrapObservable;
+    var unwrap = ko.unwrap;
 
     /**
     * initiate        
@@ -16,6 +16,11 @@
         var $el = $(element);
         var model = value();
         var modelValue = unwrap(value());
+
+        if (model === null || typeof model === "undefined") {
+            throw new Error("Cannot bind modal to undefined value. data-bind expression: " +
+                element.getAttribute("data-bind"));
+        }
 
         $el.modal({
             show: false

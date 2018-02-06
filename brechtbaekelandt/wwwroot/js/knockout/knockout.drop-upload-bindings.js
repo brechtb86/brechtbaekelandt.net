@@ -1,28 +1,36 @@
-﻿/// <reference path="../../lib/jquery/dist/jquery.js" />
-/// <reference path="../../lib/knockout/dist/knockout.debug.js" />
+﻿(function () {
+    "use strict";
 
-ko.bindingHandlers.dropUpload = {
-    init: function (element, valueAccessor, allBindings, viewModel, bindingContext) {
-        var value = valueAccessor();
+    // locals
+    var unwrap = ko.unwrap;
 
-        if (value === null || typeof value === "undefined") {
-            throw new Error("Cannot bind dropUpload to undefined value. data-bind expression: " +
+    /**
+    * initiate        
+    *
+    * @param {element} element
+    * @param {object} value
+    * @param {object} bindings
+    * @api public
+    */
+    function init(element, value, bindings) {
+        var $el = $(element);
+        var model = value();
+        var modelValue = unwrap(value());
+        var allBindings = unwrap(bindings());
+        
+        if (model === null || typeof model === "undefined") {
+            throw new Error("Cannot bind modal to undefined value. data-bind expression: " +
                 element.getAttribute("data-bind"));
         }
 
-        var unwrappedValue = ko.unwrap(value);
-
-        var isValueArray = unwrappedValue instanceof Array;
-
-        var allowedExtensions = allBindings.get("allowedExtensions") || [];
-
+        var isValueArray = modelValue instanceof Array;
+        var allowedExtensions = allBindings.allowedExtensions || [];
         var allowedExtensionsWithDot = allowedExtensions.map(function (extension) {
-            return "." + extension;
+            return extension.indexOf(".") < 0 ? "." + extension : extension;
         });
+        var allowedExtensionsAcceptString = allowedExtensionsWithDot.join(",");
 
-        var allowedExtensionsString = allowedExtensionsWithDot.join(",");
-
-        $(element).on("drop dragdrop", function (event) {
+        $el.on("drop dragdrop", function (event) {
             event.preventDefault();
 
             if (!isValueArray) {
@@ -30,14 +38,12 @@ ko.bindingHandlers.dropUpload = {
                 var file = event.originalEvent.dataTransfer.files[0];
 
                 if (allowedExtensions.length > 0) {
-                    var extension = file.name.split(".").pop();
-
-                    if ($.inArray(extension, allowedExtensions) > -1) {
-                        value(file);
+                    if ($.inArray(file.name.split(".").pop(), allowedExtensions) > -1) {
+                        model(file);
                     }
                 }
                 else {
-                    value(file);
+                    model(file);
                 }
             }
             else {
@@ -46,52 +52,76 @@ ko.bindingHandlers.dropUpload = {
                     var currentFile = event.originalEvent.dataTransfer.files[i];
 
                     if (allowedExtensions.length > 0) {
-                        var extension = currentFile.name.split(".").pop();
-
-                        if ($.inArray(extension, allowedExtensions) > -1) {
-                            value.push(currentFile);
+                        if ($.inArray(currentFile.name.split(".").pop(), allowedExtensions) > -1) {
+                            model.push(currentFile);
                         }
                     }
                     else {
-                        value.push(currentFile);
+                        model.push(currentFile);
                     }
                 }
             }
 
             $(this).removeClass("enter-drag");
+            $(this).removeClass("leave-drag");
         });
 
         var $inputElement = $("<input type='file' class='hidden' />");
 
         if (allowedExtensions.length > 0) {
-            $inputElement.attr("accept", allowedExtensionsString);
+            $inputElement.attr("accept", allowedExtensionsAcceptString);
         }
 
-        $(element).append($inputElement);
+        $el.append($inputElement);
 
-        $(element).dblclick(function () {
+        $el.dblclick(function () {
 
             $(element).find("input:file").click();
         });
-        $(element).find("input:file").change(function () {
+
+        $el.find("input:file").change(function () {
             var val = $(this).val();
 
             if (val) {
                 if (!isValueArray) {
-                    value($(this).get(0).files[0]);
+                    model($(this).get(0).files[0]);
                 } else {
-                    value.push($(this).get(0).files[0]);
+                    model.push($(this).get(0).files[0]);
                 }
             }
         });
-        $(element).on("dragenter", function () {
+
+        $el.on("dragenter", function () {
             $(this).addClass("enter-drag");
         });
-        $(element).on("dragleave", function () {
-            //$(this).css("background-color", "red");
+
+        $el.on("dragleave", function () {
+            $(this).addClass("leave-drag");
         });
-        $(element).on("dragover", function (event) {
+
+        $el.on("dragover", function (event) {
             event.preventDefault();
         });
     }
-};
+
+    /**
+    * update
+    *
+    * @param {element} element
+    * @param {object} value
+    * @param {object} bindings
+    * @api public
+    */
+    function update(element, value, bindings) {
+        var $el = $(element);
+        var model = value();
+        var modelValue = unwrap(value());
+
+
+    }
+
+    ko.bindingHandlers.dropUpload = {
+        init: init,
+        update: update
+    }
+})();
