@@ -447,7 +447,7 @@
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
-                    <input name="title" type="text" placeholder="enter your a title (optional)" class="form-control" data-bind="textInput: viewModel.newComment.title" />
+                    <input name="title" type="text" placeholder="enter a title (optional)" class="form-control" data-bind="textInput: viewModel.newComment.title" />
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.content">
@@ -458,7 +458,7 @@
                     <!-- ko if: viewModel.isTyping -->
                     <span class="input-group-addon" style="vertical-align: top;"><i class="fa fa-commenting-o"></i></span>
                     <!-- /ko -->
-                    <textarea rows="6" placeholder="enter your message" class="form-control" data-bind="textInput: viewModel.newComment.content, isTyping: viewModel.isTyping, timeOut: 750"></textarea>
+                    <textarea rows="6" placeholder="enter your comment" class="form-control" data-bind="textInput: viewModel.newComment.content, isTyping: viewModel.isTyping, timeOut: 750"></textarea>
                 </div>
             </div>
             <div class="form-inline">
