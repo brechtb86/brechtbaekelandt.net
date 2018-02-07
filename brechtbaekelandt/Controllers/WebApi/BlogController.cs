@@ -57,7 +57,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpGet]
         [Route("posts")]
-        public IActionResult GetPostsAsyncActionResult(Guid? categoryId = null, string categoryName = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1, bool includeComments = false)
+        public IActionResult GetPostsAsyncActionResult(Guid? categoryId = null, string categoryName = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1, bool includeComments = true)
         {
             var postEntities = this._blogDbContext.Posts
                 .Include(p => p.User)
