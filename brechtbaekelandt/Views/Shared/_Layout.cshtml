@@ -82,6 +82,7 @@
     <script src="~/js/knockout/knockout.validation-rules.js"></script>
     <script src="~/lib/moment/moment.js"></script>
 
+    <script src="~/js/helpers/helpers.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
@@ -343,7 +344,7 @@
                 <ul class="list-group">
                     <!-- ko foreach: post.attachments -->
                     <li class="list-group-item">
-                        <a class="" data-bind="attr: { href: $data.url }" download><b data-bind="text: $data.name"></b></a> <span data-bind="text: '(' + bytesToSizeString($data.size()) + ')'"></span>
+                        <a class="" data-bind="attr: { href: $data.url }" download><b data-bind="text: $data.name"></b></a> <span data-bind="text: '(' + new brechtbaekelandt.helpers.ByteHelper().bytesToSizeString($data.size()) + ')'"></span>
                     </li>
                     <!-- /ko -->
                 </ul>
