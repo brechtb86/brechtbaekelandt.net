@@ -89,14 +89,15 @@
     "jquery": ">=1.11.0",
     "font-awesome": ">=4.4.0"
   },
-  "version": "2.7.3",
-  "_release": "2.7.3",
+  "version": "2.7.5",
+  "_release": "2.7.5",
   "_resolution": {
     "type": "version",
-    "tag": "v2.7.3",
-    "commit": "d6f09ed8ca87d7051386c909a486bbb91c6c81f6"
+    "tag": "v2.7.5",
+    "commit": "c48651fe43af229c5c2103ce46e359f3f98b6d5a"
   },
   "_source": "https://github.com/froala/wysiwyg-editor.git",
-  "_target": "v2.7.3",
-  "_originalSource": "froala-wysiwyg-editor"
+  "_target": "v2.7.5",
+  "_originalSource": "froala-wysiwyg-editor",
+  "_direct": true
 }

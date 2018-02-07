@@ -54,7 +54,7 @@
             } else {
                 $el.froalaEditor("edit.on");
             }
-        });
+        });        
 
         // do not handle child nodes
         return { controlsDescendantBindings: true };

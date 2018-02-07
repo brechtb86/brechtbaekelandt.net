@@ -8,20 +8,25 @@ using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
-using brechtbaekelandt.Attributes;
 using brechtbaekelandt.Data;
 using brechtbaekelandt.Data.Entities;
 using brechtbaekelandt.Extensions;
+using brechtbaekelandt.Filters;
+using brechtbaekelandt.Helpers;
 using brechtbaekelandt.Identity;
 using brechtbaekelandt.Models;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Attachment = brechtbaekelandt.Data.Entities.Attachment;
 using Category = brechtbaekelandt.Data.Entities.Category;
+using Comment = brechtbaekelandt.Data.Entities.Comment;
 using Post = brechtbaekelandt.Data.Entities.Post;
 using User = brechtbaekelandt.Data.Entities.User;
 
@@ -40,23 +45,26 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         private const int _postsPerPage = 5;
 
-        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, IHostingEnvironment hostingEnvironment)
+        private readonly CaptchaHelper _captchaHelper;
+
+        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IHostingEnvironment hostingEnvironment)
         {
             this._userManager = userManager;
             this._blogDbContext = blogDbcontext;
+            this._captchaHelper = captchaHelper;
             this._hostingEnvironment = hostingEnvironment;
         }
 
         [HttpGet]
         [Route("posts")]
-        public IActionResult GetPostsAsyncActionResult(Guid? categoryId = null, string categoryName = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1)
+        public IActionResult GetPostsAsyncActionResult(Guid? categoryId = null, string categoryName = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1, bool includeComments = false)
         {
-            var query = this._blogDbContext.Posts
+            var postEntities = this._blogDbContext.Posts
                 .Include(p => p.User)
-                .Include(p => p.Comments)
                 .Include(p => p.Attachments)
                 .Include(p => p.PostCategories)
-                .ThenInclude(pc => pc.Category).Where(p =>
+                .ThenInclude(pc => pc.Category)
+                .Where(p =>
                     (categoryId == null ||
                      p.PostCategories.Any(pc => pc.Category.Id == categoryId)) &&
                     (categoryName == null ||
@@ -73,18 +81,31 @@ namespace brechtbaekelandt.Controllers.WebApi
                      tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
                 );
 
-            var totalPostCount = query.Count();
+            if (includeComments)
+            {
+                postEntities = postEntities.Include(p => p.Comments);
+            }
 
-            query = query.OrderByDescending(p => p.Created)
+            var totalPostCount = postEntities.Count();
+
+            postEntities = postEntities.OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)
                 .Take(_postsPerPage);
+
+            if (includeComments)
+            {
+                foreach (var postEntity in postEntities)
+                {
+                    postEntity.Comments = postEntity.Comments.OrderByDescending(c => c.Created).ToCollection();
+                }
+            }
 
             var viewModel = new ApiPostsViewModel
             {
                 CurrentPage = currentPage,
                 TotalPostCount = totalPostCount,
                 PostsPerPage = _postsPerPage,
-                Posts = Mapper.Map<ICollection<Models.Post>>(query.ToCollection()),
+                Posts = Mapper.Map<ICollection<Models.Post>>(postEntities.ToCollection()),
                 SearchTermsFilter = searchTerms,
                 TagsFilter = tags,
                 CategoryIdFilter = categoryId
@@ -229,75 +250,56 @@ namespace brechtbaekelandt.Controllers.WebApi
         }
 
         [HttpPost]
-        [Route("posts/edit")]
+        [Route("post/add-comment")]
+        [ValidationActionFilter]
+        public async Task<IActionResult> CreateCommentAsyncActionResult(Guid postId, string captchaAttemptedValue, [FromBody]Models.Comment comment)
+        {
+            var captchaJson = this.HttpContext.Request.Cookies["captcha"];
+
+            if (string.IsNullOrEmpty(captchaJson))
+            {
+                return this.BadRequest(new { error = "noCaptcha" });
+            }
+
+            var validatedCaptcha = this._captchaHelper.ValidateCaptcha(JsonConvert.DeserializeObject<Captcha>(captchaJson), captchaAttemptedValue);
+
+            if (validatedCaptcha.AttemptFailed)
+            {
+                this.SetCaptcha(validatedCaptcha);
+
+                return this.BadRequest(new { error = "invalidCaptcha", errorMessage = validatedCaptcha.AttemptFailedMessage });
+            }
+
+            var postEntity = await this._blogDbContext.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+
+            if (postEntity == null)
+            {
+                return this.NotFound($"the post with postID {postId} was not found.");
+            }
+
+            comment.Id = Guid.NewGuid();
+            comment.Created = DateTime.Now;
+            comment.LastModified = DateTime.Now;
+
+            var newCommentEntity = Mapper.Map<Comment>(comment);
+            newCommentEntity.Post = postEntity;
+
+            await this._blogDbContext.Comments.AddAsync(newCommentEntity);
+            await this._blogDbContext.SaveChangesAsync();
+
+            return this.Json(comment);
+        }
+
+        [HttpPost]
+        [Route("post/edit")]
         public async Task<IActionResult> EditAsyncActionResult([FromBody]Post post)
         {
-            //this.ModelState["post.User.Password"].Errors.Clear();
-
-            ////if (!ModelState.IsValid)
-            ////{
-            ////    throw new HttpResponseException(new HttpResponseMessage
-            ////    {
-            ////        StatusCode = HttpStatusCode.BadRequest,
-            ////        ReasonPhrase = "Please fill in the required fields."
-            ////    });
-            ////}
-
-            //if (post.Categories.Count == 0)
-            //{
-            //    //throw new HttpResponseException(new HttpResponseMessage
-            //    //{
-            //    //    StatusCode = HttpStatusCode.BadRequest,
-            //    //    ReasonPhrase = "You must at least select one category."
-            //    //});
-            //}
-
-            //if (this._blogDbContext.Posts.Any(p => p.Title.ToLower() == post.Title && p.Id != post.Id))
-            //{
-            //    //throw new HttpResponseException(new HttpResponseMessage
-            //    //{
-            //    //    StatusCode = HttpStatusCode.BadRequest,
-            //    //    ReasonPhrase = "This title already exists, please choose another one."
-            //    //});
-            //}
-
-            //post.LastModified = DateTime.Now;
-            ////post.InternalTitle = post.Title.RemoveSpecialCharacters().Trim().Replace(' ', '-').ToLower();
-
-            //var postEntity = await this._blogDbContext.Posts.FirstAsync(p => p.Id == post.Id);
-
-            //postEntity.Categories =
-            //    postEntity.Categories.Where(c => post.Categories.Any(cat => cat.Id == c.Id)).ToCollection();
-
-            //var categoriesToAdd = post.Categories.Where(c => postEntity.Categories.All(cat => cat.Id != c.Id)).Select(
-            //    c =>
-            //    {
-            //        var existingCategoryEntity = this._blogDbContext.Categories.FirstOrDefault(cat => cat.Id == c.Id);
-
-            //        if (existingCategoryEntity == null)
-            //        {
-            //            return Mapper.Map<Data.Entities.Category>(c);
-            //        }
-            //        else
-            //        {
-            //            return existingCategoryEntity;
-            //        }
-            //    });
-
-            //postEntity.Categories.AddRange(categoriesToAdd);
-
-            //Mapper.Map(post, postEntity);
-
-            //this._blogDbContext.Entry(postEntity).State = EntityState.Modified;
-
-            ////var currentUserId = Guid.Parse(HttpContext.Current.User.Identity.GetUserId());
-            ////postEntity.User = this._blogDbContext.Users.FirstOrDefault(u => u.Id == currentUserId);
-
-            //this._blogDbContext.SaveChanges();
-
-            //return this.Ok(postEntity.Id);
-
             return null;
+        }
+
+        private void SetCaptcha(Captcha captcha)
+        {
+            this.Response.Cookies.Append("captcha", JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
         }
 
         private string EnsureCorrectFilename(string filename)

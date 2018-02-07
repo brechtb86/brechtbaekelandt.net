@@ -14,15 +14,6 @@
         margin-bottom: 10px;
     }
 
-/*.post-title > h3 > a {
-            border-bottom: 2px solid #540804;
-            padding-bottom: 2px;
-        }
-
-            .post-title > h3 > a:hover, .post-title > h3 > a:hover, .post-title > h3 > a:active {
-                border-bottom: 2px solid #a33f3a;
-            }*/
-
 .post-categories {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -46,8 +37,39 @@
 .post-content {
 }
 
-.post-attachments {}
+.post-attachments {
+}
 
 .post-share > hr:last-child {
     margin-top: 5px;
+}
+
+
+.post-comments-container {
+    margin-bottom: 40px;
+}
+
+    .post-comments-container .post-comment {
+        padding: 15px;
+        border-bottom: 1px solid #540804;
+    }
+
+        .post-comments-container .post-comment:nth-child(odd) {
+            background-color: #eee;
+        }
+
+        .post-comments-container .post-comment:nth-child(even) {
+            background-color: #fff;
+        }
+
+        .post-comments-container .post-comment .comment-title > h4 {
+            margin-bottom: 10px;
+        }
+
+
+        .post-comments-container .post-comment .comment-content {
+        }
+
+.btn-refresh-captcha {
+    /*margin: 0 10px;*/
 }

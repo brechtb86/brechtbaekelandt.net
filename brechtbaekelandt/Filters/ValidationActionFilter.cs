@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace brechtbaekelandt.Attributes
+namespace brechtbaekelandt.Filters
 {
     public class ValidationActionFilterAttribute : ActionFilterAttribute
     {
@@ -14,7 +14,10 @@ namespace brechtbaekelandt.Attributes
             var modelState = context.ModelState;
 
             if (!modelState.IsValid)
-                context.Result = new BadRequestObjectResult(modelState);
+            {
+                context.Result =
+                    new BadRequestObjectResult(new { error = "validation", validationErrors = modelState.SelectMany(x => x.Value.Errors) });
+            }
         }
     }
 }

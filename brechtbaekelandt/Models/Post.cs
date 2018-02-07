@@ -31,6 +31,8 @@ namespace brechtbaekelandt.Models
 
         public string[] Tags { get; set; }
 
+        public int Likes { get; set; }
+
         public virtual ICollection<Category> Categories { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }

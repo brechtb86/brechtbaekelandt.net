@@ -30,14 +30,14 @@ namespace brechtbaekelandt.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(Guid? categoryId = null, string categoryName = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1)
+        public IActionResult Index(Guid? categoryId = null, string categoryName = null, string[] searchTerms = null, string[] tags = null, int currentPage = 1, bool includeComments = false)
         {
-            var query = this._blogDbContext.Posts
+            var postEntities = this._blogDbContext.Posts
                 .Include(p => p.User)
-                .Include(p => p.Comments)
                 .Include(p => p.Attachments)
                 .Include(p => p.PostCategories)
-                .ThenInclude(pc => pc.Category).Where(p =>
+                .ThenInclude(pc => pc.Category)
+                .Where(p =>
                     (categoryId == null ||
                      p.PostCategories.Any(pc => pc.Category.Id == categoryId)) &&
                     (categoryName == null ||
@@ -54,15 +54,23 @@ namespace brechtbaekelandt.Controllers
                      tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
                 );
 
-            var totalPostCount = query.Count();
+            if (includeComments)
+            {
+                postEntities = postEntities.Include(p => p.Comments);
+            }
 
-            query = query.OrderByDescending(p => p.Created)
+            var totalPostCount = postEntities.Count();
+
+            postEntities = postEntities.OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * _postsPerPage)
                 .Take(_postsPerPage);
 
-            if (categoryId == null)
+            if (includeComments)
             {
-                categoryId = this._blogDbContext.Categories.FirstOrDefault(c => c.Name == categoryName)?.Id;
+                foreach (var postEntity in postEntities)
+                {
+                    postEntity.Comments = postEntity.Comments.OrderByDescending(c => c.Created).ToCollection();
+                }
             }
 
             var categoryEntities = this._blogDbContext.Categories
@@ -76,7 +84,7 @@ namespace brechtbaekelandt.Controllers
                 CurrentPage = currentPage,
                 TotalPostCount = totalPostCount,
                 PostsPerPage = _postsPerPage,
-                Posts = Mapper.Map<ICollection<Models.Post>>(query.ToCollection()),
+                Posts = Mapper.Map<ICollection<Models.Post>>(postEntities.ToCollection()),
                 Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities.ToCollection()),
                 Tags = allTags,
                 SearchTermsFilter = searchTerms,

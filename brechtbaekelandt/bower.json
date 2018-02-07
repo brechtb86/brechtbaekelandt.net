@@ -9,11 +9,11 @@
     "moment": "2.20.1",
     "knockout-mapping": "2.4.1",
     "jquery.cookie": "jquery-cookie#v1.4.1",
-    "froala-wysiwyg-editor": "v2.7.3",
+    "froala-wysiwyg-editor": "v2.7.5",
     "fancybox": "fancyBox#v3.2.5"
   },
   "resolutions": {
     "jquery": "3.3.1",
-    "froala-wysiwyg-editor": "v2.7.3"
+    "froala-wysiwyg-editor": "v2.7.5"
   }
 }

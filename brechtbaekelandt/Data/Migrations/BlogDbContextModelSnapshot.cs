@@ -61,17 +61,19 @@ namespace brechtbaekelandt.data.migrations
 
                     b.Property<DateTime>("Created");
 
+                    b.Property<string>("EmailAddress");
+
+                    b.Property<DateTime>("LastModified");
+
+                    b.Property<string>("Name");
+
                     b.Property<Guid?>("PostId");
 
                     b.Property<string>("Title");
 
-                    b.Property<Guid?>("UserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -151,10 +153,6 @@ namespace brechtbaekelandt.data.migrations
                     b.HasOne("brechtbaekelandt.Data.Entities.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId");
-
-                    b.HasOne("brechtbaekelandt.Data.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("brechtbaekelandt.Data.Entities.Post", b =>

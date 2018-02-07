@@ -41,21 +41,7 @@
                     <h4 class="modal-title">create a post</h4>
                 </div>
                 <div class="modal-body" data-bind="with: newPost">
-
                     <div data-bind="template: { name: 'postEditorTemplate', data: { post: $data, viewModel: $root } }"> </div>
-
-                    <!-- ko if: $root.createErrorMessage -->
-                    <div class="alert alert-danger alert-dismissable">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        error! <span data-bind="text: $root.createErrorMessage"></span>
-                    </div>
-                    <!-- /ko -->
-                    <!-- ko if: $root.createSucceededMessage -->
-                    <div class="alert alert-success alert-dismissable">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        success! <span data-bind="text: $root.createSucceededMessage"></span>
-                    </div>
-                    <!-- /ko -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">close</button>

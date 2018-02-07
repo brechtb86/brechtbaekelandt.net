@@ -11,9 +11,129 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         ko.mapping.fromJS(serverViewModel, {}, self);
 
+        self.newComment = {};
+        self.newComment.title = ko.observable();
+        self.newComment.content = ko.observable().extend({ required: { message: "you didn't fill in the comment!" } });
+        self.newComment.name = ko.observable().extend({ required: { message: "you didn't fill in your name!" } });
+        self.newComment.emailAddress = ko.observable().extend({ email: { message: "the email address is not valid!" } });
+
+        self.isTyping = ko.observable();
+
+        self.addCommentErrors = ko.validation.group(self.newComment);
+
+        self.addCommentSucceededMessage = ko.observable();
+        self.addCommentErrorMessage = ko.observable();
+        self.addCommentValidationMessages = ko.observableArray();
+        self.captchaInvalidMessage = ko.observable();
+
+        self.captchaAttemptedValue = ko.observable().extend({ required: { message: "you must fill in the captcha!" } });
+        self.captchaImage = ko.observable();
+
+        self.captchaError = ko.validation.group({ captchaAttemptedValue: self.captchaAttemptedValue });
+
+        self.getCaptcha();
+
         self.initAddThis();
         self.initFancyBox();
         self.initPrettify();
+    };
+
+    PostViewModel.prototype.addComment = function(comment, captcha, postId) {
+        var self = this;
+
+        self.addCommentSucceededMessage("");
+        self.addCommentErrorMessage("");
+        self.addCommentValidationMessages([]);
+        self.captchaInvalidMessage("");
+
+        if (self.addCommentErrors().length > 0) {
+            self.addCommentErrors.showAllMessages();
+            return;
+        }
+
+        if (self.captchaError().length > 0) {
+            self.captchaError.showAllMessages();
+            return;
+        }
+
+        $.ajax({
+                url: "../../api/blog/post/add-comment?postId=" + postId + "&captchaAttemptedValue=" + self.captchaAttemptedValue(),
+                type: "POST",
+                contentType: "application/json; charset=UTF-8",
+                data: ko.toJSON(comment),
+                dataType: "json",
+                cache: false,
+                processData: false,
+                async: false,
+                success: function(data, textStatus, jqXhr) {}
+            })
+            .done(function(data, textStatus, jqXhr) {
+                self.addCommentSucceededMessage("the comment was added!");
+
+                self.post.comments.unshift(ko.mapping.fromJS(data));
+
+                self.newComment.title("");
+                self.newComment.content("");
+                self.newComment.name("");
+                self.newComment.emailAddress("");
+
+                self.addCommentErrors.showAllMessages(false);
+
+                self.captchaAttemptedValue("");
+
+                self.captchaError.showAllMessages(false);
+
+                self.getCaptcha();
+            })
+            .fail(function(jqXhr, textStatus, errorThrown) {
+                if (jqXhr.status === 400) {
+
+                    var response = jqXhr.responseJSON;
+
+                    if (response.error === "validation") {
+                        ko.mapping.fromJS(response.validationErrors, self.addCommentValidationMessages);
+                    };
+
+                    if (response.error === "invalidCaptcha") {
+                        self.captchaInvalidMessage(response.errorMessage);
+                    };
+
+                    if (response.error === "noCaptcha") {
+                        self.captchaInvalidMessage("you didn't pass the captcha cookie!");
+                    };
+                } else {
+                    self.addCommentErrorMessage("there was a problem submitting the comment, please try again");
+                }
+            })
+            .always(function(data, textStatus, jqXhr) {
+
+            });
+    };
+
+    PostViewModel.prototype.getCaptcha = function() {
+        var self = this;
+
+        self.captchaInvalidMessage("");
+
+        $.ajax({
+                url: "../../api/captcha/",
+                type: "GET",
+                success: function(data, textStatus, jqXhr) {},
+                async: false
+            })
+            .done(function(data, textStatus, jqXhr) {
+                self.captchaImage(data);
+
+                self.captchaAttemptedValue("");
+
+                self.captchaError.showAllMessages(false);
+            })
+            .fail(function(jqXhr, textStatus, errorThrown) {
+
+            })
+            .always(function(data, textStatus, jqXhr) {
+
+            });
     };
 
     PostViewModel.prototype.initFancyBox = function () {
@@ -38,7 +158,7 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
         }
     }
 
-    PostViewModel.prototype.initPrettify = function() {
+    PostViewModel.prototype.initPrettify = function () {
         PR.prettyPrint();
     }
 
@@ -46,9 +166,7 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
         var viewModel = new PostViewModel(serverViewModel);
 
         ko.applyBindings(viewModel);
-    }
-
-   
+    };
 
     return {
         PostViewModel: PostViewModel,

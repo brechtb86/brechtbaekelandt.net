@@ -4,6 +4,7 @@ using System.Diagnostics;
 using brechtbaekelandt.Data;
 using brechtbaekelandt.Data.Contexts.Identity;
 using brechtbaekelandt.Extensions;
+using brechtbaekelandt.Helpers;
 using brechtbaekelandt.Identity;
 using brechtbaekelandt.Identity.Models;
 using brechtbaekelandt.Services;
@@ -75,6 +76,9 @@ namespace brechtbaekelandt
                 .TryAddScoped<BlogDbContext, BlogDbContext>();
 
             services
+                .TryAddScoped<CaptchaHelper, CaptchaHelper>();
+
+            services
                .TryAddScoped<IEmailService, EmailService>();
 
             services
@@ -89,7 +93,10 @@ namespace brechtbaekelandt
                 .AddDistributedMemoryCache();
 
             services
-                .AddSession();
+                .AddSession(options =>
+                {
+                    options.Cookie.HttpOnly = false;
+                });
 
             services
                 .AddDbContext<ApplicationIdentityDbContext>(
