@@ -25,7 +25,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
             if ((newValue || oldValue) && (newValue !== oldValue)) {
 
-                var categoryQueryString = self.createCaregoryIdQueryString(self.categoryIdFilter());
+                var categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
 
                 self.categoryQueryString(categoryQueryString);
 
@@ -78,7 +78,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         var tagsQueryString = self.createTagsQueryString(self.tagsFilter());
         self.tagsQueryString(tagsQueryString);
 
-        var categoryQueryString = self.createCaregoryIdQueryString(self.categoryIdFilter());
+        var categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
         self.categoryQueryString(categoryQueryString);
 
         self.isLoading = ko.observable(false);
@@ -102,10 +102,10 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.isLoading(!getMore);
         self.isLoadingMore(getMore);
 
-        var currentPageQuerystring = self.createCurrentPageQueryString(self.createCurrentPageQueryString(), getMore);
+        var currentPageQuerystring = self.createCurrentPageQueryString(self.currentPage(), getMore);
 
         var request = $.ajax({
-            url: "../api/blog/posts?" + self.searchTermsQueryString() + self.tagsQueryString() + self.categoryQueryString() + currentPageQuerystring,
+            url: "../api/blog/posts" + self.createFullQueryString(true) + currentPageQuerystring,
             type: "GET",
             success: function (data, textStatus, jqXhr) { },
             async: false
@@ -188,16 +188,22 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         return tagsQueryString;
     }
 
-    HomeViewModel.prototype.createCaregoryNameQueryString = function (categoryNameFilter) {
+    HomeViewModel.prototype.createCategoryNameQueryString = function (categoryNameFilter) {
         return categoryNameFilter ? "categoryName=" + categoryNameFilter + "&" : "";
     }
 
-    HomeViewModel.prototype.createCaregoryIdQueryString = function (categoryIdFilter) {
+    HomeViewModel.prototype.createCategoryIdQueryString = function (categoryIdFilter) {
         return categoryIdFilter ? "categoryId=" + categoryIdFilter + "&" : "";
     }
 
     HomeViewModel.prototype.createCurrentPageQueryString = function (currentPage, getMore = false) {
         return "currentPage=" + (getMore ? currentPage + 1 : currentPage);
+    }
+
+    HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false) {
+        var self = this;
+
+        return "?" + self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "");
     }
 
     //HomeViewModel.prototype.highlightSearchTermResult = function (text, searchResultTerm, allowSpecialCharacters = false) {

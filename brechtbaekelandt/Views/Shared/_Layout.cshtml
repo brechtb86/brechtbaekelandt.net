@@ -239,7 +239,7 @@
         <article class="post-preview">
             <div class="post-preview-title">
                 <h3>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
+                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + viewModel.createFullQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
                 </h3>
                 <small>
                     <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
@@ -253,7 +253,7 @@
                         <!-- /ko -->
                     </i>
                     <span>|</span>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() + '#comments' }"><i class="fa fa-comment"></i></a>
+                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + viewModel.createFullQueryString() + '#comments' }"><i class="fa fa-comment"></i></a>
                     <!-- ko if: post.comments().length > 0 -->
                     <i data-bind="text: post.comments().length"></i>
                     <!-- /ko -->
@@ -273,7 +273,7 @@
             <div class="post-preview-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <!-- ko if: post.content -->
-            <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + '?' + viewModel.searchTermsQueryString() + viewModel.tagsQueryString() }">read more...</a>
+            <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + viewModel.createFullQueryString() }">read more...</a>
             <!-- /ko -->
             <div class="clearfix" />
             <!-- ko if: post.tags().length > 0 -->
@@ -397,7 +397,7 @@
                 <i data-bind="text: moment(comment.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
             </small>
         </div>
-        <div class="comment-content" data-bind="highlight: { text:  comment.content(), keywords: viewModel.searchTermsFilter() }">
+        <div class="comment-content" data-bind="text: comment.content">
         </div>
     </script>
 
@@ -461,15 +461,15 @@
                     <textarea rows="6" placeholder="enter your comment" class="form-control" data-bind="textInput: viewModel.newComment.content, isTyping: viewModel.isTyping, timeOut: 750"></textarea>
                 </div>
             </div>
-            <div class="form-inline">
+            <div class="form-group" data-bind="validationElement: viewModel.captchaAttemptedValue">
                 <img data-bind="attr: { src: viewModel.captchaImage }" class="img-thumbnail img-responsive img-captcha" />
-                <div class="form-group" data-bind="validationElement: viewModel.captchaAttemptedValue">
+                <div class="form-inline inline">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-question"></i></span>
                         <input type="text" class="form-control " data-bind="textInput: viewModel.captchaAttemptedValue" placeholder="captcha" />
                     </div>
+                    <button type="button" class="btn btn-muted" data-bind="click: function() { viewModel.getCaptcha('commentCaptcha'); }"><i class="fa fa-refresh text-success"></i></button>
                 </div>
-                <button type="button" class="btn btn-muted" data-bind="click: function() { viewModel.getCaptcha(); }"><i class="fa fa-refresh text-success"></i></button>
             </div>
             <div class="form-group text-right">
                 <button type="button" class="btn btn-primary" data-bind="click: function() { viewModel.addComment(viewModel.newComment, postId) }"><i class="fa fa-comment"></i> comment</button>

@@ -1,4 +1,8 @@
-﻿.post-preview {
+﻿.post-preview .post-preview-description a, .post-preview .post-preview-content a {
+    text-decoration: underline;
+}
+
+.post-preview {
     margin: 0 0 40px 0;
 }
 

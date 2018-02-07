@@ -23,7 +23,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         }
 
         [HttpGet]
-        public IActionResult GetCaptcha(string captchaName)
+        public IActionResult GetCaptchaActionResult(string captchaName)
         {
             var newCaptcha = this._captchaHelper.CreateNewCaptcha(5);
             var newCaptchaImage = this._captchaHelper.CreateCaptchaImage(newCaptcha);
@@ -33,9 +33,23 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Ok(newCaptchaImage);
         }
 
+        [HttpPost]
+        [Route("delete")]
+        public IActionResult DeleteCaptchaActionResult(string captchaName)
+        {
+            this.DeleteCaptcha(captchaName);
+
+            return this.Ok();
+        }
+
         private void SetCaptcha(Captcha captcha, string captchaName)
         {
             this.Response.Cookies.Append(captchaName, JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+        }
+
+        private void DeleteCaptcha(string captchaName)
+        {
+            this.Response.Cookies.Delete(captchaName);
         }
     }
 }

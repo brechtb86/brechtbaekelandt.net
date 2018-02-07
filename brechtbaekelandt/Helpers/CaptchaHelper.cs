@@ -134,6 +134,7 @@ namespace brechtbaekelandt.Helpers
 
             var buffer = new byte[16 * 1024];
 
+            // Create the base64 string from the bitmap
             using (var ms = new MemoryStream())
             {
                 bitmap.Save(ms, ImageFormat.Png);
@@ -155,7 +156,7 @@ namespace brechtbaekelandt.Helpers
         {
             var captchaValue = this.DeserializeCaptchaValue(captcha.ValueString);
 
-            if (captchaValue.NumberOfTimesAttempted >= 5)
+            if (captchaValue.NumberOfTimesAttempted >= 4)
             {
                 captcha.AttemptFailed = true;
                 captcha.AttemptFailedMessage = "the captcha was wrong for too many times, refresh the captcha!";

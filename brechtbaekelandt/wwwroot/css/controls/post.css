@@ -1,4 +1,8 @@
-﻿.post {
+﻿.post .post-description a, .post .post-content a {
+    text-decoration: underline;
+}
+
+.post {
     margin: 0 0 40px 0;
 }
 

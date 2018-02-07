@@ -289,6 +289,8 @@ namespace brechtbaekelandt.Controllers.WebApi
             await this._blogDbContext.Comments.AddAsync(newCommentEntity);
             await this._blogDbContext.SaveChangesAsync();
 
+            this.DeleteCaptcha(captchaName);
+
             return this.Json(comment);
         }
 
@@ -302,6 +304,11 @@ namespace brechtbaekelandt.Controllers.WebApi
         private void SetCaptcha(Captcha captcha, string captchaName)
         {
             this.Response.Cookies.Append(captchaName, JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+        }
+
+        private void DeleteCaptcha(string captchaName)
+        {
+            this.Response.Cookies.Delete(captchaName);
         }
 
         private string EnsureCorrectFilename(string filename)
