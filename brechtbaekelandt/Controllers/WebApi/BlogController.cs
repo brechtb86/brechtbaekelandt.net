@@ -254,7 +254,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         [ValidationActionFilter]
         public async Task<IActionResult> CreateCommentAsyncActionResult(Guid postId, string captchaAttemptedValue, [FromBody]Models.Comment comment)
         {
-            var captchaName = "commentCaptcha";
+            const string captchaName = "commentCaptcha";
 
             var captchaJson = this.HttpContext.Request.Cookies[captchaName];
 
