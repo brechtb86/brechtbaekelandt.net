@@ -461,13 +461,18 @@
                     <textarea rows="6" placeholder="enter your message" class="form-control" data-bind="textInput: viewModel.newComment.content, isTyping: viewModel.isTyping, timeOut: 750"></textarea>
                 </div>
             </div>
-            <div class="form-group" data-bind="validationElement: viewModel.captchaAttemptedValue">
-                <img data-bind="attr: { src: viewModel.captchaImage }" class="img-thumbnail img-responsive" />
-                <button type="button" class="btn btn-muted btn-refresh-captcha" data-bind="click: function() { viewModel.getCaptcha(); }"><i class="fa fa-refresh text-success"></i></button>
-                <input type="text" class="form-control inline" data-bind="textInput: viewModel.captchaAttemptedValue" placeholder="captcha" />
+            <div class="form-inline">
+                <img data-bind="attr: { src: viewModel.captchaImage }" class="img-thumbnail img-responsive img-captcha" />
+                <div class="form-group" data-bind="validationElement: viewModel.captchaAttemptedValue">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-question"></i></span>
+                        <input type="text" class="form-control " data-bind="textInput: viewModel.captchaAttemptedValue" placeholder="captcha" />
+                    </div>
+                </div>
+                <button type="button" class="btn btn-muted" data-bind="click: function() { viewModel.getCaptcha(); }"><i class="fa fa-refresh text-success"></i></button>
             </div>
             <div class="form-group text-right">
-                <button type="button" class="btn btn-primary" data-bind="click: function() { viewModel.addComment(viewModel.newComment, viewModel.captcha, postId) }"><i class="fa fa-comment"></i> comment</button>
+                <button type="button" class="btn btn-primary" data-bind="click: function() { viewModel.addComment(viewModel.newComment, postId) }"><i class="fa fa-comment"></i> comment</button>
             </div>
         </form>
     </script>

@@ -254,7 +254,9 @@ namespace brechtbaekelandt.Controllers.WebApi
         [ValidationActionFilter]
         public async Task<IActionResult> CreateCommentAsyncActionResult(Guid postId, string captchaAttemptedValue, [FromBody]Models.Comment comment)
         {
-            var captchaJson = this.HttpContext.Request.Cookies["captcha"];
+            var captchaName = "commentCaptcha";
+
+            var captchaJson = this.HttpContext.Request.Cookies[captchaName];
 
             if (string.IsNullOrEmpty(captchaJson))
             {
@@ -265,7 +267,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             if (validatedCaptcha.AttemptFailed)
             {
-                this.SetCaptcha(validatedCaptcha);
+                this.SetCaptcha(validatedCaptcha, captchaName);
 
                 return this.BadRequest(new { error = "invalidCaptcha", errorMessage = validatedCaptcha.AttemptFailedMessage });
             }
@@ -297,9 +299,9 @@ namespace brechtbaekelandt.Controllers.WebApi
             return null;
         }
 
-        private void SetCaptcha(Captcha captcha)
+        private void SetCaptcha(Captcha captcha, string captchaName)
         {
-            this.Response.Cookies.Append("captcha", JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+            this.Response.Cookies.Append(captchaName, JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
         }
 
         private string EnsureCorrectFilename(string filename)

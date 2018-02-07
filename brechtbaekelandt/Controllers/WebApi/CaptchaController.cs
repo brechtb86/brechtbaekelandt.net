@@ -22,19 +22,20 @@ namespace brechtbaekelandt.Controllers.WebApi
             this._captchaHelper = captchaHelper;
         }
 
-        public IActionResult GetCaptcha()
+        [HttpGet]
+        public IActionResult GetCaptcha(string captchaName)
         {
             var newCaptcha = this._captchaHelper.CreateNewCaptcha(5);
             var newCaptchaImage = this._captchaHelper.CreateCaptchaImage(newCaptcha);
 
-            this.SetCaptcha(newCaptcha);
+            this.SetCaptcha(newCaptcha, captchaName);
 
             return this.Ok(newCaptchaImage);
         }
 
-        private void SetCaptcha(Captcha captcha)
+        private void SetCaptcha(Captcha captcha, string captchaName)
         {
-            this.Response.Cookies.Append("captcha", JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+            this.Response.Cookies.Append(captchaName, JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
         }
     }
 }

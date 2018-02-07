@@ -31,14 +31,14 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         self.captchaError = ko.validation.group({ captchaAttemptedValue: self.captchaAttemptedValue });
 
-        self.getCaptcha();
+        self.getCaptcha("commentCaptcha");
 
         self.initAddThis();
         self.initFancyBox();
         self.initPrettify();
     };
 
-    PostViewModel.prototype.addComment = function(comment, captcha, postId) {
+    PostViewModel.prototype.addComment = function (comment, postId) {
         var self = this;
 
         self.addCommentSucceededMessage("");
@@ -57,17 +57,17 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
         }
 
         $.ajax({
-                url: "../../api/blog/post/add-comment?postId=" + postId + "&captchaAttemptedValue=" + self.captchaAttemptedValue(),
-                type: "POST",
-                contentType: "application/json; charset=UTF-8",
-                data: ko.toJSON(comment),
-                dataType: "json",
-                cache: false,
-                processData: false,
-                async: false,
-                success: function(data, textStatus, jqXhr) {}
-            })
-            .done(function(data, textStatus, jqXhr) {
+            url: "../../api/blog/post/add-comment?postId=" + postId + "&captchaAttemptedValue=" + self.captchaAttemptedValue(),
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            data: ko.toJSON(comment),
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
                 self.addCommentSucceededMessage("the comment was added!");
 
                 self.post.comments.unshift(ko.mapping.fromJS(data));
@@ -83,9 +83,9 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
                 self.captchaError.showAllMessages(false);
 
-                self.getCaptcha();
+                self.getCaptcha("commentCaptcha");
             })
-            .fail(function(jqXhr, textStatus, errorThrown) {
+            .fail(function (jqXhr, textStatus, errorThrown) {
                 if (jqXhr.status === 400) {
 
                     var response = jqXhr.responseJSON;
@@ -105,33 +105,33 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
                     self.addCommentErrorMessage("there was a problem submitting the comment, please try again");
                 }
             })
-            .always(function(data, textStatus, jqXhr) {
+            .always(function (data, textStatus, jqXhr) {
 
             });
     };
 
-    PostViewModel.prototype.getCaptcha = function() {
+    PostViewModel.prototype.getCaptcha = function (captchaName) {
         var self = this;
 
         self.captchaInvalidMessage("");
 
         $.ajax({
-                url: "../../api/captcha/",
-                type: "GET",
-                success: function(data, textStatus, jqXhr) {},
-                async: false
-            })
-            .done(function(data, textStatus, jqXhr) {
+            url: "../../api/captcha/?captchaName=" + captchaName,
+            type: "GET",
+            success: function (data, textStatus, jqXhr) { },
+            async: false
+        })
+            .done(function (data, textStatus, jqXhr) {
                 self.captchaImage(data);
 
                 self.captchaAttemptedValue("");
 
                 self.captchaError.showAllMessages(false);
             })
-            .fail(function(jqXhr, textStatus, errorThrown) {
+            .fail(function (jqXhr, textStatus, errorThrown) {
 
             })
-            .always(function(data, textStatus, jqXhr) {
+            .always(function (data, textStatus, jqXhr) {
 
             });
     };

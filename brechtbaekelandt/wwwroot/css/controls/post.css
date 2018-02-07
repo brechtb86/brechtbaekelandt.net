@@ -70,6 +70,6 @@
         .post-comments-container .post-comment .comment-content {
         }
 
-.btn-refresh-captcha {
-    /*margin: 0 10px;*/
+.img-captcha {
+    margin-right: 10px;
 }
