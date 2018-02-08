@@ -19,20 +19,14 @@
     <hr />
     <h4>posts</h4>
     <hr />
-
-
-
-    @*<hr />
-        <h3>categories</h3>
-        <hr />*@
-
-
-
-
-
-
-
-
+    <ul class="list-group">
+        <!-- ko foreach: posts -->
+        <li class="list-group-item">
+            <a href="" data-bind="text: title, click: function() { $root.selectedPost($data); $root.showEdit(true); }"></a>
+            <button type="button" data-bind="click: function() { $root.deletePost(id()) }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
+        </li>
+        <!-- /ko -->
+    </ul>
     <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showCreate">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -51,6 +45,24 @@
                     <!-- ko if: $root.isPosted -->
                     <button type="button" class="btn btn-primary" data-bind="click: function() { $root.resetNewPost($root.newPost); $root.isPosted(false); $root.createSucceededMessage('');  }">create another post</button>
                     <!-- /ko -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showEdit">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">edit the post</h4>
+                </div>
+                <div class="modal-body" data-bind="with: selectedPost">
+                    <div data-bind="template: { name: 'postEditorTemplate', data: { post: $data, viewModel: $root } }"> </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                    <button type="button" class="btn btn-primary" data-bind="click: function() { $root.updatePost(selectedPost); }">edit</button>
                 </div>
             </div>
 

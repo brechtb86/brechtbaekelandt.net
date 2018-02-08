@@ -41,7 +41,7 @@ namespace brechtbaekelandt.Extensions
                     opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name })))
                     .ForMember(
                         dest => dest.Tags,
-                        opt => opt.MapFrom(src => src.Tags.Split(",", StringSplitOptions.None).ToArray())
+                        opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.Tags) ? src.Tags.Split(",", StringSplitOptions.None).ToArray() : new string[0])
                     ).ForMember(
                         dest => dest.Description,
                         opt => opt.MapFrom(src => InsertPictureInDescription(src.Title, src.Description, src.PictureUrl))

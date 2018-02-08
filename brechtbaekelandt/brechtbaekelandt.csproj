@@ -14,9 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Attributes\**" />
     <Compile Remove="wwwroot\NewFolder\**" />
+    <Content Remove="Attributes\**" />
     <Content Remove="wwwroot\NewFolder\**" />
+    <EmbeddedResource Remove="Attributes\**" />
     <EmbeddedResource Remove="wwwroot\NewFolder\**" />
+    <None Remove="Attributes\**" />
     <None Remove="wwwroot\NewFolder\**" />
   </ItemGroup>
 
@@ -38,7 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Attributes\" />
     <Folder Include="Data\Migrations\" />
     <Folder Include="wwwroot\attachments\blog\" />
     <Folder Include="wwwroot\images\blog\" />

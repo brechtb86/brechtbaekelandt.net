@@ -17,6 +17,8 @@ namespace brechtbaekelandt.Models
 
         public string InternalTitle => this.Title.RemoveSpecialCharactersAndSpaces().ToLower();
 
+        public string Url => $"/blog/post/{this.InternalTitle}";
+
         public string Description { get; set; }
 
         public string CleanDescription => !string.IsNullOrEmpty(this.Description) ? Regex.Replace(this.Description, "<.*?>", string.Empty) : string.Empty;

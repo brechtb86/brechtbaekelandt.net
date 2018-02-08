@@ -250,6 +250,20 @@ namespace brechtbaekelandt.Controllers.WebApi
         }
 
         [HttpPost]
+        [Route("post/update")]
+        //[ValidationActionFilter]
+        public async Task<IActionResult> UpdatePostAsyncActionResult([FromBody]Models.Post post)
+        {
+            var postEntity = Mapper.Map<Post>(post);
+
+            this._blogDbContext.Update(postEntity);
+
+            await this._blogDbContext.SaveChangesAsync();
+
+            return this.Json(post);
+        }
+
+        [HttpPost]
         [Route("post/add-comment")]
         [ValidationActionFilter]
         public async Task<IActionResult> CreateCommentAsyncActionResult(Guid postId, string captchaAttemptedValue, [FromBody]Models.Comment comment)

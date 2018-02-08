@@ -240,7 +240,7 @@
         <article class="post-preview">
             <div class="post-preview-title">
                 <h3>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + viewModel.createFullQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
+                    <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
                 </h3>
                 <small>
                     <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
@@ -254,7 +254,7 @@
                         <!-- /ko -->
                     </i>
                     <span>|</span>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + viewModel.createFullQueryString() + '#comments' }"><i class="fa fa-comment"></i></a>
+                    <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() + '#comments' }"><i class="fa fa-comment"></i></a>
                     <!-- ko if: post.comments().length > 0 -->
                     <i data-bind="text: post.comments().length"></i>
                     <!-- /ko -->
@@ -274,7 +274,7 @@
             <div class="post-preview-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <!-- ko if: post.content -->
-            <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() + viewModel.createFullQueryString() }">read more...</a>
+            <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() }">read more...</a>
             <!-- /ko -->
             <div class="clearfix" />
             <!-- ko if: post.tags().length > 0 -->
@@ -301,7 +301,7 @@
         <article class="post">
             <div class="post-title">
                 <h3>
-                    <a data-bind="attr: { href: '/blog/post/' + post.internalTitle() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
+                    <a data-bind="attr: { href: post.url() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
                 </h3>
                 <small>
                     <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
@@ -334,6 +334,7 @@
             </div>
             <div class="post-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
             </div>
+            <div class="clearfix" />
             <div class="post-content" data-bind=", highlight: { text:  post.content(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <div class="clearfix" />
@@ -635,13 +636,27 @@
         <!-- ko if: viewModel.createErrorMessage -->
         <div class="alert alert-danger alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>error!</strong> <span data-bind="text: $root.createErrorMessage"></span>
+            <strong>error!</strong> <span data-bind="text: viewModel.createErrorMessage"></span>
         </div>
         <!-- /ko -->
         <!-- ko if: viewModel.createSucceededMessage -->
         <div class="alert alert-success alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>success!</strong> <span data-bind="text: $root.createSucceededMessage"></span>
+            <strong>success!</strong> <span data-bind="text: viewModel.createSucceededMessage"></span>
+            <a class="alert-link" data-bind="attr: { href: '/blog/post/' + post.internalTitle }">click here</a> to view...
+        </div>
+        <!-- /ko -->
+        <!-- ko if: viewModel.updateErrorMessage -->
+        <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>error!</strong> <span data-bind="text: viewModel.updateErrorMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: viewModel.updateSucceededMessage -->
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>success!</strong> <span data-bind="text: viewModel.updateSucceededMessage"></span>
+            <a class="alert-link" data-bind="attr: { href:  post.url }">click here</a> to view...
         </div>
         <!-- /ko -->
     </script>

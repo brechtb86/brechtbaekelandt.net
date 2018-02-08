@@ -15,6 +15,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         }
 
         self.showCreate = ko.observable();
+        self.showEdit = ko.observable();
 
         self.newPost = {};
         self.newPost.title = ko.observable().extend({ required: { message: "you didn't fill in the title!" } });
@@ -24,6 +25,17 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.newPost.tags = ko.observableArray();
         self.newPost.pictureUrl = ko.observable();
         self.newPost.attachments = ko.observableArray();
+
+        self.selectedPost = ko.observable();
+        self.selectedPost.subscribe(function (newValue) {
+            if (newValue) {
+                self.categories().forEach(function (category) {
+                    category.isSelected(newValue.categories().filter(function (c) { return category.id() === c.id() }).length > 0);
+                });
+            }
+
+
+        });
 
         self.pictureToUpload = ko.observable();
         self.pictureToUpload.subscribe(function (newValue) {
@@ -47,8 +59,11 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.attachmentDeleteErrorMessage = ko.observable();
         self.createErrorMessage = ko.observable();
         self.createSucceededMessage = ko.observable();
+        self.updateErrorMessage = ko.observable();
+        self.updateSucceededMessage = ko.observable();
 
         self.createErrors = ko.validation.group(self.newPost);
+        //self.updateErrors = ko.validation.group(self.selectedPost);
 
         self.categoryToAdd = ko.observable();
         self.tagToAdd = ko.observable();
@@ -258,7 +273,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                     self.attachmentsUploadErrorMessage("there was an error while uploading the file, please try again.");
                 }
             })
-            .always(function () {
+            .always(function (data, textStatus, jqXhr) {
                 self.isAttachmentsUploading(false);
 
                 self.attachmentsUploadProgress(0);
@@ -338,6 +353,41 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.createSucceededMessage("the post was successfully created!");
                 self.isPosted(true);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.createErrorMessage(errorThrown);
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    };
+
+    AdminViewModel.prototype.updatePost = function (post) {
+        var self = this;
+
+        self.updateSucceededMessage(null);
+        self.updateErrorMessage(null);
+
+        // TODO
+        //if (self.createErrors().length > 0) {
+        //    self.createErrors.showAllMessages();
+        //    return;
+        //}
+
+        $.ajax({
+            url: "../api/blog/post/update",
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            data: ko.toJSON(post),
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.updateSucceededMessage("the post was successfully updated!");
+                self.selectedPost(data);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.createErrorMessage(errorThrown);

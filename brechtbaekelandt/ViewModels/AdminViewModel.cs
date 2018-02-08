@@ -10,6 +10,8 @@ namespace brechtbaekelandt.ViewModels
     {
         public User CurrentUser { get; set; }
 
+        public ICollection<Post> Posts { get; set; }
+
         public ICollection<Category> Categories { get; set; }
     }
 }
