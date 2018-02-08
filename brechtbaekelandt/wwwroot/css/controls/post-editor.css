@@ -25,6 +25,10 @@
                 border: 1px solid #078d13;
             }
 
+    .post-editor .post-visible td {
+        padding-right: 10px;
+    }
+
 .progress-label-container {
     width: 100%;
     text-align: center;

@@ -74,7 +74,8 @@ namespace brechtbaekelandt.Controllers.WebApi
                     (tags == null ||
                      tags.Length == 0 ||
                      tags[0] == null ||
-                     tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
+                     tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t))) &&
+                    p.IsPostVisible
                 );
 
             if (includeComments)

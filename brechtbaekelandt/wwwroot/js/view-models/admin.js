@@ -25,6 +25,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.newPost.tags = ko.observableArray();
         self.newPost.pictureUrl = ko.observable();
         self.newPost.attachments = ko.observableArray();
+        self.newPost.isPostVisible = ko.observable(false);
 
         self.selectedPost = ko.observable();
         self.selectedPost.subscribe(function (newValue) {

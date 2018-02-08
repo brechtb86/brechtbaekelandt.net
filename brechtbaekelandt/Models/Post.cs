@@ -11,6 +11,8 @@ namespace brechtbaekelandt.Models
 
         public DateTime? LastModified { get; set; }
 
+        public bool IsPostVisible { get; set; }
+
         public string Title { get; set; }
 
         public string CleanTitle => !string.IsNullOrEmpty(this.Title) ? Regex.Replace(this.Title, "<.*?>", string.Empty) : string.Empty;

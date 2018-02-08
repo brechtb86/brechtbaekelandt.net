@@ -30,9 +30,9 @@ namespace brechtbaekelandt.Controllers
             // Task.Run(async () =>
             // {
             //     const string userName = "Tester";
-               
+
             //     var user = await this._applicationUserManager.FindByNameAsync(userName);
-               
+
             //         if(user == null)
             //         {
             //             await this._applicationUserManager.CreateUserAsync(Guid.NewGuid(), userName, "myC0mplExPas$woRd", "tester.mctestface@microsoft.com", "Tester", "McTestFace", true);
@@ -62,7 +62,8 @@ namespace brechtbaekelandt.Controllers
                     (tags == null ||
                      tags.Length == 0 ||
                      tags[0] == null ||
-                     tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t)))
+                     tags.Any(t => !string.IsNullOrEmpty(p.Tags) && p.Tags.Contains(t))) &&
+                    p.IsPostVisible
                 );
 
             if (includeComments)

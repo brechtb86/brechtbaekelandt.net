@@ -14,21 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Attributes\**" />
-    <Compile Remove="Tests\**" />
-    <Compile Remove="wwwroot\NewFolder\**" />
-    <Content Remove="Attributes\**" />
-    <Content Remove="Tests\**" />
-    <Content Remove="wwwroot\NewFolder\**" />
-    <EmbeddedResource Remove="Attributes\**" />
-    <EmbeddedResource Remove="Tests\**" />
-    <EmbeddedResource Remove="wwwroot\NewFolder\**" />
-    <None Remove="Attributes\**" />
-    <None Remove="Tests\**" />
-    <None Remove="wwwroot\NewFolder\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
@@ -55,12 +40,6 @@
     <None Include="..\README.md" Link="README.md" />
     <None Include="Properties\PublishProfiles\DevServer.pubxml.user" />
     <None Include="Properties\PublishProfiles\ProductionServer.WebDeploy.pubxml.user" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework">
-      <HintPath>..\..\..\Users\brech\.nuget\packages\mstest.testframework\1.2.0\lib\netstandard1.0\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

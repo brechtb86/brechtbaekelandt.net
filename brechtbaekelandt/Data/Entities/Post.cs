@@ -9,6 +9,8 @@ namespace brechtbaekelandt.Data.Entities
 
         public DateTime? LastModified { get; set; }
 
+        public bool IsPostVisible { get; set; }
+
         public string Title { get; set; }
 
         public string InternalTitle { get; set; }
