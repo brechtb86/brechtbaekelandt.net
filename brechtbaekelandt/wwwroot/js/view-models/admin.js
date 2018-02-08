@@ -387,7 +387,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         })
             .done(function (data, textStatus, jqXhr) {
                 self.updateSucceededMessage("the post was successfully updated!");
-                self.selectedPost(data);
+                self.selectedPost(ko.mapping.fromJS(data));
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.createErrorMessage(errorThrown);

@@ -11,9 +11,10 @@ using System;
 namespace brechtbaekelandt.data.migrations
 {
     [DbContext(typeof(BlogDbContext))]
-    partial class BlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180208012203_MadeLastModifiedOnPostNullable")]
+    partial class MadeLastModifiedOnPostNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

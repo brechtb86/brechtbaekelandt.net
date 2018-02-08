@@ -216,7 +216,6 @@ namespace brechtbaekelandt.Controllers.WebApi
         {
             post.Id = Guid.NewGuid();
             post.Created = DateTime.Now;
-            post.LastModified = DateTime.Now;
 
             var postEntity = Mapper.Map<Post>(post);
 
@@ -254,13 +253,15 @@ namespace brechtbaekelandt.Controllers.WebApi
         //[ValidationActionFilter]
         public async Task<IActionResult> UpdatePostAsyncActionResult([FromBody]Models.Post post)
         {
+            post.LastModified = DateTime.Now;
+
             var postEntity = Mapper.Map<Post>(post);
 
             this._blogDbContext.Update(postEntity);
 
             await this._blogDbContext.SaveChangesAsync();
 
-            return this.Json(post);
+            return this.Json(Mapper.Map<Models.Post>(postEntity));
         }
 
         [HttpPost]

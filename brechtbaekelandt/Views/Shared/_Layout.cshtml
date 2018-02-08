@@ -245,8 +245,12 @@
                 <small>
                     <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
                     <span>|</span>
-                    <i data-bind="text: moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
+                    <i data-bind="text: 'created: ' + moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
                     <span>|</span>
+                    <!-- ko if: post.lastModified -->
+                    <i data-bind="text: 'last updated: ' + moment(post.lastModified()).format('DD/MM/YYYY, HH:mm:ss')"></i>
+                    <span>|</span>
+                    <!-- /ko -->
                     <i>
                         <label>categories:</label>
                         <!-- ko foreach: post.categories -->
@@ -306,8 +310,12 @@
                 <small>
                     <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
                     <span>|</span>
-                    <i data-bind="text: moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
+                    <i data-bind="text: 'created: ' + moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
                     <span>|</span>
+                    <!-- ko if: post.lastModified -->
+                    <i data-bind="text: 'last updated: ' + moment(post.lastModified()).format('DD/MM/YYYY, HH:mm:ss')"></i>
+                    <span>|</span>
+                    <!-- /ko -->
                     <i>
                         <label>categories:</label>
                         <!-- ko foreach: post.categories -->

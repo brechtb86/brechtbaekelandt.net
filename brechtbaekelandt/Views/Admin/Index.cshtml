@@ -22,7 +22,7 @@
     <ul class="list-group">
         <!-- ko foreach: posts -->
         <li class="list-group-item">
-            <a href="" data-bind="text: title, click: function() { $root.selectedPost($data); $root.showEdit(true); }"></a>
+            <a href="" data-bind="text: moment(created()).format('DD/MM/YYYY, HH:mm:ss') + ' - ' + title(), click: function() { $root.selectedPost($data); $root.showEdit(true); }"></a>
             <button type="button" data-bind="click: function() { $root.deletePost(id()) }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
         </li>
         <!-- /ko -->
