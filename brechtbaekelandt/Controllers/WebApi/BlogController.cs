@@ -144,7 +144,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
                 System.IO.File.Delete(picturePath);
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
             }
@@ -196,7 +196,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpPost]
         [Route("delete-attachment")]
-        public async Task<IActionResult> DeleteAttachmentAsyncActionResult([FromBody]Models.Attachment attachment)
+        public IActionResult DeleteAttachmentActionResult([FromBody]Models.Attachment attachment)
         {
             var attachmentPath = $"{this._hostingEnvironment.WebRootPath}{attachment.Url.Replace("/", "\\")}";
 
@@ -307,7 +307,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpPost]
         [Route("post/edit")]
-        public async Task<IActionResult> EditAsyncActionResult([FromBody]Post post)
+        public IActionResult EditActionResult([FromBody]Post post)
         {
             return null;
         }

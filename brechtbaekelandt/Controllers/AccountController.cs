@@ -28,7 +28,7 @@ namespace brechtbaekelandt.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> SignIn(string returnUrl = null)
+        public IActionResult SignIn(string returnUrl = null)
         {
             return View();
         }

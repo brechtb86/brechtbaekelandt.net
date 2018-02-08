@@ -29,6 +29,8 @@ bld/
 
 **/wwwroot/images/blog/
 **/wwwroot/attachments/blog/
+**/wwwroot/lib/
+
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
