@@ -68,7 +68,7 @@ namespace brechtbaekelandt.Controllers
 
                 if (signInResult.Succeeded)
                 {
-                    return this.RedirectToLocal(returnUrl);
+                    return this.RedirectToLocal(returnUrl ?? "/admin");
                 }
                 else
                 {

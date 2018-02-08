@@ -395,13 +395,8 @@
         <div class="comment-title">
             <h4><i class="fa fa-comment-o"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span></h4>
             <small>
-                <i>
-                    <!-- ko if: comment.emailAddress -->
-                    by: <a data-bind="attr: { href: 'mailto://' + comment.emailAddress() }, text: comment.name"></a>
-                    <!-- /ko -->
-                    <!-- ko ifnot: comment.emailAddress -->
-                    by: <span data-bind="text: comment.name"></span>
-                    <!-- /ko -->
+                <i>                   
+                    by: <span data-bind="text: comment.name"></span>                  
                 </i>
                 <span>|</span>
                 <i data-bind="text: moment(comment.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
@@ -451,7 +446,7 @@
             <div class="form-group" data-bind="validationElement: viewModel.newComment.emailAddress">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-at"></i></span>
-                    <input name="emailAddress" type="text" placeholder="enter your email address (optional)" class="form-control" data-bind="textInput: viewModel.newComment.emailAddress" />
+                    <input name="emailAddress" type="text" placeholder="enter your email address (optional, will not be published)" class="form-control" data-bind="textInput: viewModel.newComment.emailAddress" />
                 </div>
             </div>
             <div class="form-group">
