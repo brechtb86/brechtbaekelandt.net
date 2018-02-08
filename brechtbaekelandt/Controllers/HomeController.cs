@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AutoMapper;
 using brechtbaekelandt.Data;
 using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Identity;
-using brechtbaekelandt.Identity.Models;
 using brechtbaekelandt.ViewModels;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,12 +19,25 @@ namespace brechtbaekelandt.Controllers
 
         private readonly ApplicationUserManager _applicationUserManager;
 
-        private const int _postsPerPage = 5;
+        private const int PostsPerPage = 5;
 
         public HomeController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager) : base(applicationUserManager)
         {
             this._blogDbContext = blogDbContext;
             this._applicationUserManager = applicationUserManager;
+
+            // Create a user for the first time, can be removed or commented out after first run.
+            // Task.Run(async () =>
+            // {
+            //     const string userName = "Tester";
+               
+            //     var user = await this._applicationUserManager.FindByNameAsync(userName);
+               
+            //         if(user == null)
+            //         {
+            //             await this._applicationUserManager.CreateUserAsync(Guid.NewGuid(), userName, "myC0mplExPas$woRd", "tester.mctestface@microsoft.com", "Tester", "McTestFace", true);
+            //         }
+            // });
         }
 
         [HttpGet]
@@ -62,8 +73,8 @@ namespace brechtbaekelandt.Controllers
             var totalPostCount = postEntities.Count();
 
             postEntities = postEntities.OrderByDescending(p => p.Created)
-                .Skip((currentPage - 1) * _postsPerPage)
-                .Take(_postsPerPage);
+                .Skip((currentPage - 1) * PostsPerPage)
+                .Take(PostsPerPage);
 
             if (includeComments)
             {
@@ -83,7 +94,7 @@ namespace brechtbaekelandt.Controllers
             {
                 CurrentPage = currentPage,
                 TotalPostCount = totalPostCount,
-                PostsPerPage = _postsPerPage,
+                PostsPerPage = PostsPerPage,
                 Posts = Mapper.Map<ICollection<Models.Post>>(postEntities.ToCollection()),
                 Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities.ToCollection()),
                 Tags = allTags,

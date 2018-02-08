@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using brechtbaekelandt.Data;
@@ -11,8 +9,6 @@ using brechtbaekelandt.Models;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace brechtbaekelandt.Controllers
 {

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Linq;
 using AutoMapper;
-using brechtbaekelandt.Data.Contexts.Identity;
 using brechtbaekelandt.Identity;
-using brechtbaekelandt.Identity.Models;
 using brechtbaekelandt.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -25,7 +22,7 @@ namespace brechtbaekelandt.Extensions
                 return source.Id == Guid.Empty ? Guid.NewGuid() : source.Id;
             }
         }
-
+        
         public static void ConfigureAutoMapper(this IServiceCollection collection)
         {
             Mapper.Initialize(cfg =>

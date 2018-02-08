@@ -47,4 +47,8 @@
     <Folder Include="wwwroot\images\blog\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\README.md" Link="README.md" />
+  </ItemGroup>
+
 </Project>

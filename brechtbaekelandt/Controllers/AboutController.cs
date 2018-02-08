@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using brechtbaekelandt.Identity;
+﻿using brechtbaekelandt.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace brechtbaekelandt.Controllers

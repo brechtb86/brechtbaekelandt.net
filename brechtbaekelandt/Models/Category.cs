@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace brechtbaekelandt.Models
+﻿namespace brechtbaekelandt.Models
 {
     public class Category : Base
     {

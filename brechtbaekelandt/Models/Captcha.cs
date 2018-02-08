@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace brechtbaekelandt.Models
+﻿namespace brechtbaekelandt.Models
 {
     public class Captcha
     {

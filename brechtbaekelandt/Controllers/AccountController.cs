@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using brechtbaekelandt.Identity;
-using brechtbaekelandt.Identity.Models;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
