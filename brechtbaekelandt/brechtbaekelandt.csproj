@@ -15,12 +15,16 @@
 
   <ItemGroup>
     <Compile Remove="Attributes\**" />
+    <Compile Remove="Tests\**" />
     <Compile Remove="wwwroot\NewFolder\**" />
     <Content Remove="Attributes\**" />
+    <Content Remove="Tests\**" />
     <Content Remove="wwwroot\NewFolder\**" />
     <EmbeddedResource Remove="Attributes\**" />
+    <EmbeddedResource Remove="Tests\**" />
     <EmbeddedResource Remove="wwwroot\NewFolder\**" />
     <None Remove="Attributes\**" />
+    <None Remove="Tests\**" />
     <None Remove="wwwroot\NewFolder\**" />
   </ItemGroup>
 
@@ -43,7 +47,6 @@
 
   <ItemGroup>
     <Folder Include="Data\Migrations\" />
-    <Folder Include="Tests\" />
     <Folder Include="wwwroot\attachments\blog\" />
     <Folder Include="wwwroot\images\blog\" />
   </ItemGroup>
