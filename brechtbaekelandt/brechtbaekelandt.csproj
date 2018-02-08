@@ -39,8 +39,6 @@
 
   <ItemGroup>
     <None Include="..\README.md" Link="README.md" />
-    <None Include="Properties\PublishProfiles\DevServer.pubxml.user" />
-    <None Include="Properties\PublishProfiles\ProductionServer.WebDeploy.pubxml.user" />
   </ItemGroup>
 
 </Project>

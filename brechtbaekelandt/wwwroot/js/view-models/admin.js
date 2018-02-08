@@ -136,6 +136,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                     "insertHtml",
                     "insertJavascript",
                     "insertCss",
+                    "insertXml",
                     "|",
                     "insertLink",
                     "insertImage",

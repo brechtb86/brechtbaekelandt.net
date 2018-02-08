@@ -49,3 +49,16 @@ $.FroalaEditor.RegisterCommand("insertCss", {
         this.html.insert(" <pre class=\"prettyprint lang-css\"></pre>");
     }
 })
+
+$.FroalaEditor.DefineIconTemplate("xmlButtonIconTemplate", "<span class='text-center'>xml</span>");
+$.FroalaEditor.DefineIcon("xmlButtonIcon", { NAME: "XML", template: "xmlButtonIconTemplate" });
+$.FroalaEditor.RegisterCommand("insertXml", {
+    title: "Insert xml code",
+    icon: "xmlButtonIcon",
+    undo: true,
+    focus: true,
+    refreshAfterCallback: false,
+    callback: function () {
+        this.html.insert(" <pre class=\"prettyprint lang-xml\"></pre>");
+    }
+})
