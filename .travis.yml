@@ -1,3 +1,7 @@
 language: csharp
 dotnet: 2.0.0
 solution: brechtbaekelandt.sln
+install:
+  - nuget # lets get version number
+  - nuget restore brechtbaekelandt.sln
+  - nuget update brechtbaekelandt.sln
