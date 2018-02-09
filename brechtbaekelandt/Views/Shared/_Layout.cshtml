@@ -661,7 +661,7 @@
         <div class="alert alert-success alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>success!</strong> <span data-bind="text: viewModel.createSucceededMessage"></span>
-            <a class="alert-link" data-bind="attr: { href: '/blog/post/' + post.internalTitle }">click here</a> to view...
+            <a class="alert-link" data-bind="attr: { href: post.url }">click here</a> to view...
         </div>
         <!-- /ko -->
         <!-- ko if: viewModel.updateErrorMessage -->

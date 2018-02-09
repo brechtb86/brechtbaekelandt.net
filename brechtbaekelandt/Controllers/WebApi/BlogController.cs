@@ -242,7 +242,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             await this._blogDbContext.SaveChangesAsync();
 
-            return this.Json(post);
+            return this.Json(Mapper.Map<Models.Post>(postEntity));
         }
 
         [HttpPost]

@@ -26,12 +26,19 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.newPost.pictureUrl = ko.observable();
         self.newPost.attachments = ko.observableArray();
         self.newPost.isPostVisible = ko.observable(false);
+        self.newPost.url = ko.observable();
 
         self.selectedPost = ko.observable();
         self.selectedPost.subscribe(function (newValue) {
             if (newValue) {
-                self.categories().forEach(function (category) {
-                    category.isSelected(newValue.categories().filter(function (c) { return category.id() === c.id() }).length > 0);
+                self.categories().forEach(function(category) {
+                    category.isSelected(newValue.categories().filter(function(c) { return category.id() === c.id() })
+                        .length >
+                        0);
+                });
+            } else {
+                self.categories().forEach(function(category) {
+                    category.isSelected(false);
                 });
             }
 
@@ -354,6 +361,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         })
             .done(function (data, textStatus, jqXhr) {
                 self.createSucceededMessage("the post was successfully created!");
+
+                ko.mapping.fromJS(data, {}, self.newPost);
+
                 self.isPosted(true);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
