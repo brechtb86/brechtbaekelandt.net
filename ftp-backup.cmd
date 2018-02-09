@@ -5,5 +5,5 @@ set root=%3
 shift
 shift
 shift
-wget -m --ftp-user=%username% --ftp-password=%password% ftp://ftp-eu.site4now.net/brechtbaekelandt/wwwroot/images/blog/ -P -nd %root%/wwwroot/images/blog/
-wget -m --ftp-user=%username% --ftp-password=%password% ftp://ftp-eu.site4now.net/brechtbaekelandt/wwwroot/attachments/blog/ -P -nd %root%/wwwroot/attachments/blog/
+wget -m --ftp-user=%username% --ftp-password=%password% ftp://ftp-eu.site4now.net/brechtbaekelandt/wwwroot/images/blog/ -nd -P %root%/wwwroot/images/blog/
+wget -m --ftp-user=%username% --ftp-password=%password% ftp://ftp-eu.site4now.net/brechtbaekelandt/wwwroot/attachments/blog/ -nd -P %root%/wwwroot/attachments/blog/
