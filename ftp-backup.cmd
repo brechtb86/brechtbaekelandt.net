@@ -1,6 +1,6 @@
 echo off
 set username=%1
-set pasword=%2
+set password=%2
 set root=%3
 shift
 shift
