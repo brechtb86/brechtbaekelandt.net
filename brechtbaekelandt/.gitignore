@@ -1,2 +1,3 @@
-/appsettings.Development.json
+/appsettings.development.json
 /appsettings.json
+/appsettings.production.json
