@@ -69,6 +69,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.createSucceededMessage = ko.observable();
         self.updateErrorMessage = ko.observable();
         self.updateSucceededMessage = ko.observable();
+        self.deleteErrorMessage = ko.observable();
+        self.deleteSucceededMessage = ko.observable();
 
         self.createErrors = ko.validation.group(self.newPost);
         //self.updateErrors = ko.validation.group(self.selectedPost);
@@ -364,6 +366,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
                 ko.mapping.fromJS(data, {}, self.newPost);
 
+                self.posts.unshift(self.newPost);
+
                 self.isPosted(true);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
@@ -403,6 +407,35 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.createErrorMessage(errorThrown);
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    };
+
+    AdminViewModel.prototype.deletePost = function (post) {
+        var self = this;
+
+        self.deleteSucceededMessage(null);
+        self.deleteErrorMessage(null);
+
+        $.ajax({
+            url: "../api/blog/post/delete?postId=" + post.id(),
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.posts.splice(self.posts.indexOf(post), 1);
+
+                self.deleteSucceededMessage("the post was sucessfully deleted.");
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.deleteErrorMessage("there was an error while deleting the post, please try again.");
             })
             .always(function (data, textStatus, jqXhr) {
 

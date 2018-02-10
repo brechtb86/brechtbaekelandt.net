@@ -15,6 +15,7 @@ using brechtbaekelandt.Helpers;
 using brechtbaekelandt.Identity;
 using brechtbaekelandt.Models;
 using brechtbaekelandt.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -111,6 +112,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Ok(viewModel);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("upload-picture")]
         public async Task<IActionResult> UploadPictureAsyncActionResult(IFormFile picture)
@@ -135,6 +137,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Json($"{relativePath}/{newFileName}");
         }
 
+        [Authorize]
         [HttpPost]
         [Route("delete-picture")]
         public IActionResult DeletePictureAsyncActionResult(string picture)
@@ -153,6 +156,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Ok();
         }
 
+        [Authorize]
         [HttpPost]
         [Route("upload-attachments")]
         public async Task<IActionResult> UploadAttachmentsAsyncActionResult(List<IFormFile> attachments)
@@ -195,6 +199,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Json(results);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("delete-attachment")]
         public IActionResult DeleteAttachmentActionResult([FromBody]Models.Attachment attachment)
@@ -206,9 +211,10 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Json(attachment);
         }
 
+        [Authorize]
         [HttpPost]
         [Route("post/add")]
-        //[ValidationActionFilter]
+        [ValidationActionFilter]
         public async Task<IActionResult> CreatePostAsyncActionResult([FromBody]Models.Post post)
         {
             post.Id = Guid.NewGuid();
@@ -245,6 +251,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Json(Mapper.Map<Models.Post>(postEntity));
         }
 
+        [Authorize]
         [HttpPost]
         [Route("post/update")]
         //[ValidationActionFilter]
@@ -269,7 +276,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             await this._blogDbContext.SaveChangesAsync();
 
             postEntity = this._blogDbContext.Posts.Include(p => p.PostCategories).FirstOrDefault(p => p.Id == post.Id);
-            
+
             foreach (var category in post.Categories)
             {
                 var categoryEntity = this._blogDbContext.Categories.First(c => c.Name == category.Name);
@@ -278,7 +285,7 @@ namespace brechtbaekelandt.Controllers.WebApi
                 {
                     postEntity.PostCategories.Add(new PostCategory() { CategoryId = categoryEntity.Id });
                 }
-            }           
+            }
 
             foreach (var postCategory in postEntity.PostCategories.Where(pc => !post.Categories.Any(c => c.Id == pc.CategoryId)).ToCollection())
             {
@@ -290,6 +297,35 @@ namespace brechtbaekelandt.Controllers.WebApi
             await this._blogDbContext.SaveChangesAsync();
 
             return this.Json(Mapper.Map<Models.Post>(postEntity));
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("post/delete")]
+        public async Task<IActionResult> DeletePostAsyncActionResult(Guid postId)
+        {
+            if (!this._blogDbContext.Posts.Any(p => p.Id == postId))
+            {
+                return this.NotFound();
+            }
+
+            var postEntity = this._blogDbContext.Posts
+                .Include(p => p.PostCategories)
+                .Include(p => p.Attachments)
+                .Include(p => p.Comments)
+                .FirstOrDefault(p => p.Id == postId);
+
+            postEntity.PostCategories?.Clear();
+            postEntity.Attachments?.Clear();
+            postEntity.Comments?.Clear();
+
+            await this._blogDbContext.SaveChangesAsync();
+
+            this._blogDbContext.Posts.Remove(postEntity);
+
+            await this._blogDbContext.SaveChangesAsync();
+
+            return this.Json(new { message = "the post is successfully deleted." });
         }
 
         [HttpPost]
@@ -335,14 +371,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             this.DeleteCaptcha(captchaName);
 
             return this.Json(comment);
-        }
-
-        [HttpPost]
-        [Route("post/edit")]
-        public IActionResult EditActionResult([FromBody]Post post)
-        {
-            return null;
-        }
+        }               
 
         private void SetCaptcha(Captcha captcha, string captchaName)
         {

@@ -15,8 +15,7 @@ namespace brechtbaekelandt.Controllers
     {
         private readonly ApplicationUserManager _applicationUserManager;
         private readonly ApplicationSignInManager _applicationSignInManager;
-
-
+        
         public AccountController(
             ApplicationUserManager applicationUserManager,
             ApplicationSignInManager applicationSignInManager) : base(applicationUserManager)
