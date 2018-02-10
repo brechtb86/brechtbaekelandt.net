@@ -31,13 +31,13 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.selectedPost = ko.observable();
         self.selectedPost.subscribe(function (newValue) {
             if (newValue) {
-                self.categories().forEach(function(category) {
-                    category.isSelected(newValue.categories().filter(function(c) { return category.id() === c.id() })
+                self.categories().forEach(function (category) {
+                    category.isSelected(newValue.categories().filter(function (c) { return category.id() === c.id() })
                         .length >
                         0);
                 });
             } else {
-                self.categories().forEach(function(category) {
+                self.categories().forEach(function (category) {
                     category.isSelected(false);
                 });
             }
@@ -420,18 +420,19 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         newPost.pictureUrl("");
         newPost.attachments([]);
 
-        self.categories.forEach(function (category) { category.isSelected(false); });
+        self.categories().forEach(function (category) { category.isSelected(false); });
 
         self.createErrors.showAllMessages(false);
     }
 
-    AdminViewModel.prototype.addCategory = function (category) {
+    AdminViewModel.prototype.addCategory = function (category, categories) {
         var self = this;
 
         if (!self.categories().some(function (e) { return e.name().toLowerCase() === category().toLowerCase(); })) {
             var newCategory = ko.mapping.fromJS({ name: category(), id: "00000000-0000-0000-0000-000000000000", isSelected: true });
 
             self.categories.push(newCategory);
+            categories.push(newCategory);
         }
 
         category(null);

@@ -250,9 +250,40 @@ namespace brechtbaekelandt.Controllers.WebApi
         //[ValidationActionFilter]
         public async Task<IActionResult> UpdatePostAsyncActionResult([FromBody]Models.Post post)
         {
+            if (!this._blogDbContext.Posts.Any(p => p.Id == post.Id))
+            {
+                return this.NotFound();
+            }
+
             post.LastModified = DateTime.Now;
 
             var postEntity = Mapper.Map<Post>(post);
+
+            this._blogDbContext.Update(postEntity);
+
+            foreach (var category in post.Categories.Where(c => c.Id == Guid.Empty))
+            {
+                await this._blogDbContext.Categories.AddAsync(Mapper.Map<Category>(category));
+            }
+
+            await this._blogDbContext.SaveChangesAsync();
+
+            postEntity = this._blogDbContext.Posts.Include(p => p.PostCategories).FirstOrDefault(p => p.Id == post.Id);
+            
+            foreach (var category in post.Categories)
+            {
+                var categoryEntity = this._blogDbContext.Categories.First(c => c.Name == category.Name);
+
+                if (!postEntity.PostCategories.Any(pc => pc.CategoryId == categoryEntity.Id))
+                {
+                    postEntity.PostCategories.Add(new PostCategory() { CategoryId = categoryEntity.Id });
+                }
+            }           
+
+            foreach (var postCategory in postEntity.PostCategories.Where(pc => !post.Categories.Any(c => c.Id == pc.CategoryId)).ToCollection())
+            {
+                postEntity.PostCategories.Remove(postCategory);
+            }
 
             this._blogDbContext.Update(postEntity);
 

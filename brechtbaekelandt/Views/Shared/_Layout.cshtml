@@ -525,9 +525,9 @@
                     <div class="form-group">
                         <label>categories:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.categoryToAdd, enterKey: function(){ viewModel.addCategory(viewModel.categoryToAdd); }" />
+                            <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.categoryToAdd, enterKey: function(){ viewModel.addCategory(viewModel.categoryToAdd, post.categories); }" />
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addCategory(viewModel.categoryToAdd); }"><i class="fa fa-plus"></i></button>
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addCategory(viewModel.categoryToAdd, post.categories); }"><i class="fa fa-plus"></i></button>
                             </span>
                         </div>
                     </div>
