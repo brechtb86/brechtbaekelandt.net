@@ -25,7 +25,7 @@ namespace brechtbaekelandt.Controllers
             this._applicationSignInManager = applicationSignInManager;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpGet]
         public IActionResult Index()
         {

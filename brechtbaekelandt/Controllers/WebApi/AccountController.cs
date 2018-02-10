@@ -24,7 +24,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             this._applicationUserManager = applicationUserManager;          
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("add")]
         [ValidationActionFilter]

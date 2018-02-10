@@ -438,25 +438,34 @@
         <!-- /ko -->
         <form>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.name">
-                <div class="input-group">
+                <div class="input-group has-feedback">
                     <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
                     <input name="name" type="text" placeholder="enter your name" class="form-control" data-bind="textInput: viewModel.newComment.name" />
+                    <!-- ko if: viewModel.newComment.name -->
+                    <span class="fa fa-check form-control-feedback"></span>
+                    <!-- /ko -->
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.emailAddress">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-at"></i></span>
+                <div class="input-group" data-bind="css: { 'has-success': viewModel.newComment.emailAddress }">
+                    <span class="input-group-addon has-feedback"><i class="fa fa-at"></i></span>
                     <input name="emailAddress" type="text" placeholder="enter your email address (optional, will not be published)" class="form-control" data-bind="textInput: viewModel.newComment.emailAddress" />
+                    <!-- ko if: viewModel.newComment.emailAddress -->
+                    <span class="fa fa-check form-control-feedback"></span>
+                    <!-- /ko -->
                 </div>
             </div>
             <div class="form-group">
-                <div class="input-group">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.title }">
                     <span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
                     <input name="title" type="text" placeholder="enter a title (optional)" class="form-control" data-bind="textInput: viewModel.newComment.title" />
+                    <!-- ko if: viewModel.newComment.title -->
+                    <span class="fa fa-check form-control-feedback"></span>
+                    <!-- /ko -->
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.content">
-                <div class="input-group">
+                <div class="input-group has-feedback">
                     <!-- ko ifnot: viewModel.isTyping -->
                     <span class="input-group-addon" style="vertical-align: top;"><i class="fa fa-comment-o"></i></span>
                     <!-- /ko -->
@@ -464,6 +473,9 @@
                     <span class="input-group-addon" style="vertical-align: top;"><i class="fa fa-commenting-o"></i></span>
                     <!-- /ko -->
                     <textarea rows="6" placeholder="enter your comment" class="form-control" data-bind="textInput: viewModel.newComment.content, isTyping: viewModel.isTyping, timeOut: 750"></textarea>
+                    <!-- ko if: viewModel.newComment.content -->
+                    <span class="fa fa-check form-control-feedback"></span>
+                    <!-- /ko -->
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.captchaAttemptedValue">
