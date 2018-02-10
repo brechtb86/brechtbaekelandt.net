@@ -27,17 +27,28 @@ namespace brechtbaekelandt.Controllers
             this._applicationUserManager = applicationUserManager;
 
             // Create a user for the first time, can be removed or commented out after first run.
-            // Task.Run(async () =>
-            // {
-            //     const string userName = "Tester";
+            Task.Run(async () =>
+            {
+                const string userName = "Tester";
+                const string password = "myC0mplExPas$woRd";
+                const string firstName = "Tester";
+                const string lastName = "McTestFace";
+                const string emailAddress = "tester@microsoft.com";
+                const bool isAdmin = true;
 
-            //     var user = await this._applicationUserManager.FindByNameAsync(userName);
+                var id = Guid.NewGuid();
 
-            //         if(user == null)
-            //         {
-            //             await this._applicationUserManager.CreateUserAsync(Guid.NewGuid(), userName, "myC0mplExPas$woRd", "tester.mctestface@microsoft.com", "Tester", "McTestFace", true);
-            //         }
-            // });
+                var user = await this._applicationUserManager.FindByNameAsync(userName);
+
+                if (user == null)
+                {
+                    await this._applicationUserManager.CreateUserAsync(id, userName, password, emailAddress, firstName, lastName, isAdmin);
+
+                    this._blogDbContext.Users.Add(new Data.Entities.User { UserName = userName, EmailAddress = emailAddress, FirstName = firstName, LastName = lastName, IsAdmin = isAdmin });
+
+                    await this._blogDbContext.SaveChangesAsync();
+                }
+            });
         }
 
         [HttpGet]
