@@ -54,11 +54,7 @@ I haven't implemented a registration page, but in `HomeController.cs` you will f
 
 //    if (user == null)
 //    {
-//        await this._applicationUserManager.CreateUserAsync(id, userName, password, emailAddress, firstName, lastName, isAdmin);
-
-//        this._blogDbContext.Users.Add(new Data.Entities.User { UserName = userName, EmailAddress = emailAddress, FirstName = firstName, LastName = lastName, IsAdmin = isAdmin });
-
-//        await this._blogDbContext.SaveChangesAsync();
+//        await this._applicationUserManager.CreateUserAsync(id, userName, password, emailAddress, firstName, lastName, isAdmin);//        
 //    }
 //});
 ```
