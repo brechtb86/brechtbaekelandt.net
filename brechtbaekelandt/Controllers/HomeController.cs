@@ -25,26 +25,6 @@ namespace brechtbaekelandt.Controllers
         {
             this._blogDbContext = blogDbContext;
             this._applicationUserManager = applicationUserManager;
-
-            // Create a user for the first time, can be removed or commented out after first run.
-            //Task.Run(async () =>
-            //{
-            //    const string userName = "Tester";
-            //    const string password = "myC0mplExPas$woRd";
-            //    const string firstName = "Tester";
-            //    const string lastName = "McTestFace";
-            //    const string emailAddress = "tester@microsoft.com";
-            //    const bool isAdmin = true;
-
-            //    var id = Guid.NewGuid();
-
-            //    var user = await this._applicationUserManager.FindByNameAsync(userName);
-
-            //    if (user == null)
-            //    {
-            //        await this._applicationUserManager.CreateUserAsync(id, userName, password, emailAddress, firstName, lastName, isAdmin);            //       
-            //    }
-            //});
         }
 
         [HttpGet]
