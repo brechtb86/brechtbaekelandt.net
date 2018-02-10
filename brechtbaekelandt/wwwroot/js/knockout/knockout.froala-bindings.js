@@ -83,7 +83,7 @@
 
         var editorInstance = $el.data("froala.editor");
 
-        if (editorInstance == null) {
+        if (editorInstance === null) {
             return;
         }
 
