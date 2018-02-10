@@ -16,7 +16,6 @@ namespace brechtbaekelandt.Controllers
         private readonly ApplicationUserManager _applicationUserManager;
         private readonly ApplicationSignInManager _applicationSignInManager;
 
-        private readonly ILogger _logger;
 
         public AccountController(
             ApplicationUserManager applicationUserManager,
@@ -24,7 +23,13 @@ namespace brechtbaekelandt.Controllers
         {
             this._applicationUserManager = applicationUserManager;
             this._applicationSignInManager = applicationSignInManager;
+        }
 
+        [Authorize]
+        [HttpGet]
+        public IActionResult Index()
+        {
+            return this.View();
         }
 
         [HttpGet]

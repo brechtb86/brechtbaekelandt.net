@@ -1,0 +1,108 @@
+﻿@{
+    this.ViewData["Title"] = "create a user";
+
+}
+
+<div style="display: none;" data-bind="visible: true">
+    <div class="row">
+        <div class="hidden-xs col-sm-2 col-md-3 col-lg-4"></div>
+        <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
+            <div class="panel panel-default">
+                <div class="panel-heading text-center">
+                    <h3 class="panel-title">create a user</h3>
+                </div>
+                <div class="panel-body" data-bind="with: newUser">
+                    <!-- ko if: $root.isUserAddSuccess -->
+                    <div class="alert alert-success alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>success!</strong> the user was succesfully added.
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: $root.userAddErrorMessages().length > 0 -->
+                    <div class="alert alert-danger">
+                        <strong>error!</strong> there are some errors:
+
+                        <ul>
+                            <!-- ko foreach: $root.userAddErrorMessages -->
+                            <li data-bind="text: $data"></li>
+                            <!-- /ko -->
+                        </ul>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: $root.userAddErrorMessage -->
+                    <div class="alert alert-danger">
+                        <strong>error!</strong> <span data-bind="text: $root.userAddErrorMessage"></span>
+                    </div>
+                    <!-- /ko -->
+                    <form>
+                        <div class="form-group" data-bind="validationElement: userName">
+                            <div class="input-group has-feedback" data-bind="css: { 'has-success': userName.isValid }">
+                                <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+                                <input type="text" placeholder="username" class="form-control" data-bind="textInput: userName" />
+                                <!-- ko if: userName.isValid -->
+                                <span class="fa fa-check form-control-feedback"></span>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                        <div class="form-group" data-bind="validationElement: firstName">
+                            <div class="input-group" data-bind="css: { 'has-success': firstName.isValid }">
+                                <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+                                <input type="text" placeholder="first name" class="form-control" data-bind="textInput: firstName" />
+                                <!-- ko if: firstName.isValid -->
+                                <span class="fa fa-check form-control-feedback"></span>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                        <div class="form-group" data-bind="validationElement: lastName">
+                            <div class="input-group" data-bind="css: { 'has-success': lastName.isValid }">
+                                <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+                                <input type="text" placeholder="last name" class="form-control" data-bind="textInput: lastName" />
+                                <!-- ko if: lastName.isValid -->
+                                <span class="fa fa-check form-control-feedback"></span>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                        <div class="form-group" data-bind="validationElement: emailAddress">
+                            <div class="input-group" data-bind="css: { 'has-success': emailAddress.isValid }">
+                                <span class="input-group-addon"><i class="fa fa-at"></i></span>
+                                <input type="email" placeholder="email address" class="form-control" data-bind="textInput: emailAddress" />
+                                <!-- ko if: emailAddress.isValid -->
+                                <span class="fa fa-check form-control-feedback"></span>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                        <div class="form-group" data-bind="validationElement: password">
+                            <div class="input-group" data-bind="css: { 'has-success': password.isValid }">
+                                <span class="input-group-addon"><i class="fa fa-unlock"></i></span>
+                                <input type="password" placeholder="password" class="form-control" data-bind="textInput: password" />
+                                <!-- ko if: password.isValid -->
+                                <span class="fa fa-check form-control-feedback"></span>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label><input type="checkbox" value="true" data-bind="checked: isAdmin" /><span>is admin</span></label>
+                            </div>
+                        </div>
+                        <div class="form-group text-right">
+                            <button type="button" class="btn btn-primary" data-bind="click: function(){ $parent.addUser($data); }"><i class="fa fa-plus"></i> add</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="hidden-xs col-sm-2 col-md-3 col-lg-4"></div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/view-models/account.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            brechtbaekelandt.account.init();
+        });
+    </script>
+}

@@ -35,26 +35,29 @@ Then apply the migrations:
 
 ##### Add a user
 
-I haven't implemented a registration page, but in `HomeController.cs` you will find some code to add a user.
+To add a user go to /account. Once you added the first user don't forget to set the `[Authorize]` attribute on Controllers\AccountController.cs `Index()`and Controllers\api\AccountController.cs `AddBlogUserAsyncActionResult()`!
 
 ```csharp
-// Create a user for the first time, can be removed or commented out after first run.
-//Task.Run(async () =>
-//{
-//    const string userName = "Tester";
-//    const string password = "myC0mplExPas$woRd";
-//    const string firstName = "Tester";
-//    const string lastName = "McTestFace";
-//    const string emailAddress = "tester@microsoft.com";
-//    const bool isAdmin = true;
 
-//    var id = Guid.NewGuid();
+// Controllers\AccountController.cs
 
-//    var user = await this._applicationUserManager.FindByNameAsync(userName);
+[Authorize]
+[HttpGet]
+public IActionResult Index()
+{
+    return this.View();
+}
 
-//    if (user == null)
-//    {
-//        await this._applicationUserManager.CreateUserAsync(id, userName, password, emailAddress, firstName, lastName, isAdmin);//        
-//    }
-//});
+// Controllers\api\AccountController.cs
+
+//[Authorize]
+[HttpPost]
+[Route("add")]
+[ValidationActionFilter]
+public async Task<IActionResult> AddBlogUserAsyncActionResult([FromBody] ApplicationUserWithPassword user)
+{
+    var result = await this._applicationUserManager.CreateUserAsync(Guid.NewGuid(), user.UserName, user.Password, user.EmailAddress, user.FirstName, user.LastName, user.IsAdmin);
+
+    return !result.Succeeded ? this.StatusCode((int)HttpStatusCode.BadRequest, result.Errors.Select(e => e.Description.ToLowerInvariant())) : this.Ok(new { message = "the user was addded." });
+}
 ```
