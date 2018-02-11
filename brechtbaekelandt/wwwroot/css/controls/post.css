@@ -68,7 +68,7 @@
     }
 
         .post-comments-container .post-comment:nth-child(odd) {
-            background-color: #eee;
+            background-color: #fef5f6;
         }
 
         .post-comments-container .post-comment:nth-child(even) {
