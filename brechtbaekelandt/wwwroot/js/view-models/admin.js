@@ -14,6 +14,15 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
         }
 
+
+        if (self.posts) {
+            self.posts().forEach(function (post) {
+                post.title.extend({ required: { message: "you didn't fill in the title!" } });
+                post.description.extend({ required: { message: "you didn't fill in the description!" } });
+                post.categories.extend({ minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" } })
+            });
+        }
+
         self.showCreate = ko.observable();
         self.showEdit = ko.observable();
 
@@ -36,6 +45,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                         .length >
                         0);
                 });
+
+                self.updateErrors = ko.validation.group(newValue);
+
             } else {
                 self.categories().forEach(function (category) {
                     category.isSelected(false);
@@ -73,7 +85,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.deleteUserSucceededMessage = ko.observable();
 
         self.createErrors = ko.validation.group(self.newPost);
-        //self.updateErrors = ko.validation.group(self.selectedPost);
+        self.updateErrors = {};
 
         self.categoryToAdd = ko.observable();
         self.tagToAdd = ko.observable();
@@ -384,13 +396,11 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         var self = this;
 
         self.resetMessages();
-
-
-        // TODO
-        //if (self.createErrors().length > 0) {
-        //    self.createErrors.showAllMessages();
-        //    return;
-        //}
+                
+        if (self.updateErrors().length > 0) {
+            self.updateErrors.showAllMessages();
+            return;
+        }
 
         $.ajax({
             url: "../api/blog/post/update",
