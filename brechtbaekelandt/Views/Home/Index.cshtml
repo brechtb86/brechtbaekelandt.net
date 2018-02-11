@@ -77,8 +77,8 @@
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
 
-            @*<button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="image-placeholder"></span><span>subscribe</span></button>
-                <hr />*@
+            <button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="image-placeholder"></span><span>subscribe</span></button>
+            <hr />
             <img src="~/images/me.png" class="img-responsive img-thumbnail" />
             <hr />
             <div id="social">
@@ -144,34 +144,46 @@
                 <div class="modal-body text-center">
                     <h4>select the categories you want to subscribe to</h4>
                     <form>
-                        <div class="well well-sm text-left row">
-                            <!-- ko foreach: categories -->
-                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
-                                <div class="col-xs-6">
-                                    <label data-bind="text: $data.name() + ':'"></label>
+                        <div class="text-left">
+                            <fieldset class="well well-sm row categories" data-bind="disable: hasSubscribed">
+                                <!-- ko foreach: categories -->
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                                    <div class="col-xs-6">
+                                        <label data-bind="text: $data.name() + ':'"></label>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <label class="switch">
+                                            <input type="checkbox" data-bind="checkedValue: $data, checked: $parentContext.$data.subscriber.categories">
+                                            <span class="slider"></span>
+                                        </label>
+                                    </div>
                                 </div>
-                                <div class="col-xs-6">
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="slider"></span>
-                                    </label>
-                                </div>
-                            </div>
-                            <!-- /ko -->
+                                <!-- /ko -->
+                            </fieldset>
                         </div>
                         <label>enter your email address</label>
-                        <div class="input-group" data-bind="with: subscriber">
-                            <input type="email" class="form-control" placeholder="your email address" data-bind="textInput: emailAddress" />
-                            <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe($data) }">subscribe!</button>
-                            </span>
+                        <div class="text-left">
+                            <div class="form-group" data-bind="validationElement: subscriber.emailAddress">
+                                <div class="input-group" data-bind="css: { 'has-success': subscriber.emailAddress.isValid }">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-at"></i>
+                                    </span>
+                                    <input type="email" class="form-control" placeholder="your email address" data-bind="textInput: subscriber.emailAddress, disable: hasSubscribed" />
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe(subscriber) }, css: { 'btn-success':  subscriber.emailAddress.isValid }, enable: subscriber.emailAddress.isValid && !hasSubscribed()"><i class="fa fa-check"></i></button>
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                         <p class="line-on-sides"><span>or</span></p>
                         <label>generate an RSS link</label>
-                        <div class="input-group" data-bind="with: subscriber">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-rss-square"></i>
+                            </span>
                             <input type="text" class="form-control" />
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.generateRssLink($data) }">generate!</button>
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ copyRssLink($data) }"><i class="fa fa-copy"></i></button>
                             </span>
                         </div>
                     </form>
@@ -206,15 +218,19 @@
 
     <script type="text/javascript">
 
-        $(function () {
-            @{
-                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+    $(function () {
+        /**/
+@{
+    var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
 
-                var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
-            }
+    var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
+}
+    /**/
 
-            brechtbaekelandt.home.init(@serverViewmodel);
-        });
+    /**/
+    brechtbaekelandt.home.init(@serverViewmodel);
+    /**/
+});
     </script>
 }
 
@@ -224,7 +240,7 @@
 
 @section seo {
     <meta name="description" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
-    <meta name="keywords" content="@string.Join(", ", keywords)" />
+    <meta name="keywords" content="@string.Join(" , ", keywords)" />
 }
 
 @section social{
@@ -236,7 +252,7 @@
     <meta property="og:type" content="article" />
     <meta property="og:description" content="This blog talks about development, electronics and other stuff that I like." />
     <meta property="og:url" content="http://www.brechtbaekelandt.net" />
-    <meta property="article:tag" content="@string.Join(", ", keywords)" />
+    <meta property="article:tag" content="@string.Join(" , ", keywords)" />
     <meta property="fb:app_id" content="495540337506240">
 
     <!-- Schema.org markup for Google+ -->

@@ -20,6 +20,8 @@ namespace brechtbaekelandt.Data
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Subscriber> Subscribers { get; set; }
+
         public DbSet<Attachment> Attachments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -37,7 +39,20 @@ namespace brechtbaekelandt.Data
             builder.Entity<PostCategory>()
                 .HasOne(pc => pc.Category)
                 .WithMany(c => c.PostCategories)
-                .HasForeignKey(bc => bc.CategoryId);
+                .HasForeignKey(pc => pc.CategoryId);
+
+            builder.Entity<SubscriberCategory>()
+                .HasKey(sc => new { sc.subscriberId, sc.CategoryId });
+
+            builder.Entity<SubscriberCategory>()
+                .HasOne(sc => sc.Subscriber)
+                .WithMany(s => s.SubscriberCategories)
+                .HasForeignKey(sc => sc.subscriberId);
+
+            builder.Entity<SubscriberCategory>()
+                .HasOne(sc => sc.Category)
+                .WithMany(c => c.SubscriberCategories)
+                .HasForeignKey(sc => sc.CategoryId);
 
         }
     }

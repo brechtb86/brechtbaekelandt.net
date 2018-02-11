@@ -7,5 +7,7 @@ namespace brechtbaekelandt.Data.Entities
         public string Name { get; set; }
         
         public virtual ICollection<PostCategory> PostCategories { get; set; }
+
+        public virtual ICollection<SubscriberCategory> SubscriberCategories { get; set; }
     }
 }

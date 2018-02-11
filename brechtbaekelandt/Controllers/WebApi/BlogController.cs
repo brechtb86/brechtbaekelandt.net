@@ -14,6 +14,7 @@ using brechtbaekelandt.Filters;
 using brechtbaekelandt.Helpers;
 using brechtbaekelandt.Identity;
 using brechtbaekelandt.Models;
+using brechtbaekelandt.Services;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -38,18 +39,23 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         private readonly ApplicationUserManager _applicationUserManager;
 
+        private readonly IEmailService _emailService;
+
         private readonly IHostingEnvironment _hostingEnvironment;
 
         private const int _postsPerPage = 5;
 
         private readonly CaptchaHelper _captchaHelper;
 
-        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IHostingEnvironment hostingEnvironment)
+        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IEmailService emailService, IHostingEnvironment hostingEnvironment)
         {
             this._applicationUserManager = userManager;
             this._blogDbContext = blogDbcontext;
             this._captchaHelper = captchaHelper;
+            
             this._hostingEnvironment = hostingEnvironment;
+            this._emailService = emailService;
+            this._emailService.TemplateRootPath = this._hostingEnvironment.ContentRootPath;
         }
 
         [HttpGet]
@@ -448,6 +454,16 @@ namespace brechtbaekelandt.Controllers.WebApi
             await this._blogDbContext.SaveChangesAsync();
 
             return this.Json(currentLikesNumber);
+        }
+               
+        [HttpPost]
+        [Route("subscribe")]
+        [ValidationActionFilter]
+        public async Task<IActionResult> SubscribeAsyncActionResult([FromBody]Models.Subscriber subscriber)
+        {
+            await this._emailService.SendSubscribedEmailAsync(subscriber.EmailAddress);
+
+            return this.Json(new { message = "you have successfully subscribed!" });
         }
 
         private void SetCaptcha(Captcha captcha, string captchaName)

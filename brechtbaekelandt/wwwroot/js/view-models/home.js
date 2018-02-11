@@ -11,7 +11,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
     function HomeViewModel(serverViewModel) {
         var self = this;
-        
+
         document.addEventListener("scroll", function (event) {
             if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > self.posts().length)) {
                 self.getPosts(true);
@@ -95,8 +95,15 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.showSubscribe = ko.observable(false);
 
         self.subscriber = {};
-        self.subscriber.emailAddress = ko.observable();
+        self.subscriber.emailAddress = ko.observable().extend({
+            email: { message: "the email address is not valid!" },
+            required: { message: "you must fill in your email address!" }
+        });;
         self.subscriber.categories = ko.observableArray();
+
+        self.subscriberErrors = ko.validation.group(self.subscriber);
+
+        self.hasSubscribed = ko.observable(false);
 
         self.getRequests = ko.observableArray();
 
@@ -168,7 +175,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.likedPostsIds.push(post.id());
 
-                $.cookie("likedPostsIds", ko.toJSON(self.likedPostsIds()), { expires: 365, path :"/" });
+                $.cookie("likedPostsIds", ko.toJSON(self.likedPostsIds()), { expires: 365, path: "/" });
 
                 post.liked(true);
 
@@ -179,7 +186,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             })
             .always(function (data, textStatus, jqXhr) {
 
-            });       
+            });
     }
 
 
@@ -214,7 +221,33 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     }
 
     HomeViewModel.prototype.subscribe = function (subscriber) {
+        var self = this;
 
+        if (self.subscriberErrors().length > 0) {
+            self.subscriberErrors.showAllMessages();
+            return;
+        }
+
+        $.ajax({
+            url: "../api/blog/subscribe",
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            data: ko.toJSON(subscriber),
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.hasSubscribed(true);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
     };
 
     HomeViewModel.prototype.generateRssLink = function (categories) {
