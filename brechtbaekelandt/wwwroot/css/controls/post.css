@@ -44,14 +44,19 @@
 .post-attachments {
 }
 
-.post-comments {
-
+.post-comments-likes-share {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
 }
 
-.post-share > hr:last-child {
-    margin-top: 5px;
-}
-
+    .post-comments-likes-share > .addthis_inline_share_toolbox {
+        margin-top: 9px;
+    }
 
 .post-comments-container {
     margin-bottom: 40px;

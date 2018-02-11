@@ -49,6 +49,17 @@
 .post-preview-content {
 }
 
-.post-preview-share > hr:last-child {
-    margin-top: 5px;
+.post-preview-comments-likes-share {
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
+    justify-content: flex-start;
 }
+
+    .post-preview-comments-likes-share > .addthis_inline_share_toolbox {
+        margin-top: 9px;
+    }

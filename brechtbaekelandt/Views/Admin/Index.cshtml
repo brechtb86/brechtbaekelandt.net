@@ -38,7 +38,7 @@
         <!-- ko foreach: posts -->
         <li class="list-group-item">
             <label class="switch">
-                <input type="checkbox" data-bind="checked: isPostVisible,  click: function() { $root.updatePost($data); }">
+                <input type="checkbox" data-bind="checked: isPostVisible, click: function() { $root.updatePost($data); return true; }">
                 <span class="slider"></span>
             </label>
             <a href="" data-bind="text: title(), click: function() { $root.selectedPost($data); $root.resetMessages(); $root.showEdit(true); }"></a>

@@ -257,22 +257,6 @@
                         <a href="#" data-bind="text: name, click: function() { $parentContext.$data.viewModel.categoryIdFilter($data.id()); }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
                         <!-- /ko -->
                     </i>
-                    <span>|</span>
-                    <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() + '#comments' }"><i class="fa fa-comment"></i></a>
-                    <!-- ko if: post.comments().length > 0 -->
-                    <i data-bind="text: post.comments().length"></i>
-                    <!-- /ko -->
-                    <!-- ko if: post.comments().length === 0 -->
-                    <i>no comments yet...</i>
-                    <!-- /ko -->
-                    @*<span>|</span>
-                        <a href="#"><i class="fa fa-thumbs-up"></i></a>
-                        <!-- ko if: post.likes() > 0 -->
-                        <span data-bind="text: post.likes()"></span>
-                        <!-- /ko -->
-                        <!-- ko if: post.likes() === 0 -->
-                        <i>no likes yet...</i>
-                        <!-- /ko -->*@
                 </small>
             </div>
             <div class="post-preview-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
@@ -291,11 +275,29 @@
             </div>
             <!-- /ko -->
             <div class="clearfix"></div>
-            <div class="post-preview-share">
-                <hr />
-                <div class="addthis_inline_share_toolbox" data-bind="attr: { 'data-title': post.title, 'data-description': post.cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + post.internalTitle() }"></div>
-                <hr />
+            <hr />
+            <div class="post-preview-comments-likes-share">
+                <div class="inline-block">
+                    <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() + '#comments' }"><i class="fa fa-comment"></i></a>
+                    <!-- ko if: post.comments().length > 0 -->
+                    <i data-bind="text: post.comments().length"></i>
+                    <!-- /ko -->
+                    <!-- ko if: post.comments().length === 0 -->
+                    no comments yet...
+                    <!-- /ko -->
+                    <span>|</span>
+                    <a href="#"><i class="fa fa-thumbs-up"></i></a>
+                    <!-- ko if: post.likes() > 0 -->
+                    <span data-bind="text: post.likes()"></span>
+                    <!-- /ko -->
+                    <!-- ko if: post.likes() === 0 -->
+                    no likes yet...
+                    <!-- /ko -->
+                    <span>|</span>
+                </div>
+                <div class="addthis_inline_share_toolbox inline-block" data-bind="attr: { 'data-title': post.title, 'data-description': post.cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + post.internalTitle() }"></div>
             </div>
+            <hr />
         </article>
     </script>
 
@@ -322,22 +324,6 @@
                         <a data-bind="text: name, attr: { href: '/home?categoryName=' + name() }"></a><span data-bind="if: $index() < $parentContext.$data.post.categories().length - 1">, </span>
                         <!-- /ko -->
                     </i>
-                    <span>|</span>
-                    <a href="#comments"><i class="fa fa-comment"></i></a>
-                    <!-- ko if: post.comments().length > 0 -->
-                    <i data-bind="text: post.comments().length"></i>
-                    <!-- /ko -->
-                    <!-- ko if: post.comments().length === 0 -->
-                    <i>no comments yet...</i>
-                    <!-- /ko -->
-                    @*<span>|</span>
-                        <a href="#"><i class="fa fa-thumbs-up"></i></a>
-                        <!-- ko if: post.likes() > 0 -->
-                        <span data-bind="text: post.likes"></span>
-                        <!-- /ko -->
-                        <!-- ko if: post.likes() === 0 -->
-                        <i>no likes yet...</i>
-                        <!-- /ko -->*@
                 </small>
             </div>
             <div class="post-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
@@ -369,11 +355,29 @@
             </div>
             <!-- /ko -->
             <div class="clearfix"></div>
-            <div class="post-share">
-                <hr />
-                <div class="addthis_inline_share_toolbox" data-bind="attr: { 'data-title': post.title, 'data-description': post.cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + post.internalTitle() }"></div>
-                <hr />
+            <hr />
+            <div class="post-comments-likes-share">
+                <div class="inline-block">
+                    <a href="#comments"><i class="fa fa-comment"></i></a>
+                    <!-- ko if: post.comments().length > 0 -->
+                    <i data-bind="text: post.comments().length"></i>
+                    <!-- /ko -->
+                    <!-- ko if: post.comments().length === 0 -->
+                    no comments yet...
+                    <!-- /ko -->
+                    <span>|</span>
+                    <a href="#"><i class="fa fa-thumbs-up"></i></a>
+                    <!-- ko if: post.likes() > 0 -->
+                    <span data-bind="text: post.likes()"></span>
+                    <!-- /ko -->
+                    <!-- ko if: post.likes() === 0 -->
+                    no likes yet...
+                    <!-- /ko -->
+                    <span>|</span>
+                </div>
+                <div class="addthis_inline_share_toolbox inline-block" data-bind="attr: { 'data-title': post.title, 'data-description': post.cleanDescription, 'data-url': 'http://www.brechtbaekelandt.net/blog/post/' + post.internalTitle() }"></div>
             </div>
+            <hr />
             <div class="post-comments">
                 <h4>comments:</h4>
                 <h6>leave a comment</h6>
@@ -439,7 +443,7 @@
         <form>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.name">
                 <div class="input-group has-feedback">
-                    <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
                     <input name="name" type="text" placeholder="enter your name" class="form-control" data-bind="textInput: viewModel.newComment.name" />
                     <!-- ko if: viewModel.newComment.name -->
                     <span class="fa fa-check form-control-feedback"></span>
@@ -548,10 +552,10 @@
                             <!-- ko  foreach: viewModel.categories -->
                             <button data-bind="css: { selected: isSelected }, click: function(){ $parent.viewModel.toggleSelectedCategory($data, $parentContext.$data.post.categories); }" class="category">
                                 <span data-bind="text: name"></span> <i class="fa fa-check"></i>
-                                
+
                             </button>
                             <!-- /ko -->
-                            <input class="hidden" data-bind="value: post.categories"/>
+                            <input class="hidden" data-bind="value: post.categories" />
                         </div>
                     </div>
                     @*<div class="validation-message" data-bind="validationMessage: post.categories"></div>*@
@@ -688,7 +692,7 @@
         <!-- ko if: viewModel.updatePostSucceededMessage -->
         <div class="alert alert-success alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>success!</strong> <span data-bind="text: viewModel.updateSucceededMessage"></span>
+            <strong>success!</strong> <span data-bind="text: viewModel.updatePostSucceededMessage"></span>
             <a class="alert-link" data-bind="attr: { href:  post.url }">click here</a> to view...
         </div>
         <!-- /ko -->

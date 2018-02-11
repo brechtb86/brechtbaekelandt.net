@@ -8,12 +8,12 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         ko.mapping.fromJS(serverViewModel, {}, self);
 
-        if (serverViewModel.categories) {
-            for (var i = 0; i < self.categories().length; i++) {
-                self.categories()[i].isSelected = ko.observable();
-            }
+        if (self.categories) {
+            self.categories().forEach(function (category) {
+                category.isSelected = ko.observable();
+            });
         }
-
+               
         self.showCreate = ko.observable();
         self.showEdit = ko.observable();
 
@@ -41,8 +41,6 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                     category.isSelected(false);
                 });
             }
-
-
         });
 
         self.pictureToUpload = ko.observable();
@@ -365,9 +363,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.createPostSucceededMessage("the post was successfully created!");
 
-                ko.mapping.fromJS(data, {}, self.newPost);
+                ko.mapping.fromJS(data, {}, post);
 
-                self.posts.unshift(self.newPost);
+                self.posts.unshift(post);
 
                 self.isPosted(true);
             })
@@ -383,6 +381,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         var self = this;
 
         self.resetMessages();
+
 
         // TODO
         //if (self.createErrors().length > 0) {
@@ -404,7 +403,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.updatePostSucceededMessage("the post was successfully updated!");
 
-                self.selectedPost(ko.mapping.fromJS(data));
+                ko.mapping.fromJS(data, {}, post);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.createPostErrorMessage(errorThrown);
@@ -412,6 +411,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .always(function (data, textStatus, jqXhr) {
 
             });
+
     };
 
     AdminViewModel.prototype.deletePost = function (post) {
