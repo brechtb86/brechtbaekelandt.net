@@ -395,8 +395,8 @@
         <div class="comment-title">
             <h4><i class="fa fa-comment-o"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span></h4>
             <small>
-                <i>                   
-                    by: <span data-bind="text: comment.name"></span>                  
+                <i>
+                    by: <span data-bind="text: comment.name"></span>
                 </i>
                 <span>|</span>
                 <i data-bind="text: moment(comment.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
@@ -548,10 +548,13 @@
                             <!-- ko  foreach: viewModel.categories -->
                             <button data-bind="css: { selected: isSelected }, click: function(){ $parent.viewModel.toggleSelectedCategory($data, $parentContext.$data.post.categories); }" class="category">
                                 <span data-bind="text: name"></span> <i class="fa fa-check"></i>
+                                
                             </button>
                             <!-- /ko -->
+                            <input class="hidden" data-bind="value: post.categories"/>
                         </div>
                     </div>
+                    @*<div class="validation-message" data-bind="validationMessage: post.categories"></div>*@
                     <div class="form-group">
                         <label>tags:</label>
                         <div class="input-group">

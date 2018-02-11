@@ -15,9 +15,10 @@
             height: 30px;
             margin: 5px 5px 5px 0;
             padding: 5px;
-            color: #333;
+            color: #eee;
             border: 1px solid #540804;
             cursor: pointer;
+            background-color: #fff;
         }
 
             .post-editor .categories .category.selected, .post-editor .tags .tag.selected {

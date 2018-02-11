@@ -8,6 +8,7 @@ using brechtbaekelandt.Helpers;
 using brechtbaekelandt.Identity;
 using brechtbaekelandt.Identity.Models;
 using brechtbaekelandt.Services;
+using brechtbaekelandt.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -74,6 +75,10 @@ namespace brechtbaekelandt
                         options.MultipartBodyLengthLimit = int.MaxValue;
                         options.MultipartHeadersLengthLimit = int.MaxValue;
                     });
+
+            services
+                .Configure<MailjetSettings>(
+                    Configuration.GetSection("Mailjet"));
 
             services
                .ConfigureAutoMapper();
@@ -192,8 +197,7 @@ namespace brechtbaekelandt
             }
             else
             {
-                app.UseDeveloperExceptionPage();
-                // app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler("/Error");
             }
 
             app.UseStaticFiles();
