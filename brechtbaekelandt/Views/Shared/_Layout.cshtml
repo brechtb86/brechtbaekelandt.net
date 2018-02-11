@@ -278,7 +278,7 @@
             <hr />
             <div class="post-preview-comments-likes-share">
                 <div class="inline-block">
-                    <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() + '#comments' }"><i class="fa fa-comment"></i></a>
+                    <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() + '#comments' }"><i class="fa fa-comment-o"></i></a>
                     <!-- ko if: post.comments().length > 0 -->
                     <i data-bind="text: post.comments().length"></i>
                     <!-- /ko -->
@@ -286,7 +286,12 @@
                     no comments yet...
                     <!-- /ko -->
                     <span>|</span>
-                    <a href="#"><i class="fa fa-thumbs-up"></i></a>
+                    <!-- ko ifnot: post.liked -->
+                    <a href="#" data-bind="click: function() { viewModel.likePost(post); }"><i class="fa fa-thumbs-o-up"></i></a>
+                    <!-- /ko -->
+                    <!-- ko if: post.liked -->
+                    <a href="#" data-bind="click: function() { viewModel.unlikePost(post); }"><i class="fa fa-thumbs-up"></i></a>
+                    <!-- /ko -->
                     <!-- ko if: post.likes() > 0 -->
                     <span data-bind="text: post.likes()"></span>
                     <!-- /ko -->
@@ -358,7 +363,7 @@
             <hr />
             <div class="post-comments-likes-share">
                 <div class="inline-block">
-                    <a href="#comments"><i class="fa fa-comment"></i></a>
+                    <a href="#comments"><i class="fa fa-comment-o"></i></a>
                     <!-- ko if: post.comments().length > 0 -->
                     <i data-bind="text: post.comments().length"></i>
                     <!-- /ko -->
@@ -366,7 +371,12 @@
                     no comments yet...
                     <!-- /ko -->
                     <span>|</span>
-                    <a href="#"><i class="fa fa-thumbs-up"></i></a>
+                    <!-- ko ifnot: post.liked -->
+                    <a href="#" data-bind="click: function() { viewModel.likePost(post); }"><i class="fa fa-thumbs-o-up"></i></a>
+                    <!-- /ko -->
+                    <!-- ko if: post.liked -->
+                    <a href="#" data-bind="click: function() { viewModel.unlikePost(post); }"><i class="fa fa-thumbs-up"></i></a>
+                    <!-- /ko -->
                     <!-- ko if: post.likes() > 0 -->
                     <span data-bind="text: post.likes()"></span>
                     <!-- /ko -->

@@ -11,7 +11,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
     function HomeViewModel(serverViewModel) {
         var self = this;
-
+        
         document.addEventListener("scroll", function (event) {
             if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > self.posts().length)) {
                 self.getPosts(true);
@@ -19,6 +19,14 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         });
 
         ko.mapping.fromJS(serverViewModel, {}, self);
+
+        self.likedPostsIds = $.cookie("likedPostsIds") ? ko.mapping.fromJSON($.cookie("likedPostsIds")) : ko.observableArray();
+
+        if (self.posts) {
+            self.posts().forEach(function (post) {
+                post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === post.id() }).length > 0);
+            });
+        }
 
         self.categoryQueryString = ko.observable("");
 
@@ -113,6 +121,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 if (!getMore) {
                     ko.mapping.fromJS(data.posts, {}, self.posts);
+
+
                 } else {
                     data.posts.forEach(function (post) {
                         self.posts.push(ko.mapping.fromJS(post));
@@ -127,6 +137,10 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.totalPostCount(data.totalPostCount);
                 self.postsPerPage(data.postsPerPage);
 
+                self.posts().forEach(function (post) {
+                    post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === post.id() }).length > 0);
+                });
+
                 $.when.apply($, self.getRequests()).done(function () {
                     self.isLoading(false);
                     self.isLoadingMore(false);
@@ -137,6 +151,67 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.getRequests.push(request);
     };
+
+    HomeViewModel.prototype.likePost = function (post) {
+        var self = this;
+
+        $.ajax({
+            url: "../api/blog/post/like?postId=" + post.id(),
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.likedPostsIds.push(post.id());
+
+                $.cookie("likedPostsIds", ko.toJSON(self.likedPostsIds()), { expires: 365, path :"/" });
+
+                post.liked(true);
+
+                post.likes(data);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });       
+    }
+
+
+    HomeViewModel.prototype.unlikePost = function (post) {
+        var self = this;
+
+        $.ajax({
+            url: "../api/blog/post/unlike?postId=" + post.id(),
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.likedPostsIds.splice(self.likedPostsIds.indexOf(post.id(), 1));
+
+                $.cookie("likedPostsIds", ko.toJSON(self.likedPostsIds()), { expires: 365, path: "/" });
+
+                post.liked(false);
+
+                post.likes(data);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    }
 
     HomeViewModel.prototype.subscribe = function (subscriber) {
 

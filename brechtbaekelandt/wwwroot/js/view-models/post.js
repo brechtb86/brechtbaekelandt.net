@@ -11,6 +11,10 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         ko.mapping.fromJS(serverViewModel, {}, self);
 
+        self.likedPostsIds = $.cookie("likedPostsIds") ? ko.mapping.fromJSON($.cookie("likedPostsIds")) : ko.observableArray();
+
+        self.post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === self.post.id() }).length > 0);
+
         self.newComment = {};
         self.newComment.title = ko.observable();
         self.newComment.content = ko.observable().extend({ required: { message: "you didn't fill in the comment!" } });
@@ -109,6 +113,66 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
             });
     };
+
+    PostViewModel.prototype.likePost = function (post) {
+        var self = this;
+
+        $.ajax({
+            url: "../../api/blog/post/like?postId=" + post.id(),
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.likedPostsIds.push(post.id());
+
+                $.cookie("likedPostsIds", ko.toJSON(self.likedPostsIds()), { expires: 365, path: "/" });
+
+                post.liked(true);
+
+                post.likes(data);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    }
+
+    PostViewModel.prototype.unlikePost = function (post) {
+        var self = this;
+
+        $.ajax({
+            url: "../../api/blog/post/unlike?postId=" + post.id(),
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.likedPostsIds.splice(self.likedPostsIds.indexOf(post.id(), 1));
+
+                $.cookie("likedPostsIds", ko.toJSON(self.likedPostsIds()), { expires: 365, path: "/" });
+
+                post.liked(false);
+
+                post.likes(data);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    }
 
     PostViewModel.prototype.getCaptcha = function (captchaName) {
         var self = this;

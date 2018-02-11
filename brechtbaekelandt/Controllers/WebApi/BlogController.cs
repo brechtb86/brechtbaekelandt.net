@@ -335,7 +335,6 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Json(new { message = "the post was successfully deleted." });
         }
 
-
         [HttpPost]
         [Route("post/add-comment")]
         [ValidationActionFilter]
@@ -379,6 +378,53 @@ namespace brechtbaekelandt.Controllers.WebApi
             this.DeleteCaptcha(captchaName);
 
             return this.Json(comment);
+        }
+
+        [HttpPost]
+        [Route("post/like")]
+        public async Task<IActionResult> LikePostAsyncActionResult(Guid postId)
+        {
+            if (!this._blogDbContext.Posts.Any(p => p.Id == postId))
+            {
+                return this.NotFound();
+            }
+
+            var postEntity = this._blogDbContext.Posts
+                .FirstOrDefault(p => p.Id == postId);
+
+            var currentLikesNumber = postEntity.Likes += 1;
+
+            postEntity.Likes = currentLikesNumber;
+
+            this._blogDbContext.Update(postEntity);
+
+            await this._blogDbContext.SaveChangesAsync();
+
+            return this.Json(currentLikesNumber);
+        }
+
+
+        [HttpPost]
+        [Route("post/unlike")]
+        public async Task<IActionResult> UnlikePostAsyncActionResult(Guid postId)
+        {
+            if (!this._blogDbContext.Posts.Any(p => p.Id == postId))
+            {
+                return this.NotFound();
+            }
+
+            var postEntity = this._blogDbContext.Posts
+                .FirstOrDefault(p => p.Id == postId);
+
+            var currentLikesNumber = postEntity.Likes != 0 ? postEntity.Likes -= 1 : 0;
+
+            postEntity.Likes = currentLikesNumber;
+
+            this._blogDbContext.Update(postEntity);
+
+            await this._blogDbContext.SaveChangesAsync();
+
+            return this.Json(currentLikesNumber);
         }
 
         private void SetCaptcha(Captcha captcha, string captchaName)

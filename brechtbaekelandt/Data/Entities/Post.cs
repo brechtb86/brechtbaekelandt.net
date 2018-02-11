@@ -30,5 +30,7 @@ namespace brechtbaekelandt.Data.Entities
         public virtual ICollection<Attachment> Attachments { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
+
+        public int Likes { get; set; }
     }
 }
