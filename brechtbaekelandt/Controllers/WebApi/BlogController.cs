@@ -263,7 +263,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         [Authorize]
         [HttpPost]
         [Route("post/update")]
-        //[ValidationActionFilter]
+        [ValidationActionFilter]
         public async Task<IActionResult> UpdatePostAsyncActionResult([FromBody]Models.Post post)
         {
             if (!this._blogDbContext.Posts.Any(p => p.Id == post.Id))
@@ -380,6 +380,27 @@ namespace brechtbaekelandt.Controllers.WebApi
             this.DeleteCaptcha(captchaName);
 
             return this.Json(comment);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("post/delete-comment")]
+        [ValidationActionFilter]
+        public async Task<IActionResult> DeleteCommentAsyncActionResult(Guid commentId)
+        {
+            if (!this._blogDbContext.Comments.Any(c => c.Id == commentId))
+            {
+                return this.NotFound();
+            }
+
+            var commentEntity = this._blogDbContext.Comments              
+                .FirstOrDefault(c => c.Id == commentId);
+
+            this._blogDbContext.Comments.Remove(commentEntity);
+
+            await this._blogDbContext.SaveChangesAsync();
+
+            return this.Json(new { message = "the comment was successfully deleted." });
         }
 
         [HttpPost]

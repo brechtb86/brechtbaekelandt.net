@@ -396,6 +396,18 @@
         <a id="comments" />
         <div data-bind="template: { name: 'commentEditorTemplate', data: { comments: post.comments, postId: post.id(), viewModel: viewModel }, afterRender: function() {  } }"></div>
         <hr />
+        <!-- ko if: viewModel.deleteCommentErrorMessage -->
+        <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>error!</strong> <span data-bind="text:  viewModel.deleteCommentErrorMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if:  viewModel.deleteCommentSucceededMessage -->
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>success!</strong> <span data-bind="text: viewModel.deleteCommentSucceededMessage"></span>
+        </div>
+        <!-- /ko -->
         <div class="post-comments-container">
             <!-- ko foreach: post.comments -->
             <div class="post-comment" data-bind="template: { name: 'commentTemplate', data: { comment: $data, postTitle: $parentContext.$data.post.title(), viewModel: $parentContext.$data.viewModel }, afterRender: function() {  } }"></div>
@@ -407,7 +419,13 @@
 
     <script type="text/html" id="commentTemplate">
         <div class="comment-title">
-            <h4><i class="fa fa-comment-o"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span></h4>
+            <h4>
+                <i class="fa fa-comment-o"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span>
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    <a href="#" data-bind="click: function() { viewModel.deleteComment(comment) }" class="pull-right">delete</a>
+                }
+            </h4>
             <small>
                 <i>
                     by: <span data-bind="text: comment.name"></span>
@@ -452,7 +470,7 @@
         <!-- /ko -->
         <form>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.name">
-                <div class="input-group has-feedback">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.name.isValid }">
                     <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
                     <input name="name" type="text" placeholder="enter your name" class="form-control" data-bind="textInput: viewModel.newComment.name" />
                     <!-- ko if: viewModel.newComment.name -->
@@ -479,7 +497,7 @@
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.content">
-                <div class="input-group has-feedback">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.content.isValid }">
                     <!-- ko ifnot: viewModel.isTyping -->
                     <span class="input-group-addon" style="vertical-align: top;"><i class="fa fa-comment-o"></i></span>
                     <!-- /ko -->

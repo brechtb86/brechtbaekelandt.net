@@ -15,7 +15,7 @@ namespace brechtbaekelandt.Models
         [Required(ErrorMessage = "you didn't fill in the comment!")]
         public string Content { get; set; }
 
-        [Required(ErrorMessage = "you didn't fill in the name!")]
+        [Required(ErrorMessage = "you didn't fill in your name!")]
         public string Name { get; set; }
 
         [EmailAddress(ErrorMessage = "the email address is not valid!")]

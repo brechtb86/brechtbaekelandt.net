@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using brechtbaekelandt.Extensions;
 
@@ -13,6 +14,7 @@ namespace brechtbaekelandt.Models
 
         public bool IsPostVisible { get; set; }
 
+        [Required(ErrorMessage= "you didn't fill in the title!")]
         public string Title { get; set; }
 
         public string CleanTitle => !string.IsNullOrEmpty(this.Title) ? Regex.Replace(this.Title, "<.*?>", string.Empty) : string.Empty;
@@ -21,6 +23,7 @@ namespace brechtbaekelandt.Models
 
         public string Url => $"/blog/post/{this.InternalTitle}";
 
+        [Required(ErrorMessage = "you didn't fill in the description!")]
         public string Description { get; set; }
 
         public string CleanDescription => !string.IsNullOrEmpty(this.Description) ? Regex.Replace(this.Description, "<.*?>", string.Empty) : string.Empty;
@@ -37,6 +40,7 @@ namespace brechtbaekelandt.Models
 
         public int Likes { get; set; }
 
+        [Required(ErrorMessage = "you didn't select a category!")]
         public virtual ICollection<Category> Categories { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }

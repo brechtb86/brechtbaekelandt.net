@@ -27,6 +27,8 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         self.addCommentSucceededMessage = ko.observable();
         self.addCommentErrorMessage = ko.observable();
+        self.deleteCommentSucceededMessage = ko.observable();
+        self.deleteCommentErrorMessage = ko.observable();
         self.addCommentValidationMessages = ko.observableArray();
         self.captchaInvalidMessage = ko.observable();
 
@@ -113,6 +115,35 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
             });
     };
+
+    PostViewModel.prototype.deleteComment = function (comment) {
+        var self = this;
+
+        self.deleteCommentSucceededMessage(null);
+        self.deleteCommentErrorMessage(null);
+
+        $.ajax({
+            url: "../../api/blog/post/delete-comment?commentId=" + comment.id(),           
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.post.comments.splice(self.post.comments.indexOf(comment, 1));
+
+                self.deleteCommentSucceededMessage("the comment was successfully deleted");
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.deleteCommentErrorMessage("there was a problem while deleting the comment.");
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    }
 
     PostViewModel.prototype.likePost = function (post) {
         var self = this;
