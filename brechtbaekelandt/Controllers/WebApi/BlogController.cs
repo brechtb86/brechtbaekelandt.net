@@ -134,7 +134,9 @@ namespace brechtbaekelandt.Controllers.WebApi
                 await picture.CopyToAsync(stream);
             }
 
-            return this.Json($"{relativePath}/{newFileName}");
+
+
+            return this.Json(new { link = $"{relativePath}/{newFileName}" });
         }
 
         [Authorize]
@@ -196,7 +198,7 @@ namespace brechtbaekelandt.Controllers.WebApi
                 results.Add(newAttachement);
             }
 
-            return this.Json(results);
+            return this.Json(new { attachments= results });
         }
 
         [Authorize]

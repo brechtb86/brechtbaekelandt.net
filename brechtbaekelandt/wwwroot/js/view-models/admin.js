@@ -13,7 +13,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 category.isSelected = ko.observable();
             });
         }
-               
+
         self.showCreate = ko.observable();
         self.showEdit = ko.observable();
 
@@ -158,7 +158,10 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                     "clearFormatting",
                     "selectAll",
                     "html"
-                ]
+                ],
+                imageUploadParam: "picture",
+                imageUploadURL: "../api/blog/upload-picture",
+                imageUploadMethod: "POST",
             });
     };
 
@@ -191,7 +194,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         })
             .done(function (data, textStatus, jqXhr) {
                 self.pictureToUpload(null);
-                self.newPost.pictureUrl(data);
+                self.newPost.pictureUrl(data.link);
 
                 $(".picture-drop-zone input:file").val();
             })
@@ -268,7 +271,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.isAttachmentsUploadingFinished(true);
 
-                data.forEach(function (attachment) {
+                data.attachments.forEach(function (attachment) {
                     self.newPost.attachments.push(attachment);
                 });
 

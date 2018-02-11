@@ -40,6 +40,10 @@
     <None Include="Properties\PublishProfiles\DevServer.pubxml.user" />
     <None Include="Properties\PublishProfiles\ProductionServer.pubxml.user" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="wwwroot\attachments\blog\" />
+    <Folder Include="wwwroot\images\blog\" />
+  </ItemGroup>
 
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" Condition="Exists('$(MSBuildCommunityTasksPath)')" />
 </Project>
