@@ -666,26 +666,26 @@
                 </div>
             </fieldset>
         </form>
-        <!-- ko if: viewModel.createErrorMessage -->
+        <!-- ko if: viewModel.createPostErrorMessage -->
         <div class="alert alert-danger alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>error!</strong> <span data-bind="text: viewModel.createErrorMessage"></span>
+            <strong>error!</strong> <span data-bind="text: viewModel.createPostErrorMessage"></span>
         </div>
         <!-- /ko -->
-        <!-- ko if: viewModel.createSucceededMessage -->
+        <!-- ko if: viewModel.createPostSucceededMessage -->
         <div class="alert alert-success alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>success!</strong> <span data-bind="text: viewModel.createSucceededMessage"></span>
+            <strong>success!</strong> <span data-bind="text: viewModel.createPostSucceededMessage"></span>
             <a class="alert-link" data-bind="attr: { href: post.url }">click here</a> to view...
         </div>
         <!-- /ko -->
-        <!-- ko if: viewModel.updateErrorMessage -->
+        <!-- ko if: viewModel.updatePostErrorMessage -->
         <div class="alert alert-danger alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>error!</strong> <span data-bind="text: viewModel.updateErrorMessage"></span>
+            <strong>error!</strong> <span data-bind="text: viewModel.updatePostErrorMessage"></span>
         </div>
         <!-- /ko -->
-        <!-- ko if: viewModel.updateSucceededMessage -->
+        <!-- ko if: viewModel.updatePostSucceededMessage -->
         <div class="alert alert-success alert-dismissable">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <strong>success!</strong> <span data-bind="text: viewModel.updateSucceededMessage"></span>

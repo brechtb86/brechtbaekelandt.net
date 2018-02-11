@@ -46,6 +46,8 @@ namespace brechtbaekelandt.Extensions
                 cfg.CreateMap<Data.Entities.Comment, Comment>();
                 cfg.CreateMap<Data.Entities.Category, Category>();
                 cfg.CreateMap<Data.Entities.User, User>();
+                cfg.CreateMap<Data.Entities.User, ApplicationUser>();
+                cfg.CreateMap<Data.Entities.User, Identity.Models.ApplicationUser>();
                 cfg.CreateMap<Data.Entities.Attachment, Attachment>();
 
                 cfg.CreateMap<Post, Data.Entities.Post>()
@@ -57,8 +59,10 @@ namespace brechtbaekelandt.Extensions
                 cfg.CreateMap<Comment, Data.Entities.Comment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<Category, Data.Entities.Category>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<User, Data.Entities.User>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
-                cfg.CreateMap<Attachment, Data.Entities.Attachment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+                cfg.CreateMap<ApplicationUser, Data.Entities.User>();
                 cfg.CreateMap<Identity.Models.ApplicationUser, Data.Entities.User>();
+                cfg.CreateMap<Attachment, Data.Entities.Attachment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+                
             });
         }
 

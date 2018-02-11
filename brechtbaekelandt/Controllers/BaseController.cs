@@ -25,15 +25,13 @@ namespace brechtbaekelandt.Controllers
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if (User.Identity.IsAuthenticated)
+            if (HttpContext.User.Identity.IsAuthenticated)
             {
-                var username = User?.Identity.Name;
-                
                 Task
                     .Run(async () =>
                     {
                         this.ViewData["CurrentUser"] =
-                            Mapper.Map<Models.ApplicationUser>(await this._userManager.FindByNameAsync(username));
+                            Mapper.Map<Models.ApplicationUser>(await this._userManager.FindByNameAsync(HttpContext.User?.Identity.Name));
                     })
                     .Wait();
             }

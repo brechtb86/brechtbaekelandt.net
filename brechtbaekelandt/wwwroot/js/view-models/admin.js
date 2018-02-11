@@ -65,12 +65,14 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.attachmentsUploadErrorMessage = ko.observable();
         self.attachmentsUploadAbortedMessage = ko.observable();
         self.attachmentDeleteErrorMessage = ko.observable();
-        self.createErrorMessage = ko.observable();
-        self.createSucceededMessage = ko.observable();
-        self.updateErrorMessage = ko.observable();
-        self.updateSucceededMessage = ko.observable();
-        self.deleteErrorMessage = ko.observable();
-        self.deleteSucceededMessage = ko.observable();
+        self.createPostErrorMessage = ko.observable();
+        self.createPostSucceededMessage = ko.observable();
+        self.updatePostErrorMessage = ko.observable();
+        self.updatePostSucceededMessage = ko.observable();
+        self.deletePostErrorMessage = ko.observable();
+        self.deletePostSucceededMessage = ko.observable();
+        self.deleteUserErrorMessage = ko.observable();
+        self.deleteUserSucceededMessage = ko.observable();
 
         self.createErrors = ko.validation.group(self.newPost);
         //self.updateErrors = ko.validation.group(self.selectedPost);
@@ -165,7 +167,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.uploadPicture = function (picture) {
         var self = this;
 
-        self.pictureUploadErrorMessage("");
+        self.pictureUploadErrorMessage(null);
 
         var formData = new FormData();
         formData.append("picture", picture);
@@ -205,7 +207,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.deletePicture = function (pictureUrl) {
         var self = this;
 
-        self.pictureDeleteErrorMessage("");
+        self.pictureDeleteErrorMessage(null);
 
         $.ajax({
             url: "../api/blog/delete-picture?picture=" + pictureUrl(),
@@ -237,9 +239,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         self.attachmentsUploadProgress(0);
 
-        self.attachmentsUploadErrorMessage("");
+        self.attachmentsUploadErrorMessage(null);
 
-        self.attachmentsUploadAbortedMessage("");
+        self.attachmentsUploadAbortedMessage(null);
 
         self.isAttachmentsUploading(true);
 
@@ -311,7 +313,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.deleteUploadedAttachment = function (attachment) {
         var self = this;
 
-        self.attachmentDeleteErrorMessage("");
+        self.attachmentDeleteErrorMessage(null);
 
         $.ajax({
             url: "../api/blog/delete-attachment",
@@ -340,8 +342,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.createPost = function (post) {
         var self = this;
 
-        self.createSucceededMessage(null);
-        self.createErrorMessage(null);
+        self.resetMessages();
 
         self.isPosted(false);
 
@@ -362,7 +363,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             success: function (data, textStatus, jqXhr) { }
         })
             .done(function (data, textStatus, jqXhr) {
-                self.createSucceededMessage("the post was successfully created!");
+                self.createPostSucceededMessage("the post was successfully created!");
 
                 ko.mapping.fromJS(data, {}, self.newPost);
 
@@ -371,7 +372,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 self.isPosted(true);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
-                self.createErrorMessage(errorThrown);
+                self.createPostErrorMessage(errorThrown);
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -381,8 +382,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.updatePost = function (post) {
         var self = this;
 
-        self.updateSucceededMessage(null);
-        self.updateErrorMessage(null);
+        self.resetMessages();
 
         // TODO
         //if (self.createErrors().length > 0) {
@@ -402,11 +402,12 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             success: function (data, textStatus, jqXhr) { }
         })
             .done(function (data, textStatus, jqXhr) {
-                self.updateSucceededMessage("the post was successfully updated!");
+                self.updatePostSucceededMessage("the post was successfully updated!");
+
                 self.selectedPost(ko.mapping.fromJS(data));
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
-                self.createErrorMessage(errorThrown);
+                self.createPostErrorMessage(errorThrown);
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -416,8 +417,13 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.deletePost = function (post) {
         var self = this;
 
-        self.deleteSucceededMessage(null);
-        self.deleteErrorMessage(null);
+        var sure = confirm("are you sure you want to delete this post?");
+
+        if (!sure) {
+            return;
+        }
+
+        self.resetMessages();
 
         $.ajax({
             url: "../api/blog/post/delete?postId=" + post.id(),
@@ -432,10 +438,44 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.posts.splice(self.posts.indexOf(post), 1);
 
-                self.deleteSucceededMessage("the post was sucessfully deleted.");
+                self.deletePostSucceededMessage("the post was sucessfully deleted.");
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
-                self.deleteErrorMessage("there was an error while deleting the post, please try again.");
+                self.deletePostErrorMessage("there was an error while deleting the post, please try again.");
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    };
+
+    AdminViewModel.prototype.deleteUser = function (user) {
+        var self = this;
+
+        var sure = confirm("are you sure you want to delete this user? all posts will be deleted too!");
+
+        if (!sure) {
+            return;
+        }
+
+        self.resetMessages();
+
+        $.ajax({
+            url: "../api/account/delete?userId=" + user.id(),
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.users.splice(self.users.indexOf(user), 1);
+
+                self.deleteUserSucceededMessage("the user was sucessfully deleted.");
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.deleteUserErrorMessage("there was an error while deleting the user, please try again.");
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -456,6 +496,19 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.categories().forEach(function (category) { category.isSelected(false); });
 
         self.createErrors.showAllMessages(false);
+    }
+
+    AdminViewModel.prototype.resetMessages = function () {
+        var self = this;
+
+        self.createPostErrorMessage(null);
+        self.createPostSucceededMessage(null);
+        self.updatePostErrorMessage(null);
+        self.updatePostSucceededMessage(null);
+        self.deletePostErrorMessage(null);
+        self.deletePostSucceededMessage(null);
+        self.deleteUserErrorMessage(null);
+        self.deleteUserSucceededMessage(null);
     }
 
     AdminViewModel.prototype.addCategory = function (category, categories) {

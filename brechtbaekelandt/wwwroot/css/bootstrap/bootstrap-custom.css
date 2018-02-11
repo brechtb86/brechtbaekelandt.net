@@ -6487,11 +6487,18 @@ a.thumbnail.active {
 
 .list-group-item {
     position: relative;
-    display: block;
     padding: 10px 15px;
     margin-bottom: -1px;
     background-color: #fff;
     border: 1px solid #ddd;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
+    justify-content: center;
 }
 
     .list-group-item:first-child {

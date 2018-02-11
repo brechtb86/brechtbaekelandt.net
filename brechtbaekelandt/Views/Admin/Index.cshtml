@@ -14,26 +14,62 @@
     <h2>admin</h2>
     <hr />
     <p>
-        <a href="#" data-bind="click: function(){ $root.selectedPost(null); showCreate(true); }">create a post...</a>
+        <a href="#" data-bind="click: function(){ $root.selectedPost(null); $root.resetMessages(); showCreate(true);  }">create a post...</a>
     </p>
     <hr />
     <h4>posts</h4>
     <hr />
-    <!-- ko if: deleteErrorMessage -->
-    <div class="alert alert-danger">
-        <strong>error!</strong> <span data-bind="text: deleteErrorMessage"></span>
+    <!-- ko if: deletePostErrorMessage -->
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>error!</strong> <span data-bind="text: deletePostErrorMessage"></span>
     </div>
     <!-- /ko -->
-    <!-- ko if: deleteSucceededMessage -->
-    <div class="alert alert-success">
-        <strong>success!</strong> <span data-bind="text: deleteSucceededMessage"></span>
+    <!-- ko if: deletePostSucceededMessage -->
+    <div class="alert alert-success alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>success!</strong> <span data-bind="text: deletePostSucceededMessage"></span>
     </div>
+    <!-- /ko -->
+    <!-- ko if: posts().length === 0 -->
+    <spen>there are no posts...</spen>
     <!-- /ko -->
     <ul class="list-group">
         <!-- ko foreach: posts -->
         <li class="list-group-item">
-            <a href="" data-bind="text: moment(created()).format('DD/MM/YYYY, HH:mm:ss') + ' - ' + title(), click: function() { $root.selectedPost($data); $root.showEdit(true); }"></a>
-            <button type="button" data-bind="click: function() { $root.deletePost($data) }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
+            <label class="switch">
+                <input type="checkbox" data-bind="checked: isPostVisible,  click: function() { $root.updatePost($data); }">
+                <span class="slider"></span>
+            </label>
+            <a href="" data-bind="text: title(), click: function() { $root.selectedPost($data); $root.resetMessages(); $root.showEdit(true); }"></a>
+            <span data-bind="text: moment(created()).format('DD/MM/YYYY, HH:mm:ss')"></span>
+            <button type="button" data-bind="click: function() { $root.deletePost($data); }" class="btn btn-muted"><i class="fa fa-trash text-danger"></i></button>
+        </li>
+        <!-- /ko -->
+    </ul>
+    <h4>users</h4>
+    <hr />
+    <!-- ko if: users().length === 0 -->
+    <spen>there are no users...</spen>
+    <!-- /ko -->
+    <!-- ko if: deleteUserErrorMessage -->
+    <div class="alert alert-danger alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>error!</strong> <span data-bind="text: deleteUserErrorMessage"></span>
+    </div>
+    <!-- /ko -->
+    <!-- ko if: deleteUserSucceededMessage -->
+    <div class="alert alert-success alert-dismissable">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>success!</strong> <span data-bind="text: deleteUserSucceededMessage"></span>
+    </div>
+    <!-- /ko -->
+    <ul class="list-group">
+        <!-- ko foreach: users -->
+        <li class="list-group-item">
+            <a href="" data-bind="text: fullName, click: function() { }"></a>
+            <button type="button" data-bind="click: function() { $root.deleteUser($data); }, disable: id === $root.currentUser.id" class="btn btn-muted"><i class="fa fa-trash text-danger"></i></button>
+
         </li>
         <!-- /ko -->
     </ul>
@@ -53,7 +89,7 @@
                     <button type="button" class="btn btn-primary" data-bind="click: function() { $root.createPost($root.newPost); }">post</button>
                     <!-- /ko -->
                     <!-- ko if: $root.isPosted -->
-                    <button type="button" class="btn btn-primary" data-bind="click: function() { $root.resetNewPost($root.newPost); $root.isPosted(false); $root.createSucceededMessage('');  }">create another post</button>
+                    <button type="button" class="btn btn-primary" data-bind="click: function() { $root.resetNewPost($root.newPost); $root.isPosted(false); $root.resetMessages(); }">create another post</button>
                     <!-- /ko -->
                 </div>
             </div>
@@ -104,7 +140,8 @@
 }
 
 @section scripts{
-    @*<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>*@
+    @*
+        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>*@
 
     <script src="~/lib/froala-wysiwyg-editor/js/froala_editor.min.js"></script>
     <script src="~/lib/froala-wysiwyg-editor/js/plugins/align.min.js"></script>
@@ -142,15 +179,19 @@
 
     <script type="text/javascript">
 
-        $(function () {
-            @{
-                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+    $(function () {
+        /**/
+@{
+    var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
 
-                var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
-            }
+    var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
+}
+    /**/
 
-        brechtbaekelandt.admin.init(@serverViewmodel);
-        });
+    /**/
+    brechtbaekelandt.admin.init(@serverViewmodel);
+    /**/
+});
     </script>
 
 }

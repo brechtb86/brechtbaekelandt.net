@@ -169,6 +169,7 @@ header {
     display: inline-block;
     width: 30px;
     height: 18px;
+    margin-top: 6px;
 }
 
     .switch input {
@@ -210,9 +211,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(9px);
-    -ms-transform: translateX(9px);
-    transform: translateX(9px);
+    -webkit-transform: translateX(11px);
+    -ms-transform: translateX(11px);
+    transform: translateX(11px);
 }
 
 

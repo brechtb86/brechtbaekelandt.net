@@ -36,7 +36,7 @@ namespace brechtbaekelandt.Controllers.WebApi
     {
         private readonly BlogDbContext _blogDbContext;
 
-        private readonly ApplicationUserManager _userManager;
+        private readonly ApplicationUserManager _applicationUserManager;
 
         private readonly IHostingEnvironment _hostingEnvironment;
 
@@ -46,7 +46,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IHostingEnvironment hostingEnvironment)
         {
-            this._userManager = userManager;
+            this._applicationUserManager = userManager;
             this._blogDbContext = blogDbcontext;
             this._captchaHelper = captchaHelper;
             this._hostingEnvironment = hostingEnvironment;
@@ -153,7 +153,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             }
 
-            return this.Ok();
+            return this.Ok(new { message = "the picture was succesfully deleted." });
         }
 
         [Authorize]
@@ -222,9 +222,16 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             var postEntity = Mapper.Map<Post>(post);
 
-            var userCurrentUserName = this.HttpContext.User.Identity.Name;
+            var currentUserName = this.HttpContext.User?.Identity.Name;
 
-            var userEntity = this._blogDbContext.Users.FirstOrDefault(u => u.UserName == userCurrentUserName) ?? Mapper.Map<User>(await this._userManager.FindByNameAsync(userCurrentUserName));
+            var userEntity = this._blogDbContext.Users.FirstOrDefault(u => u.UserName == currentUserName);
+
+            if (userEntity == null)
+            {
+                var user = await this._applicationUserManager.FindByNameAsync(currentUserName);
+
+                userEntity = Mapper.Map<User>(user);
+            }
 
             postEntity.User = userEntity;
 
@@ -325,8 +332,9 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             await this._blogDbContext.SaveChangesAsync();
 
-            return this.Json(new { message = "the post is successfully deleted." });
+            return this.Json(new { message = "the post was successfully deleted." });
         }
+
 
         [HttpPost]
         [Route("post/add-comment")]
@@ -371,7 +379,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             this.DeleteCaptcha(captchaName);
 
             return this.Json(comment);
-        }               
+        }
 
         private void SetCaptcha(Captcha captcha, string captchaName)
         {

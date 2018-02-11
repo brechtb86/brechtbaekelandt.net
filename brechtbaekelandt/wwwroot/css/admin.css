@@ -1,1 +1,13 @@
-﻿
+﻿.list-group-item > * {
+    padding-right: 10px;
+    align-self: center;
+}
+
+.list-group-item > .switch {
+    margin-right: 20px;
+}
+
+.list-group-item > button {
+    align-self: flex-end;
+    margin-left: auto;
+}

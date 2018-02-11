@@ -30,9 +30,10 @@ namespace brechtbaekelandt.Controllers
         {
             var viewModel = new AdminViewModel
             {
-                CurrentUser = Mapper.Map<User>(await this._applicationUserManager.FindByNameAsync(HttpContext.User.Identity.Name)),
                 Posts = Mapper.Map<ICollection<Post>>(this._blogDbContext.Posts.Include(p => p.User).Include(p => p.Attachments).Include(p => p.PostCategories).ThenInclude(pc => pc.Category).OrderByDescending(p => p.Created)),
-                Categories = Mapper.Map<ICollection<Models.Category>>(this._blogDbContext.Categories).OrderBy(c => c.Name).ToCollection()
+                Categories = Mapper.Map<ICollection<Models.Category>>(this._blogDbContext.Categories).OrderBy(c => c.Name).ToCollection(),
+                Users = Mapper.Map<ICollection<Models.User>>(this._blogDbContext.Users.ToCollection()),
+                CurrentUser = Mapper.Map<User>(await this._applicationUserManager.FindByNameAsync(HttpContext.User?.Identity.Name))
             };
 
             return View(viewModel);
