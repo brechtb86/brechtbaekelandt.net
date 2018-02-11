@@ -423,7 +423,7 @@
                 <i class="fa fa-comment-o"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span>
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    <a href="#" data-bind="click: function() { viewModel.deleteComment(comment) }" class="pull-right">delete</a>
+                    <small><a href="#" data-bind="click: function() { viewModel.deleteComment(comment) }" class="pull-right">delete</a></small>
                 }
             </h4>
             <small>
