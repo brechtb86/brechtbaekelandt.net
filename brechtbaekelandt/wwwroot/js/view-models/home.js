@@ -311,33 +311,15 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false) {
         var self = this;
 
-        return "?" + self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "");
+        var query = self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "")
+
+        return query ? "?" + query : "";
     }
-
-    //HomeViewModel.prototype.highlightSearchTermResult = function (text, searchResultTerm, allowSpecialCharacters = false) {
-
-    //    return searchResultTerm === "" ? text : text.replace(/(>[^<]+)/igm, function (newText) {
-
-    //        if (!allowSpecialCharacters) {
-    //            searchResultTerm = searchResultTerm.replace(/([{}()[\]\\.?*+^$|=!:~-])/g, "\\$1");
-    //        }
-
-    //        return newText.replace(new RegExp("(" + searchResultTerm + ")", "igm"), "<span class='heighLightedSearchTermResult'>$1</span>");
-    //    });
-    //}
-
+    
     function init(serverViewModel) {
 
         var viewModel = new HomeViewModel(serverViewModel);
-
-        //var currentHistoryState = history.state;
-        //if (currentHistoryState) {
-        //    viewModel.currentIndex(currentHistoryState.currentIndex);
-        //    viewModel.isSearching(currentHistoryState.isSearching);
-        //    viewModel.searchTerm(currentHistoryState.searchTerm);
-        //    viewModel.selectedCategoryId(currentHistoryState.selectedCategoryId);
-        //}
-
+        
         ko.applyBindings(viewModel);
     };
 
