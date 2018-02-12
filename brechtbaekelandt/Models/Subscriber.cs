@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace brechtbaekelandt.Models
 {
+    [Serializable]
     public class Subscriber : Base
     {
         public string EmailAddress { get; set; }

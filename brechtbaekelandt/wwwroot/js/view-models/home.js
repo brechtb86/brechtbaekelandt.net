@@ -240,7 +240,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             success: function (data, textStatus, jqXhr) { }
         })
             .done(function (data, textStatus, jqXhr) {
-                self.hasSubscribed(true);
+                //self.hasSubscribed(true);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 

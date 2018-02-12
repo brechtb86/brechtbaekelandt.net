@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace brechtbaekelandt.Services
 {
+    public class SubscribedData
+    {
+        public string SubscriberEmailAddress { get; set; }
+
+        public string ConfirmationLink { get; set; }
+    }
+
     public class EmailService : IEmailService
     {
         private readonly MailjetSettings _mailjetSettings;
@@ -19,10 +26,16 @@ namespace brechtbaekelandt.Services
             this._mailjetSettings = mailjetSettingsOptions.Value;
         }
 
-        public async Task SendSubscribedEmailAsync(string subscriberEmailAddress)
+        public async Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink)
         {
-            var emailHtmString = await this.ParseHtmlEmail("subscribed", subscriberEmailAddress);
-            var emailTextString = await this.ParseTextEmail("subscribed", subscriberEmailAddress);
+            var data = new SubscribedData
+            {
+                ConfirmationLink = confirmationLink,
+                SubscriberEmailAddress = subscriberEmailAddress
+            };
+
+            var emailHtmString = await this.ParseSubscribedHtmlEmail("subscribed", data);
+            //var emailTextString = await this.ParseTextEmail("subscribed", data);
 
             var client = new MailjetClient(this._mailjetSettings.ApiKey, this._mailjetSettings.ApiSecret, new MailjetClientHandler())
             {
@@ -56,11 +69,14 @@ namespace brechtbaekelandt.Services
         }
 
 
-        private async Task<string> ParseHtmlEmail(string templateName, params string[] parameters)
+        private async Task<string> ParseSubscribedHtmlEmail(string templateName, SubscribedData data)
         {
             var htmlString = await File.ReadAllTextAsync(Path.Combine(this.TemplateRootPath, $@"EmailTemplates\{templateName}.html"));
 
-            return string.Format(htmlString, parameters);
+            var parsedHtmlString = htmlString.Replace("%%confirmationLink%%", data.ConfirmationLink);
+            parsedHtmlString = parsedHtmlString.Replace("%%subscriberEmailAddress%%", data.SubscriberEmailAddress);
+
+            return parsedHtmlString;
         }
 
         private async Task<string> ParseTextEmail(string templateName, params string[] parameters)

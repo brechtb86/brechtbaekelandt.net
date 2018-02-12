@@ -6,6 +6,6 @@ namespace brechtbaekelandt.Services
     {
         string TemplateRootPath { get; set; }
 
-        Task SendSubscribedEmailAsync(string subscriberEmailAddress);
+        Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink);
     }
 }
