@@ -43,6 +43,12 @@ namespace brechtbaekelandt.Extensions
                         dest => dest.Description,
                         opt => opt.MapFrom(src => InsertPictureInDescription(src.Title, src.Description, src.PictureUrl))
                     );
+
+                cfg.CreateMap<Data.Entities.Subscriber, Subscriber>()
+                   .ForMember(
+                   dest => dest.Categories,
+                   opt => opt.MapFrom(src => src.SubscriberCategories.Select(sc => new Category() { Id = sc.CategoryId, Name = sc.Category.Name })));
+
                 cfg.CreateMap<Data.Entities.Comment, Comment>();
                 cfg.CreateMap<Data.Entities.Category, Category>();
                 cfg.CreateMap<Data.Entities.User, User>();
@@ -56,6 +62,7 @@ namespace brechtbaekelandt.Extensions
                         dest => dest.Tags,
                         opt => opt.MapFrom(src => string.Join(',', src.Tags))
                     );
+                cfg.CreateMap<Subscriber, Data.Entities.Subscriber>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<Comment, Data.Entities.Comment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<Category, Data.Entities.Category>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<User, Data.Entities.User>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());

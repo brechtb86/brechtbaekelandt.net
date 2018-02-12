@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net.Http.Headers;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -14,6 +15,7 @@ using brechtbaekelandt.Filters;
 using brechtbaekelandt.Helpers;
 using brechtbaekelandt.Identity;
 using brechtbaekelandt.Models;
+using brechtbaekelandt.Services;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -38,18 +40,23 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         private readonly ApplicationUserManager _applicationUserManager;
 
+        private readonly IEmailService _emailService;
+
         private readonly IHostingEnvironment _hostingEnvironment;
 
         private const int _postsPerPage = 5;
 
         private readonly CaptchaHelper _captchaHelper;
 
-        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IHostingEnvironment hostingEnvironment)
+        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IEmailService emailService, IHostingEnvironment hostingEnvironment)
         {
             this._applicationUserManager = userManager;
             this._blogDbContext = blogDbcontext;
             this._captchaHelper = captchaHelper;
+
             this._hostingEnvironment = hostingEnvironment;
+            this._emailService = emailService;
+            this._emailService.TemplateRootPath = this._hostingEnvironment.ContentRootPath;
         }
 
         [HttpGet]
@@ -198,7 +205,7 @@ namespace brechtbaekelandt.Controllers.WebApi
                 results.Add(newAttachement);
             }
 
-            return this.Json(new { attachments= results });
+            return this.Json(new { attachments = results });
         }
 
         [Authorize]
@@ -393,7 +400,7 @@ namespace brechtbaekelandt.Controllers.WebApi
                 return this.NotFound();
             }
 
-            var commentEntity = this._blogDbContext.Comments              
+            var commentEntity = this._blogDbContext.Comments
                 .FirstOrDefault(c => c.Id == commentId);
 
             this._blogDbContext.Comments.Remove(commentEntity);
@@ -450,6 +457,16 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Json(currentLikesNumber);
         }
 
+        [HttpPost]
+        [Route("subscribe")]
+        [ValidationActionFilter]
+        public async Task<IActionResult> SubscribeAsyncActionResult([FromBody]Models.Subscriber subscriber)
+        {
+            await this._emailService.SendSubscribedEmailAsync(subscriber.EmailAddress, this.CreateSubscribeConfirmationLink(subscriber));
+
+            return this.Json(new { message = "you have successfully subscribed!" });
+        }
+
         private void SetCaptcha(Captcha captcha, string captchaName)
         {
             this.Response.Cookies.Append(captchaName, JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
@@ -458,6 +475,35 @@ namespace brechtbaekelandt.Controllers.WebApi
         private void DeleteCaptcha(string captchaName)
         {
             this.Response.Cookies.Delete(captchaName);
+        }
+
+        private string CreateSubscribeConfirmationLink(Models.Subscriber subscriber)
+        {
+            var subscriberString = this.SerializeSubscriber(subscriber);
+
+            return $"http://www.brechtbaekelandt.net/subscriber/confirm?subscriber={subscriberString}";
+        }
+
+        private string SerializeSubscriber(Models.Subscriber subscriber)
+        {
+            using (var ms = new MemoryStream())
+            {
+                new BinaryFormatter().Serialize(ms, subscriber);
+                return Convert.ToBase64String(ms.ToArray());
+            }
+        }
+
+        private Models.Subscriber DeserializeSubscriber(string base64String)
+        {
+            var bytes = Convert.FromBase64String(base64String);
+
+            using (var ms = new MemoryStream(bytes, 0, bytes.Length))
+            {
+                ms.Write(bytes, 0, bytes.Length);
+                ms.Position = 0;
+
+                return new BinaryFormatter().Deserialize(ms) as Models.Subscriber;
+            }
         }
 
         private string EnsureCorrectFilename(string filename)
