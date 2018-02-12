@@ -311,7 +311,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false) {
         var self = this;
 
-        return self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "") ? "?" + self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : ""): "";
+        var query = self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "")
+
+        return query ? "?" + query : "";
     }
     
     function init(serverViewModel) {
