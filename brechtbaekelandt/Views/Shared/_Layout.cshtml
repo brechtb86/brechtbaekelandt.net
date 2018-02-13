@@ -263,7 +263,7 @@
                     </i>
                 </small>
             </div>
-            <div class="post-preview-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
+            <div class="post-preview-description" data-bind=", highlight: { text:  post.descriptionWithPicture(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <!-- ko if: post.content -->
             <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() }">read more...</a>
@@ -335,7 +335,7 @@
                     </i>
                 </small>
             </div>
-            <div class="post-description" data-bind=", highlight: { text:  post.description(), keywords: viewModel.searchTermsFilter() }">
+            <div class="post-description" data-bind=", highlight: { text:  post.descriptionWithPicture(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <div class="clearfix" />
             <div class="post-content" data-bind=", highlight: { text:  post.content(), keywords: viewModel.searchTermsFilter() }">
