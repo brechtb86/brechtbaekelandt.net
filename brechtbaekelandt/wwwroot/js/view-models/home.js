@@ -29,6 +29,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         }
 
         self.categoryQueryString = ko.observable("");
+        self.searchTermsQueryString = ko.observable("");
+        self.tagsQueryString = ko.observable("");
+        self.currentPageQueryString = ko.observable("");
 
         self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
             if ((newValue || oldValue) && (newValue !== oldValue)) {
@@ -48,8 +51,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             self.searchTermsFilter(newValue.trim().split(" "));
         });
 
-        self.searchTermsQueryString = ko.observable("");
-
         self.searchTermsFilter.subscribe(function () {
             self.getRequests().forEach(function (request) {
                 request.abort();
@@ -65,9 +66,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             self.getPosts();
         });
-
-        self.tagsQueryString = ko.observable("");
-
+        
         self.tagsFilter.subscribe(function () {
             self.currentPage(1);
 
@@ -80,6 +79,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             self.getPosts();
         });
 
+        self.currentPage.subscribe(function(newValue) {
+            var currentPageQueryString = self.createCurrentPageQueryString(self.currentPage());
+
+            self.currentPageQueryString(currentPageQueryString);
+        });
+
         var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
         self.searchTermsQueryString(searchTermsQueryString);
 
@@ -88,6 +93,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         var categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
         self.categoryQueryString(categoryQueryString);
+        
+        var currentPageQueryString = self.createCurrentPageQueryString(self.currentPage());
+        self.currentPageQueryString(currentPageQueryString);
 
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(false);
@@ -117,10 +125,13 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.isLoading(!getMore);
         self.isLoadingMore(getMore);
 
-        var currentPageQuerystring = self.createCurrentPageQueryString(self.currentPage(), getMore);
+        var currentPage = getMore ? self.currentPage() + 1 : self.currentPage();
+        self.currentPage(currentPage);
+        
+        var fullQueryString = self.createFullQueryString(true, true);
 
         var request = $.ajax({
-            url: "../api/blog/posts" + self.createFullQueryString(true) + currentPageQuerystring,
+            url: "../api/blog/posts" + fullQueryString,
             type: "GET",
             success: function (data, textStatus, jqXhr) { },
             async: false
@@ -304,14 +315,14 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         return categoryIdFilter ? "categoryId=" + categoryIdFilter + "&" : "";
     }
 
-    HomeViewModel.prototype.createCurrentPageQueryString = function (currentPage, getMore = false) {
-        return "currentPage=" + (getMore ? currentPage + 1 : currentPage);
+    HomeViewModel.prototype.createCurrentPageQueryString = function (currentPage) {
+        return currentPage ? "currentPage=" + currentPage : "";
     }
-
-    HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false) {
+    
+    HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false, includeCurrentPage = false) {
         var self = this;
 
-        var query = self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "")
+        var query = self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "") + (includeCurrentPage ? self.currentPageQueryString() : "");
 
         return query ? "?" + query : "";
     }

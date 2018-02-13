@@ -19,7 +19,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             self.posts().forEach(function (post) {
                 post.title.extend({ required: { message: "you didn't fill in the title!" } });
                 post.description.extend({ required: { message: "you didn't fill in the description!" } });
-                post.categories.extend({ minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" } })
+                post.categories.extend({ minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" }
+                });
             });
         }
 
@@ -395,6 +396,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
     AdminViewModel.prototype.updatePost = function (post) {
         var self = this;
+
+        self.updateErrors = ko.validation.group(post);
 
         self.resetMessages();
                 
