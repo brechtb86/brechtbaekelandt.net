@@ -67,3 +67,17 @@ $.FroalaEditor.RegisterCommand("insertXml",
             this.html.insert(" <pre class=\"prettyprint lang-xml\"></pre>");
         }
     });
+
+$.FroalaEditor.DefineIconTemplate("jsonButtonIconTemplate", "<span class='text-center'>json</span>");
+$.FroalaEditor.DefineIcon("jsonButtonIcon", { NAME: "JSON", template: "jsonButtonIconTemplate" });
+$.FroalaEditor.RegisterCommand("insertJson",
+    {
+        title: "Insert json code",
+        icon: "jsonButtonIcon",
+        undo: true,
+        focus: true,
+        refreshAfterCallback: false,
+        callback: function () {
+            this.html.insert(" <pre class=\"prettyprint lang-json\"></pre>");
+        }
+    });
