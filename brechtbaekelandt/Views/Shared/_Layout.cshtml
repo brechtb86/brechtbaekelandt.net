@@ -49,28 +49,23 @@
     <link href="//fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic" rel="stylesheet" type="text/css">
-
-
-    @* <environment include="Development">*@
-
+    
     <link href="~/css/bootstrap/bootstrap-custom.css" rel="stylesheet" />
-    <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" />
 
-    @*</environment>*@
-    <environment exclude="Development">
-        @*<link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
-                  asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
-                  asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
-            <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />*@
+    <environment include="Development">
+        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+        <link rel="stylesheet" href="~/css/site.css" />
     </environment>
-
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-fallback-test-class="fa" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+    
     @RenderSection("styles", required: false)
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
     <script type="text/javascript" src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
-
-    @*<environment include="Development">*@
+    
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery.cookie/jquery.cookie.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
@@ -113,9 +108,17 @@
 
         ko.validation.init(knockoutValidationSettings, true);
     </script>
+    
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
 
-    @*</environment>*@
-
+        gtag('config', 'UA-114039978-1');
+    </script>
+    
     <environment exclude="Development">
         @*<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                     asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
