@@ -3307,7 +3307,6 @@ output {
     background-color: #fff;
     background-image: none;
     border: 1px solid #540804;
-    border-right: 0;
 }
 
     .form-control:focus {
