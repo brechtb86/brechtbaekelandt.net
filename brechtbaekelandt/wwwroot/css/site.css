@@ -32,7 +32,6 @@ header {
     padding-right: 0;
 }
 
-
 #title {
     display: inline-block;
     position: relative;
@@ -70,7 +69,6 @@ header {
 
 
 #main {
-    min-height: calc(100% - 200px);
     background-color: #fff;
     margin-top: -100px;
     -webkit-box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.5);
@@ -84,8 +82,6 @@ header {
     padding: 10px;
     width: 300px;
 }
-
-
 
 .inline {
     display: inline !important;
@@ -243,35 +239,3 @@ input:checked + .slider:before {
     -webkit-animation: webkit-blinker 1.5s linear infinite;
     animation: blinker 1.5s linear infinite;
 }
-
-
-/*input:invalid, input:focus:invalid {
-    color: red;
-    border-color: red;
-}
-
-input:valid, input:focus:valid {
-    color: green;
-    border-color: green;
-}
-
-input:optional, input:optional:valid {
-    color: #222;
-    border-color: #6D0029;
-}
-
-
-textarea:invalid, textarea:focus:invalid {
-    color: red;
-    border-color: red;
-}
-
-textarea:valid, textarea:focus:valid {
-    color: green;
-    border-color: green;
-}
-
-textarea:optional, textarea:optional:valid {
-    color: #222;
-    border-color: #6D0029;
-}*/
