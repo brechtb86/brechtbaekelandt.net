@@ -28,7 +28,7 @@
     <script src="~/js/knockout/knockout.key-binding-handlers.js"></script>
 
     <script src="~/js/extensions/string-extensions.js"></script>
-    
+
     <script src="~/js/view-models/post.js"></script>
 
     <script type="text/javascript">
@@ -42,6 +42,36 @@
 
             brechtbaekelandt.post.init(@serverViewmodel);
         });
+    </script>
+
+    <script type="application/ld+json">
+        {
+        "@@context": "http://schema.org",
+        "@@type": "NewsArticle",
+        "mainEntityOfPage": {
+        "@@type": "WebPage",
+        "@@id": "@($"{this.Model.BaseUrl}{this.Model.Post.Url}")"
+        },
+        "headline": "@this.Model.Post.CleanTitle",
+        "image": [
+        "@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? $"{this.Model.BaseUrl}{this.Model.Post.PictureUrl}" : $"{this.Model.BaseUrl}/images/me-social.png")"
+        ],
+        "datePublished": "@this.Model.Post.Created",
+        "dateModified": "@this.Model.Post.LastModified",
+        "publisher": {
+        "@@type": "Organization",
+        "name": "@this.Model.BaseUrl",
+        "logo": {
+        "@@type": "ImageObject",
+        "url": "@($"{this.Model.BaseUrl}/images/me-social.png"))"
+        }
+        },
+        "author": {
+        "@@type": "Person",
+        "name": "@this.Model.Post.User.FullName"
+        },
+        "description": "@this.Model.Post.CleanDescription"
+        }
     </script>
 }
 
@@ -63,7 +93,7 @@
     <meta name="medium" content="image">
     <meta property="og:type" content="article" />
     <meta property="og:description" content="@this.Html.Raw(this.Model.Post.CleanDescription)" />
-    <meta property="og:url" content="@("http://www.brechtbaekelandt.net/blog/post/" + this.Model.Post.InternalTitle)" />
+    <meta property="og:url" content="@($"{this.Model.BaseUrl}{this.Model.Post.Url}")" />
     <meta property="article:published_time" content="@this.Model.Post.Created" />
     <meta property="article:modified_time" content="@this.Model.Post.LastModified" />
     <meta property="article:section" content="@this.Html.Raw(this.Model.Post.CleanContent)" />
@@ -72,7 +102,7 @@
     {
         <meta property="article:tag" content="@postTag" />
     }
-  
+
     <meta property="fb:app_id" content="495540337506240">
 
     <!-- Schema.org markup for Google+ -->

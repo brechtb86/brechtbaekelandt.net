@@ -106,7 +106,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://be.linkedin.com/pub/brecht-baekelandt/3a/b64/ba0" target="_blank">
+                        <a href="https://www.linkedin.com/in/brechtbaekelandt/" target="_blank">
                             <img src="~/images/social-linkedin.png" />
                         </a>
                     </li>
@@ -235,6 +235,21 @@
 
             brechtbaekelandt.home.init(@serverViewmodel);
         });
+    </script>
+
+    <script type="application/ld+json">
+        {
+        "@@context": "http://schema.org",
+        "@@type": "Person",
+        "name": "Brecht Baekelandt",
+        "url": "@this.Model.BaseUrl",
+        "sameAs": [
+        "https://facebook.com/brecht.baekelandt",
+        "https://twitter.com/BaekelandtB",
+        "https://www.linkedin.com/in/brechtbaekelandt/",
+        "https://github.com/brechtb86"
+        ]
+        }
     </script>
 }
 
