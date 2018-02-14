@@ -1,5 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using AutoMapper;
 using brechtbaekelandt.Data;
 using brechtbaekelandt.Extensions;
@@ -9,6 +14,7 @@ using brechtbaekelandt.Models;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols;
 
 namespace brechtbaekelandt.Controllers
 {
@@ -63,7 +69,45 @@ namespace brechtbaekelandt.Controllers
                 SearchTermsFilter = searchTerms
             };
 
-            return View(vm);
+            return this.View(vm);
+        }
+
+        [HttpGet("sitemap")]
+        public IActionResult Sitemap()
+        {
+            var doc = new XmlDocument();
+
+            var rootElement = doc.CreateElement("urlset");
+            rootElement.SetAttribute("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
+            rootElement.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            rootElement.SetAttribute("xsi:schemaLocation",
+                "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd");
+
+            var postEntities = this._blogDbContext.Posts.ToCollection();
+
+            foreach (var postEntity in postEntities)
+            {
+                var urlElement = doc.CreateElement("url");
+
+                var locationElement = doc.CreateElement("loc");
+                locationElement.InnerText = $"https://www.brechtbaekelandt.net/blog/post/{postEntity.InternalTitle}";
+
+                var lastModifiedElement = doc.CreateElement("lastmod");
+                lastModifiedElement.InnerText = postEntity.LastModified.ToString();
+
+                var priorityElement = doc.CreateElement("priority");
+                priorityElement.InnerText = "0.90";
+
+                urlElement.AppendChild(locationElement);
+                urlElement.AppendChild(lastModifiedElement);
+                urlElement.AppendChild(priorityElement);
+
+                rootElement.AppendChild(urlElement);
+            }
+
+            doc.AppendChild(rootElement);
+
+            return this.Content(doc.OuterXml, "application/xml");
         }
     }
 }
