@@ -93,7 +93,7 @@ namespace brechtbaekelandt.Controllers
                 locationElement.InnerText = $"https://www.brechtbaekelandt.net/blog/post/{postEntity.InternalTitle}";
 
                 var lastModifiedElement = doc.CreateElement("lastmod");
-                lastModifiedElement.InnerText = postEntity.LastModified.ToString();
+                lastModifiedElement.InnerText = postEntity.LastModified?.ToString("yyyy-MM-ddTHH:mm:sszzz");
 
                 var priorityElement = doc.CreateElement("priority");
                 priorityElement.InnerText = "0.90";
