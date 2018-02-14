@@ -325,7 +325,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     };
 
     return {
-        BlogViewModel: HomeViewModel,
+        HomeViewModel: HomeViewModel,
         init: init
     };
 
