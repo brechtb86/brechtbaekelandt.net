@@ -5,6 +5,10 @@
     this.ViewData["ActivePage"] = "about";
 }
 
+<h2 class="title">about</h2>
+<small>here's a little information about this site, to find out more about me see the <a asp-area="" asp-controller="Home" asp-action="Index">home page</a>.</small>
+<hr />
+
 <div class="text-center about-container">
     <h4>these are the frame works I used to create this blog:</h4>
     <div class="row row-eq-height front-end">
@@ -58,7 +62,7 @@
             <a href="https://www.newtonsoft.com/json" target="_blank"><img src="~/images/about/json-net.png" class="img-responsive" alt="JSON.net" /></a>
         </div>
     </div>
-    <h6 class="github">this blog is also open source, see my <a href="https://github.com/brechtb86/brechtbaekelandt.net" targent="_blank">Github</a> page.</h6>
+    <h5 class="github">this blog is also open source, see my <a href="https://github.com/brechtb86/brechtbaekelandt.net" targent="_blank">Github</a> page.</h5>
 </div>
 
 @section styles{
