@@ -4,7 +4,7 @@ using brechtbaekelandt.Models;
 
 namespace brechtbaekelandt.ViewModels
 {
-    public class HomeViewModel
+    public class HomeViewModel : BaseViewModel
     {
         public int CurrentPage { get; set; }
 
@@ -19,6 +19,8 @@ namespace brechtbaekelandt.ViewModels
         public string[] SearchTermsFilter { get; set; }
 
         public Guid? CategoryIdFilter { get; set; }
+
+        public ICollection<string> AllPostsUrls { get; set; }
 
         public ICollection<Post> Posts { get; set; }
 

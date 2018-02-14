@@ -4,7 +4,7 @@ using brechtbaekelandt.Models;
 
 namespace brechtbaekelandt.ViewModels
 {
-    public class ApiPostsViewModel
+    public class ApiPostsViewModel : BaseViewModel
     {
         public int CurrentPage { get; set; }
 
