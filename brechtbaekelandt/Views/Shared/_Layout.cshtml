@@ -145,7 +145,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="@(activePage == "home" ? "active" : "")"><a asp-area="" asp-controller="Home" asp-action="Index">home</a></li>
-                    @*<li><a href="/tools">tools</a></li>*@
+                    <li><a href="https://www.brechtbaekelandt.net/tools">tools</a></li>
                     <li class="@(activePage == "about" ? "active" : "")"><a asp-area="" asp-controller="About" asp-action="Index">about</a></li>
 
                     @if (this.User.Identity.IsAuthenticated)
