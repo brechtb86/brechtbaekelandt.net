@@ -73,11 +73,17 @@
             <!-- ko if: isLoadingMore -->
             <div data-bind="template: { name: 'loaderTemplate' }"></div>
             <!-- /ko -->
-
+            <div class="text-center">
+                <ul class="pagination pagination-sm">
+                    <!-- ko foreach:  new Array(totalPageCount()) -->
+                    <li data-bind="css: { active: $root.currentPage() === $index() + 1 }"><a href="#" data-bind="text: $index() + 1, attr: { href: '/' + $root.createFullQueryString(true, true, $index() + 1) }"></a></li>
+                    <!-- /ko -->
+                </ul>
+            </div>
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
 
-           @* <button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="image-placeholder"></span><span>subscribe</span></button>*@
+            @* <button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="image-placeholder"></span><span>subscribe</span></button>*@
             <hr />
             <img src="~/images/me.png" class="img-responsive img-thumbnail" />
             <hr />

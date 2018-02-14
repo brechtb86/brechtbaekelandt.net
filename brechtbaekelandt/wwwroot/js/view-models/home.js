@@ -12,14 +12,18 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     function HomeViewModel(serverViewModel) {
         var self = this;
 
+        ko.mapping.fromJS(serverViewModel, {}, self);
+
+        self.totalPageCount = ko.computed(function() {
+            return Math.ceil(self.totalPostCount() / self.postsPerPage());
+        });  
+
         document.addEventListener("scroll", function (event) {
-            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.totalPostCount() > self.posts().length)) {
+            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.currentPage() < self.totalPageCount())) {
                 self.getPosts(true);
             }
         });
-
-        ko.mapping.fromJS(serverViewModel, {}, self);
-
+        
         self.likedPostsIds = $.cookie("likedPostsIds") ? ko.mapping.fromJSON($.cookie("likedPostsIds")) : ko.observableArray();
 
         if (self.posts) {
@@ -31,7 +35,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.categoryQueryString = ko.observable("");
         self.searchTermsQueryString = ko.observable("");
         self.tagsQueryString = ko.observable("");
-        self.currentPageQueryString = ko.observable("");
 
         self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
             if ((newValue || oldValue) && (newValue !== oldValue)) {
@@ -78,13 +81,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             self.getPosts();
         });
-
-        self.currentPage.subscribe(function(newValue) {
-            var currentPageQueryString = self.createCurrentPageQueryString(self.currentPage());
-
-            self.currentPageQueryString(currentPageQueryString);
-        });
-
+        
         var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
         self.searchTermsQueryString(searchTermsQueryString);
 
@@ -94,9 +91,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         var categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
         self.categoryQueryString(categoryQueryString);
         
-        var currentPageQueryString = self.createCurrentPageQueryString(self.currentPage());
-        self.currentPageQueryString(currentPageQueryString);
-
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(false);
 
@@ -127,8 +121,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         var currentPage = getMore ? self.currentPage() + 1 : self.currentPage();
         self.currentPage(currentPage);
-        
-        var fullQueryString = self.createFullQueryString(true, true);
+
+        var fullQueryString = self.createFullQueryString(true, true, self.currentPage());
 
         var request = $.ajax({
             url: "../api/blog/posts" + fullQueryString,
@@ -314,15 +308,11 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     HomeViewModel.prototype.createCategoryIdQueryString = function (categoryIdFilter) {
         return categoryIdFilter ? "categoryId=" + categoryIdFilter + "&" : "";
     }
-
-    HomeViewModel.prototype.createCurrentPageQueryString = function (currentPage) {
-        return currentPage ? "currentPage=" + currentPage : "";
-    }
     
-    HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false, includeCurrentPage = false) {
+    HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false, includeCurrentPage = false, currentPage = 1) {
         var self = this;
 
-        var query = self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "") + (includeCurrentPage ? self.currentPageQueryString() : "");
+        var query = self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "") + (includeCurrentPage ? "currentPage=" + currentPage : "");
 
         return query ? "?" + query : "";
     }
