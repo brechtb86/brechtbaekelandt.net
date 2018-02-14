@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
 using AutoMapper;
 using brechtbaekelandt.Data;
 using brechtbaekelandt.Extensions;
@@ -96,6 +97,58 @@ namespace brechtbaekelandt.Controllers
             };
 
             return this.View(vm);
+        }
+
+        [HttpGet("sitemap")]
+        public IActionResult Sitemap()
+        {
+            var doc = new XmlDocument();
+
+            var rootElement = doc.CreateElement("urlset");
+            rootElement.SetAttribute("xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
+            rootElement.SetAttribute("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+            rootElement.SetAttribute("xsi:schemaLocation",
+                "http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd");
+
+            var homeUrlElement = doc.CreateElement("url");
+
+            var homeLocationElement = doc.CreateElement("loc");
+            homeLocationElement.InnerText = $"https://www.brechtbaekelandt.net/";
+            var homeLastModifiedElement = doc.CreateElement("lastmod");
+            homeLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
+            var homePriorityElement = doc.CreateElement("priority");
+            homePriorityElement.InnerText = "0.10";
+            var homeChangeFrequencyElement = doc.CreateElement("changefreq");
+            homeChangeFrequencyElement.InnerText = "always";
+
+            homeUrlElement.AppendChild(homeLocationElement);
+            homeUrlElement.AppendChild(homeLastModifiedElement);
+            homeUrlElement.AppendChild(homePriorityElement);
+            homeUrlElement.AppendChild(homeChangeFrequencyElement);
+
+            rootElement.AppendChild(homeUrlElement);
+
+            var aboutUrlElement = doc.CreateElement("url");
+
+            var aboutLocationElement = doc.CreateElement("loc");
+            aboutLocationElement.InnerText = $"https://www.brechtbaekelandt.net/about";
+            var aboutLastModifiedElement = doc.CreateElement("lastmod");
+            aboutLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
+            var aboutPriorityElement = doc.CreateElement("priority");
+            aboutPriorityElement.InnerText = "0.80";
+            var aboutChangeFrequencyElement = doc.CreateElement("changefreq");
+            aboutChangeFrequencyElement.InnerText = "never";
+
+            aboutUrlElement.AppendChild(aboutLocationElement);
+            aboutUrlElement.AppendChild(aboutLastModifiedElement);
+            aboutUrlElement.AppendChild(aboutPriorityElement);
+            aboutUrlElement.AppendChild(aboutChangeFrequencyElement);
+
+            rootElement.AppendChild(aboutUrlElement);
+
+            doc.AppendChild(rootElement);
+
+            return this.Content(doc.OuterXml, "application/xml");
         }
     }
 }
