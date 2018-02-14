@@ -59,7 +59,7 @@
     <!-- Open Graph data -->
     <meta property="og:site_name" content="www.brechtbaekelandt.net" />
     <meta property="og:title" content="@this.Model.Post.CleanTitle" />
-    <meta property="og:image" itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? $"http://www.brechtbaekelandt.net{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")" />
+    <meta property="og:image" itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ? $"{this.Model.BaseUrl}{this.Model.Post.PictureUrl}" : $"{this.Model.BaseUrl}/images/me-social.png")" />
     <meta name="medium" content="image">
     <meta property="og:type" content="article" />
     <meta property="og:description" content="@this.Html.Raw(this.Model.Post.CleanDescription)" />
@@ -78,7 +78,7 @@
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="@this.Model.Post.CleanTitle">
     <meta itemprop="description" content="@this.Html.Raw(this.Model.Post.CleanDescription)">
-    <meta itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ?  $"http://www.brechtbaekelandt.net{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")">
+    <meta itemprop="image" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ?  $"{this.Model.BaseUrl}{this.Model.Post.PictureUrl}" : $"{this.Model.BaseUrl}/images/me-social.png")">
 
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -86,5 +86,5 @@
     <meta name="twitter:creator" content="Brecht Baekelandt">
     <meta name="twitter:title" content="@this.Model.Post.CleanTitle">
     <meta name="twitter:description" content="@this.Html.Raw(this.Model.Post.CleanDescription)">
-    <meta name="twitter:image:src" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ?  $"http://www.brechtbaekelandt.net{this.Model.Post.PictureUrl}" : "http://www.brechtbaekelandt.net/images/me-social.png")">
+    <meta name="twitter:image:src" content="@(!string.IsNullOrEmpty(this.Model.Post.PictureUrl) ?  $"{this.Model.BaseUrl}{this.Model.Post.PictureUrl}" : $"{this.Model.BaseUrl}/images/me-social.png")">
 }

@@ -2,7 +2,7 @@
 
 namespace brechtbaekelandt.ViewModels
 {
-    public class PostViewModel
+    public class PostViewModel : BaseViewModel
     {
         public Post Post { get; set; }
 

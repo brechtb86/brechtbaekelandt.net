@@ -1,4 +1,5 @@
 ﻿using brechtbaekelandt.Identity;
+using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace brechtbaekelandt.Controllers
@@ -14,7 +15,9 @@ namespace brechtbaekelandt.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var vm = new AboutViewModel();
+
+            return this.View(vm);
         }
     }
 }

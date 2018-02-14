@@ -18,7 +18,7 @@ namespace brechtbaekelandt.Controllers
         private readonly BlogDbContext _blogDbContext;
 
         private readonly ApplicationUserManager _applicationUserManager;
-
+        
         private CaptchaHelper _captchaHelper;
 
         public BlogController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager, CaptchaHelper captchaHelper) : base(applicationUserManager)

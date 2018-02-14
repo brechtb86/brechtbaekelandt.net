@@ -25,6 +25,14 @@
     var yearsActive = today.Year - 2009;
 }
 
+@*only for search bots to crawl*@
+<div class="hidden">
+    @foreach (var url in this.Model.AllPostsUrls)
+    {
+        <a href="@url">@url</a>
+    }
+</div>
+
 <div style="display: none;" data-bind="visible: true">
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
@@ -73,13 +81,6 @@
             <!-- ko if: isLoadingMore -->
             <div data-bind="template: { name: 'loaderTemplate' }"></div>
             <!-- /ko -->
-            <div class="text-center">
-                <ul class="pagination pagination-sm">
-                    <!-- ko foreach:  new Array(totalPageCount()) -->
-                    <li data-bind="css: { active: $root.currentPage() === $index() + 1 }"><a href="#" data-bind="text: $index() + 1, attr: { href: '/' + $root.createFullQueryString(true, true, $index() + 1) }"></a></li>
-                    <!-- /ko -->
-                </ul>
-            </div>
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
 
@@ -224,19 +225,16 @@
 
     <script type="text/javascript">
 
-    $(function () {
-        /**/
-@{
-    var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+        $(function () {
+            @{
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
 
-    var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
-}
-    /**/
+                var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
 
-    /**/
-    brechtbaekelandt.home.init(@serverViewmodel);
-    /**/
-});
+            }
+
+            brechtbaekelandt.home.init(@serverViewmodel);
+        });
     </script>
 }
 
@@ -251,20 +249,20 @@
 
 @section social{
     <!-- Open Graph data -->
-    <meta property="og:site_name" content="www.brechtbaekelandt.net" />
+    <meta property="og:site_name" content="@(this.Model.BaseUrl)" />
     <meta property="og:title" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
-    <meta property="og:image" itemprop="image" content="http://www.brechtbaekelandt.net/images/me-social.png" />
+    <meta property="og:image" itemprop="image" content="@($"{this.Model.BaseUrl}/images/me-social.png")" />
     <meta name="medium" content="image">
     <meta property="og:type" content="article" />
     <meta property="og:description" content="This blog talks about development, electronics and other stuff that I like." />
-    <meta property="og:url" content="http://www.brechtbaekelandt.net" />
+    <meta property="og:url" content="@(this.Model.BaseUrl)" />
     <meta property="article:tag" content="@string.Join(" , ", keywords)" />
     <meta property="fb:app_id" content="495540337506240">
 
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast.">
     <meta itemprop="description" content="This blog talks about development, electronics and other stuff that I like.">
-    <meta itemprop="image" content="http://www.brechtbaekelandt.net/images/me-social.png">
+    <meta itemprop="image" content="@($"{this.Model.BaseUrl}/images/me-social.png")">
 
     <!-- Twitter Card data -->
     <meta name="twitter:card" content="summary_large_image" />
@@ -272,5 +270,5 @@
     <meta name="twitter:creator" content="Brecht Baekelandt">
     <meta name="twitter:title" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast.">
     <meta name="twitter:description" content="This blog talks about development, electronics and other stuff that I like.">
-    <meta name="twitter:image:src" content="http://www.brechtbaekelandt.net/images/me-social.png">
+    <meta name="twitter:image:src" content="@($"{this.Model.BaseUrl}/images/me-social.png")">
 }

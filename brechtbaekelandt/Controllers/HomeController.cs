@@ -19,6 +19,8 @@ namespace brechtbaekelandt.Controllers
 
         private readonly ApplicationUserManager _applicationUserManager;
 
+        private readonly string _baseUrl = "https://www.brechtbaekelandt.net";
+
         private const int PostsPerPage = 5;
 
         public HomeController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager) : base(applicationUserManager)
@@ -59,6 +61,7 @@ namespace brechtbaekelandt.Controllers
             }
 
             var totalPostCount = postEntities.Count();
+            var allPostsUrls = postEntities.Select(p => $"{this._baseUrl}/blog/post/{p.InternalTitle}").ToCollection();
 
             postEntities = postEntities.OrderByDescending(p => p.Created)
                 .Skip((currentPage - 1) * PostsPerPage)
@@ -83,6 +86,7 @@ namespace brechtbaekelandt.Controllers
                 CurrentPage = currentPage,
                 TotalPostCount = totalPostCount,
                 PostsPerPage = PostsPerPage,
+                AllPostsUrls = allPostsUrls,
                 Posts = Mapper.Map<ICollection<Models.Post>>(postEntities.ToCollection()),
                 Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities.ToCollection()),
                 Tags = allTags,
