@@ -70,6 +70,21 @@
 }
 
 @section seo {
+    <script type="application/ld+json">
+        {
+        "@@context": "http://schema.org",
+        "@@type": "Person",
+        "name": "Brecht Baekelandt",
+        "url": "@this.Model.BaseUrl",
+        "sameAs": [
+        "https://facebook.com/brecht.baekelandt",
+        "https://twitter.com/BaekelandtB",
+        "https://www.linkedin.com/in/brechtbaekelandt/",
+        "https://github.com/brechtb86"
+        ]
+        }
+    </script>
+
     <meta name="description" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
     <meta name="keywords" content="@string.Join(", ", keywords)" />
 }
@@ -80,10 +95,9 @@
     <meta property="og:title" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
     <meta property="og:image" itemprop="image" content="@($"{this.Model.BaseUrl}/images/me-social.png")" />
     <meta name="medium" content="image">
-    <meta property="og:type" content="article" />
+    <meta property="og:type" content="website" />
     <meta property="og:description" content="This blog talks about development, electronics and other stuff that I like." />
-    <meta property="og:url" content="@(this.Model.BaseUrl)" />
-    <meta property="article:tag" content="@string.Join(", ", keywords)" />
+    <meta property="og:url" content="@($"{this.Model.BaseUrl}/about)")" />
     <meta property="fb:app_id" content="495540337506240">
 
     <!-- Schema.org markup for Google+ -->
