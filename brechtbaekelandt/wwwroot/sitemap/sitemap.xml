@@ -8,10 +8,12 @@
     <loc>http://www.brechtbaekelandt.net/</loc>
     <lastmod>2018-02-05T12:58:37+00:00</lastmod>
     <priority>1.00</priority>
+    <changefreq>always</changefreq>
   </url>
   <url>
     <loc>http://www.brechtbaekelandt.net/about</loc>
     <lastmod>2018-02-05T12:58:37+00:00</lastmod>
     <priority>0.80</priority>
+    <changefreq>never</changefreq>
   </url>
 </urlset>
