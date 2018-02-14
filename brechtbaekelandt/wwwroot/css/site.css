@@ -85,7 +85,6 @@ header {
 
 .inline {
     display: inline !important;
-    width: auto !important;
 }
 
 .inline-block {
