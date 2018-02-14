@@ -232,7 +232,7 @@
                     <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
                 </h3>
                 <small>
-                    <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
+                    <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress() }, text: post.user.fullName"></a></i>
                     <span>|</span>
                     <i data-bind="text: 'created: ' + moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
                     <span>|</span>
@@ -304,7 +304,7 @@
                     <a data-bind="attr: { href: post.url() }, highlight: { text:  post.title(), keywords: viewModel.searchTermsFilter() }"></a>
                 </h3>
                 <small>
-                    <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress }, text: post.user.fullName"></a></i>
+                    <i>by: <a data-bind="attr: { href: 'mailto://' + post.user.emailAddress() }, text: post.user.fullName"></a></i>
                     <span>|</span>
                     <i data-bind="text: 'created: ' + moment(post.created()).format('DD/MM/YYYY, HH:mm:ss')"></i>
                     <span>|</span>

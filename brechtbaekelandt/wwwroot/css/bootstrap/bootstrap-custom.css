@@ -1419,7 +1419,7 @@ textarea {
 
 a {
     color: #540804;
-    text-decoration: none;
+    /*text-decoration: none;*/
 }
 
     a:hover,
@@ -4954,6 +4954,10 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
         position: relative;
         display: block;
     }
+
+        .nav > li a {
+            text-decoration: none;
+        }
 
         .nav > li > a {
             position: relative;

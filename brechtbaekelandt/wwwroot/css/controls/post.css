@@ -1,8 +1,4 @@
-﻿.post .post-description a, .post .post-content a {
-    text-decoration: underline;
-}
-
-.post {
+﻿.post {
     margin: 0 0 40px 0;
 }
 
@@ -16,6 +12,10 @@
 
     .post-title > h3 {
         margin-bottom: 10px;
+    }
+
+    .post-title a {
+        text-decoration: none;
     }
 
 .post-categories {
