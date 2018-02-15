@@ -2,22 +2,18 @@
 
 <div class="row">
     <div class="hidden-xs col-sm-2 col-md-3 col-lg-4"></div>
-
     <div class="col-sm-12 col-sm-8 col-md-6 col-lg-4">
-
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">sign in</h3>
             </div>
             <div class="panel-body">
-
                 @if (this.ViewData["Error"] != null)
                 {
                     <div class="alert alert-danger" role="alert">
                         <b>error!</b> <span>@this.ViewData["Error"]</span>
                     </div>
                 }
-
                 <form method="POST" asp-controller="account" asp-action="signIn" asp-route-returnurl="@this.Context.Request.Query["ReturnUrl"]">
                     <div class="form-group">
                         <div class="input-group">
@@ -42,9 +38,6 @@
                 </form>
             </div>
         </div>
-
-
     </div>
-
     <div class="hidden-xs col-sm-2 col-md-3 col-lg-4"></div>
 </div>

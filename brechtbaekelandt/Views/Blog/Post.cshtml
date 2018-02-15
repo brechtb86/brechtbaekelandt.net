@@ -11,14 +11,13 @@
 
 <div style="display: none;" data-bind="visible: true">
     <a style="cursor: pointer;" onclick="window.history.back();"><i class="far fa-arrow-alt-circle-left"></i> go back</a>
-
     <div data-bind="template: { name: 'postTemplate', data: { post: post, viewModel: $root }, afterRender: function() { $root.initFancyBox(); $root.initAddThis(); $root.initPrettify(); } }"> </div>
 </div>
 
 @section styles{
     <link href="~/lib/fancybox/dist/jquery.fancybox.css" rel="stylesheet" />
 
-    <link href="~/css/controls/post.css" rel="stylesheet" />
+    <link href="~/css/controls/post.css" rel="stylesheet" asp-append-version="true"/>
 }
 
 @section scripts{
@@ -29,7 +28,7 @@
 
     <script src="~/js/extensions/string-extensions.js"></script>
 
-    <script src="~/js/view-models/post.js"></script>
+    <script src="~/js/view-models/post.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
 
@@ -52,7 +51,6 @@
 }
 
 @section seo {
-    
     <script type="application/ld+json">
         {
         "@@context": "http://schema.org",
@@ -88,7 +86,6 @@
 }
 
 @section social{
-
     <!-- Open Graph data -->
     <meta property="og:site_name" content="www.brechtbaekelandt.net" />
     <meta property="og:title" content="@this.Model.Post.CleanTitle" />
