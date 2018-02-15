@@ -179,18 +179,22 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="far fa-unlock-alt"></i></span>
+                                                <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
 
                                                 <input name="password" type="password" placeholder="password" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <div class="checkbox">
-                                                <label><input name="rememberMe" type="checkbox" value="true" /><span>remember me</span></label>
-                                            </div>
+                                            <label>
+                                                <label class="switch">
+                                                    <input name="rememberMe" type="checkbox" value="true" />
+                                                    <span class="slider"></span>
+                                                </label>
+                                                remember me
+                                            </label>
                                         </div>
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-primary"><i class="far fa-sign-in-alt"></i> sign in</button>
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> sign in</button>
                                         </div>
                                     </form>
                                 </li>
@@ -553,7 +557,6 @@
                             <!-- ko  foreach: viewModel.categories -->
                             <button data-bind="css: { selected: isSelected }, click: function(){ $parent.viewModel.toggleSelectedCategory($data, $parentContext.$data.post.categories); }" class="category">
                                 <span data-bind="text: name"></span> <i class="fas fa-check"></i>
-
                             </button>
                             <!-- /ko -->
                             <input class="hidden" data-bind="value: post.categories" />
@@ -577,19 +580,13 @@
                         <!-- /ko -->
                     </div>
                     <div class="form-group">
-                        <table class="post-visible">
-                            <tr>
-                                <td><label>make post visible:</label></td>
-                                <td>
-                                    <label class="switch">
-                                        <input type="checkbox" data-bind="checked: post.isPostVisible">
-                                        <span class="slider"></span>
-                                    </label>
-                                </td>
-                            </tr>
-                        </table>
-
-
+                        <label>
+                            make post visible:
+                            <label class="switch">
+                                <input type="checkbox" data-bind="checked: post.isPostVisible">
+                                <span class="slider"></span>
+                            </label>
+                        </label>
                     </div>
                     <!-- ko if: viewModel.attachmentsUploadErrorMessage -->
                     <div class="alert alert-danger">
@@ -717,9 +714,9 @@
     </script>
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
-    <script type="text/javascript"  defer src="//use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script type="text/javascript" defer src="//use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script type="text/javascript"  async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
+    <script type="text/javascript" async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
