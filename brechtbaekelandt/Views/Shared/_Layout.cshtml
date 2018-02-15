@@ -37,7 +37,7 @@
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="##540804">
 
-    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
     <script type="text/javascript">
         WebFont.load({
             google: {
@@ -51,31 +51,27 @@
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic" rel="stylesheet" type="text/css">
 
     <link href="~/css/bootstrap/bootstrap-custom.css" rel="stylesheet" />
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/css/site.css" rel="stylesheet" />
 
     <environment include="Development">
-
-
     </environment>
-    <environment exclude="Development">
-
-    </environment>
+    <environment exclude="Development"></environment>
 
     @RenderSection("styles", required: false)
 
-    <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/jquery.cookie/jquery.cookie.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="~/lib/knockout/dist/knockout.js"></script>
-    <script src="~/lib/knockout-mapping/knockout.mapping.js"></script>
-    <script src="~/js/knockout/knockout.extenders.js"></script>
-    <script src="~/js/knockout/knockout.extensions.js"></script>
-    <script src="~/js/knockout/knockout.validation-custom.js"></script>
-    <script src="~/js/knockout/knockout.validation-rules.js"></script>
-    <script src="~/lib/moment/moment.js"></script>
+    <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="~/lib/jquery.cookie/jquery.cookie.js"></script>
+    <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="~/lib/knockout/dist/knockout.js"></script>
+    <script type="text/javascript" src="~/lib/knockout-mapping/knockout.mapping.js"></script>
+    <script type="text/javascript" src="~/js/knockout/knockout.extenders.js"></script>
+    <script type="text/javascript" src="~/js/knockout/knockout.extensions.js"></script>
+    <script type="text/javascript" src="~/js/knockout/knockout.validation-custom.js"></script>
+    <script type="text/javascript" src="~/js/knockout/knockout.validation-rules.js"></script>
+    <script type="text/javascript" src="~/lib/moment/moment.js"></script>
 
-    <script src="~/js/helpers/helpers.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/helpers/helpers.js"></script>
+    <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
         $.ajaxSetup({
@@ -137,7 +133,6 @@
                         <li class="@(activePage == "admin" ? "active" : "")"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
                     }
                 </ul>
-
                 @if (this.User.Identity.IsAuthenticated)
                 {
                     var firstName = string.Empty;
@@ -173,14 +168,12 @@
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="far fa-user"></i></span>
-
                                                 <input name="username" type="text" placeholder="username or email" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
-
                                                 <input name="password" type="password" placeholder="password" class="form-control" />
                                             </div>
                                         </div>
@@ -208,8 +201,6 @@
             @RenderBody()
         </section>
     </div>
-
-
 
     @*post preview template*@
 
@@ -562,7 +553,7 @@
                             <input class="hidden" data-bind="value: post.categories" />
                         </div>
                     </div>
-                    @*<div class="validation-message" data-bind="validationMessage: post.categories"></div>*@
+
                     <div class="form-group">
                         <label>tags:</label>
                         <div class="input-group">
@@ -696,7 +687,6 @@
         <!-- /ko -->
     </script>
 
-
     @*loader template*@
 
     <script type="text/html" id="loaderTemplate">
@@ -707,6 +697,7 @@
     </script>
 
     @*validation template*@
+
     <script type="text/html" id="validationMessageTemplate">
         <div class="validation-message" data-bind="visible: field.isModified() && !field.isValid()">
             <i class="far fa-arrow-alt-circle-up blinking"></i> <span data-bind="text: field.error"></span>
@@ -715,16 +706,14 @@
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
     <script type="text/javascript" defer src="//use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <!-- Global site tag (gtag.js) - Google Analytics -->
     <script type="text/javascript" async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
-    <script>
+    <script type="text/javascript">
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
 
         gtag('config', 'UA-114039978-1');
     </script>
-
 </body>
 </html>
 

@@ -83,7 +83,6 @@
             <!-- /ko -->
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
-
             @*<button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="far fa-paper-plane"></span> subscribe</button>*@
             <hr />
             <img src="~/images/me.png" class="img-responsive img-thumbnail" />
@@ -141,7 +140,6 @@
             <!-- /ko -->
         </div>
     </div>
-
     <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal: showSubscribe">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -197,7 +195,6 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
-
                 </div>
             </div>
         </div>
@@ -207,9 +204,10 @@
 @section styles{
 
     <link href="~/lib/fancybox/dist/jquery.fancybox.css" rel="stylesheet" />
-    <link href="~/css/controls/post-preview.css" rel="stylesheet" />
 
-    <link href="~/css/home.css" rel="stylesheet" />
+    <link href="~/css/controls/post-preview.css" rel="stylesheet" asp-append-version="true"/>
+
+    <link href="~/css/home.css" rel="stylesheet"  asp-append-version="true"/>
 }
 
 @section scripts{
@@ -221,10 +219,9 @@
 
     <script src="~/js/extensions/string-extensions.js"></script>
 
-    <script src="~/js/view-models/home.js"></script>
+    <script src="~/js/view-models/home.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
-
         $(function () {
             @{
                 var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
@@ -236,7 +233,6 @@
             brechtbaekelandt.home.init(@serverViewmodel);
         });
     </script>
-
 }
 
 @{
@@ -244,8 +240,6 @@
 }
 
 @section seo {
-
-    
     <script type="application/ld+json">
         {
         "@@context": "http://schema.org",

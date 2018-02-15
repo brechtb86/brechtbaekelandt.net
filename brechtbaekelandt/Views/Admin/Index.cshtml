@@ -32,7 +32,7 @@
     </div>
     <!-- /ko -->
     <!-- ko if: posts().length === 0 -->
-    <spen>there are no posts...</spen>
+    <span>there are no posts...</span>
     <!-- /ko -->
     <ul class="list-group">
         <!-- ko foreach: posts -->
@@ -93,7 +93,6 @@
                     <!-- /ko -->
                 </div>
             </div>
-
         </div>
     </div>
     <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showEdit">
@@ -116,7 +115,6 @@
     </div>
 </div>
 
-
 @section styles{
 
     <link rel="stylesheet" href="~/lib/froala-wysiwyg-editor/css/froala_editor.css" />
@@ -134,15 +132,12 @@
 
     <link href="~/css/froala/froala-theme.css" rel="stylesheet" />
 
-    <link href="~/css/controls/post-editor.css" rel="stylesheet" />
+    <link href="~/css/controls/post-editor.css" rel="stylesheet" asp-append-version="true" />
 
-    <link href="~/css/admin.css" rel="stylesheet" />
+    <link href="~/css/admin.css" rel="stylesheet" asp-append-version="true" />
 }
 
 @section scripts{
-    @*
-        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>*@
-
     <script src="~/lib/froala-wysiwyg-editor/js/froala_editor.min.js"></script>
     <script src="~/lib/froala-wysiwyg-editor/js/plugins/align.min.js"></script>
     <script src="~/lib/froala-wysiwyg-editor/js/plugins/char_counter.min.js"></script>
@@ -175,22 +170,19 @@
 
     <script src="~/js/knockout/knockout.validation-rules.js"></script>
 
-    <script src="~/js/view-models/admin.js"></script>
+    <script src="~/js/view-models/admin.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
 
-    $(function () {
-        /**/
-@{
-    var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+        $(function () {
+            @{
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
 
-    var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
+                var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
 }
-    /**/
 
-    /**/
-    brechtbaekelandt.admin.init(@serverViewmodel);
-    /**/
+brechtbaekelandt.admin.init(@serverViewmodel);
+
 });
     </script>
 
