@@ -54,18 +54,14 @@
     <link rel="stylesheet" href="~/css/site.css" />
 
     <environment include="Development">
-        <link href="~/lib/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
 
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-fallback-test-class="fa" />
-        @* <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />*@
+
     </environment>
 
     @RenderSection("styles", required: false)
-
-    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
-    <script type="text/javascript" src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/jquery.cookie/jquery.cookie.js"></script>
@@ -109,19 +105,7 @@
 
         ko.validation.init(knockoutValidationSettings, true);
     </script>
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'UA-114039978-1');
-    </script>
-    
     @RenderSection("scripts", required: false)
-
 </head>
 <body>
     <header>
@@ -149,9 +133,9 @@
                     <li class="@(activePage == "about" ? "active" : "")"><a asp-area="" asp-controller="About" asp-action="Index">about</a></li>
 
                     @if (this.User.Identity.IsAuthenticated)
-    {
-                <li class="@(activePage == "admin" ? "active" : "")"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
-}
+                    {
+                        <li class="@(activePage == "admin" ? "active" : "")"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
+                    }
                 </ul>
 
                 @if (this.User.Identity.IsAuthenticated)
@@ -173,7 +157,7 @@
                         </li>
                         <li>
                             <form class="navbar-form" method="POST" asp-controller="account" asp-action="signout">
-                                <button type="submit" class="btn btn-sm btn-default"><i class="fa fa-sign-out"></i> sign out</button>
+                                <button type="submit" class="btn btn-sm btn-default"><i class="far fa-sign-out-alt"></i> sign out</button>
                             </form>
                         </li>
                     </ul>
@@ -188,14 +172,14 @@
                                     <form method="POST" asp-controller="account" asp-action="signin">
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+                                                <span class="input-group-addon"><i class="far fa-user"></i></span>
 
                                                 <input name="username" type="text" placeholder="username or email" class="form-control" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <div class="input-group">
-                                                <span class="input-group-addon"><i class="fa fa-unlock"></i></span>
+                                                <span class="input-group-addon"><i class="far fa-unlock-alt"></i></span>
 
                                                 <input name="password" type="password" placeholder="password" class="form-control" />
                                             </div>
@@ -206,7 +190,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                            <button type="submit" class="btn btn-primary"><i class="fa fa-sign-in"></i> sign in</button>
+                                            <button type="submit" class="btn btn-primary"><i class="far fa-sign-in-alt"></i> sign in</button>
                                         </div>
                                     </form>
                                 </li>
@@ -267,7 +251,7 @@
             <hr />
             <div class="post-preview-comments-likes-share">
                 <div class="inline-block">
-                    <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() + '#comments' }"><i class="fa fa-comment-o"></i></a>
+                    <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() + '#comments' }"><i class="far fa-comment"></i></a>
                     <!-- ko if: post.comments().length > 0 -->
                     <i data-bind="text: post.comments().length"></i>
                     <!-- /ko -->
@@ -276,10 +260,10 @@
                     <!-- /ko -->
                     <span>|</span>
                     <!-- ko ifnot: post.liked -->
-                    <a href="#" data-bind="click: function() { viewModel.likePost(post); }"><i class="fa fa-thumbs-o-up"></i></a>
+                    <a href="#" data-bind="click: function() { viewModel.likePost(post); }"><i class="far fa-thumbs-up"></i></a>
                     <!-- /ko -->
                     <!-- ko if: post.liked -->
-                    <a href="#" data-bind="click: function() { viewModel.unlikePost(post); }"><i class="fa fa-thumbs-up"></i></a>
+                    <a href="#" data-bind="click: function() { viewModel.unlikePost(post); }"><i class="fas fa-thumbs-up"></i></a>
                     <!-- /ko -->
                     <!-- ko if: post.likes() > 0 -->
                     <span data-bind="text: post.likes()"></span>
@@ -352,7 +336,7 @@
             <hr />
             <div class="post-comments-likes-share">
                 <div class="inline-block">
-                    <a href="#comments"><i class="fa fa-comment-o"></i></a>
+                    <a href="#comments"><i class="far fa-comment"></i></a>
                     <!-- ko if: post.comments().length > 0 -->
                     <i data-bind="text: post.comments().length"></i>
                     <!-- /ko -->
@@ -361,10 +345,10 @@
                     <!-- /ko -->
                     <span>|</span>
                     <!-- ko ifnot: post.liked -->
-                    <a href="#" data-bind="click: function() { viewModel.likePost(post); }"><i class="fa fa-thumbs-o-up"></i></a>
+                    <a href="#" data-bind="click: function() { viewModel.likePost(post); }"><i class="far fa-thumbs-up"></i></a>
                     <!-- /ko -->
                     <!-- ko if: post.liked -->
-                    <a href="#" data-bind="click: function() { viewModel.unlikePost(post); }"><i class="fa fa-thumbs-up"></i></a>
+                    <a href="#" data-bind="click: function() { viewModel.unlikePost(post); }"><i class="fas fa-thumbs-up"></i></a>
                     <!-- /ko -->
                     <!-- ko if: post.likes() > 0 -->
                     <span data-bind="text: post.likes()"></span>
@@ -409,7 +393,7 @@
     <script type="text/html" id="commentTemplate">
         <div class="comment-title">
             <h4>
-                <i class="fa fa-comment-o"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span>
+                <i class="far fa-comment"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span>
                 @if (this.User.Identity.IsAuthenticated)
                 {
                     <small><a href="#" data-bind="click: function() { viewModel.deleteComment(comment) }" class="pull-right">delete</a></small>
@@ -460,42 +444,42 @@
         <form>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.name">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.name.isValid }">
-                    <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+                    <span class="input-group-addon"><i class="far fa-id-card"></i></span>
                     <input name="name" type="text" placeholder="enter your name" class="form-control" data-bind="textInput: viewModel.newComment.name" />
                     <!-- ko if: viewModel.newComment.name -->
-                    <span class="fa fa-check form-control-feedback"></span>
+                    <span class="fas fa-check form-control-feedback"></span>
                     <!-- /ko -->
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.emailAddress">
                 <div class="input-group" data-bind="css: { 'has-success': viewModel.newComment.emailAddress }">
-                    <span class="input-group-addon has-feedback"><i class="fa fa-at"></i></span>
+                    <span class="input-group-addon has-feedback"><i class="fas fa-at"></i></span>
                     <input name="emailAddress" type="text" placeholder="enter your email address (optional, will not be published)" class="form-control" data-bind="textInput: viewModel.newComment.emailAddress" />
                     <!-- ko if: viewModel.newComment.emailAddress -->
-                    <span class="fa fa-check form-control-feedback"></span>
+                    <span class="fas fa-check form-control-feedback"></span>
                     <!-- /ko -->
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.title }">
-                    <span class="input-group-addon"><i class="fa fa-arrow-right"></i></span>
+                    <span class="input-group-addon"><i class="fas fa-arrow-right"></i></span>
                     <input name="title" type="text" placeholder="enter a title (optional)" class="form-control" data-bind="textInput: viewModel.newComment.title" />
                     <!-- ko if: viewModel.newComment.title -->
-                    <span class="fa fa-check form-control-feedback"></span>
+                    <span class="fas fa-check form-control-feedback"></span>
                     <!-- /ko -->
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.content">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.content.isValid }">
                     <!-- ko ifnot: viewModel.isTyping -->
-                    <span class="input-group-addon" style="vertical-align: top;"><i class="fa fa-comment-o"></i></span>
+                    <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment"></i></span>
                     <!-- /ko -->
                     <!-- ko if: viewModel.isTyping -->
-                    <span class="input-group-addon" style="vertical-align: top;"><i class="fa fa-commenting-o"></i></span>
+                    <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment-alt"></i></span>
                     <!-- /ko -->
                     <textarea rows="6" placeholder="enter your comment" class="form-control" data-bind="textInput: viewModel.newComment.content, isTyping: viewModel.isTyping, timeOut: 750"></textarea>
                     <!-- ko if: viewModel.newComment.content -->
-                    <span class="fa fa-check form-control-feedback"></span>
+                    <span class="fas fa-check form-control-feedback"></span>
                     <!-- /ko -->
                 </div>
             </div>
@@ -503,14 +487,14 @@
                 <img data-bind="attr: { src: viewModel.captchaImage }" class="img-thumbnail img-responsive img-captcha" />
                 <div class="form-inline inline">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-question"></i></span>
+                        <span class="input-group-addon"><i class="fas fa-question"></i></span>
                         <input type="text" class="form-control " data-bind="textInput: viewModel.captchaAttemptedValue" placeholder="captcha" />
                     </div>
-                    <button type="button" class="btn btn-muted" data-bind="click: function() { viewModel.getCaptcha('commentCaptcha'); }"><i class="fa fa-refresh text-success"></i></button>
+                    <button type="button" class="btn btn-muted" data-bind="click: function() { viewModel.getCaptcha('commentCaptcha'); }"><i class="fas fa-sync text-success"></i></button>
                 </div>
             </div>
             <div class="form-group text-right">
-                <button type="button" class="btn btn-primary" data-bind="click: function() { viewModel.addComment(viewModel.newComment, postId) }"><i class="fa fa-comment"></i> comment</button>
+                <button type="button" class="btn btn-primary" data-bind="click: function() { viewModel.addComment(viewModel.newComment, postId) }"><i class="far fa-comment"></i> comment</button>
             </div>
         </form>
     </script>
@@ -538,7 +522,7 @@
                             <!-- ko if: post.pictureUrl -->
                             <div class="thumbnail-container">
                                 <img data-bind="attr: { src: post.pictureUrl }" alt="thumbnail" class="img-thumbnail" />
-                                <button type="button" class="btn btn-danger btn-delete-picture" data-bind="click: function() { viewModel.deletePicture(post.pictureUrl); }"><i class="fa fa-times"></i></button>
+                                <button type="button" class="btn btn-danger btn-delete-picture" data-bind="click: function() { viewModel.deletePicture(post.pictureUrl); }"><i class="fas fa-times"></i></button>
                             </div>
                             <!-- /ko -->
                         </div>
@@ -560,7 +544,7 @@
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="add a new category or select one or more below" data-bind="textInput: viewModel.categoryToAdd, enterKey: function(){ viewModel.addCategory(viewModel.categoryToAdd, post.categories); }" />
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addCategory(viewModel.categoryToAdd, post.categories); }"><i class="fa fa-plus"></i></button>
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addCategory(viewModel.categoryToAdd, post.categories); }"><i class="fas fa-plus"></i></button>
                             </span>
                         </div>
                     </div>
@@ -568,7 +552,7 @@
                         <div class="form-control">
                             <!-- ko  foreach: viewModel.categories -->
                             <button data-bind="css: { selected: isSelected }, click: function(){ $parent.viewModel.toggleSelectedCategory($data, $parentContext.$data.post.categories); }" class="category">
-                                <span data-bind="text: name"></span> <i class="fa fa-check"></i>
+                                <span data-bind="text: name"></span> <i class="fas fa-check"></i>
 
                             </button>
                             <!-- /ko -->
@@ -581,14 +565,14 @@
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="add a new tag or select one or more below" data-bind="textInput: viewModel.tagToAdd, enterKey: function() { viewModel.addTag(viewModel.tagToAdd, post.tags); }" />
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addTag(viewModel.tagToAdd, post.tags); }"><i class="fa fa-plus"></i></button>
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addTag(viewModel.tagToAdd, post.tags); }"><i class="fas fa-plus"></i></button>
                             </span>
                         </div>
                     </div>
                     <div class="form-group tags">
                         <!-- ko  foreach: post.tags -->
                         <button data-bind="css: { selected: true }, click: function(){ $parent.viewModel.removeTag($data, $parentContext.$data.post.tags); }" class="tag">
-                            <span data-bind="text: $data"></span> <i class="fa fa-check"></i>
+                            <span data-bind="text: $data"></span> <i class="fas fa-check"></i>
                         </button>
                         <!-- /ko -->
                     </div>
@@ -640,7 +624,7 @@
                             <li class="list-group-item">
                                 <b class="" data-bind="text: name"></b>
                                 <!-- ko ifnot: $parentContext.$data.viewModel.isAttachmentsUploading -->
-                                <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteSelectedAttachmentToUpload($data); }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
+                                <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteSelectedAttachmentToUpload($data); }" class="btn btn-muted pull-right"><i class="far fa-trash-alt text-danger"></i></button>
                                 <!-- /ko -->
                             </li>
                             <!-- /ko -->
@@ -662,7 +646,7 @@
                     <div class="form-group">
                         <!-- ko if: viewModel.attachmentsToUpload().length > 0 -->
                         <button class="btn btn-primary" data-bind="click: function() { viewModel.uploadAttachments(viewModel.attachmentsToUpload); }, disable: viewModel.isAttachmentsUploading() | viewModel.attachmentsToUpload().length == 0">
-                            <i class="fa fa-upload"></i> <span>upload</span>
+                            <i class="far fa-upload"></i> <span>upload</span>
                         </button>
                         <!-- /ko -->
                     </div>
@@ -678,7 +662,7 @@
                             <!-- ko foreach: post.attachments -->
                             <li class="list-group-item">
                                 <b class="" data-bind="text: name"></b>
-                                <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteUploadedAttachment($data); }" class="btn btn-muted pull-right"><i class="fa fa-trash text-danger"></i></button>
+                                <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteUploadedAttachment($data); }" class="btn btn-muted pull-right"><i class="far fa-trash-alt text-danger"></i></button>
                             </li>
                             <!-- /ko -->
                         </ul>
@@ -720,18 +704,30 @@
 
     <script type="text/html" id="loaderTemplate">
         <div class="loader">
-            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+            <i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>
             <p>loading, please wait...</p>
         </div>
     </script>
 
     @*validation template*@
-
     <script type="text/html" id="validationMessageTemplate">
         <div class="validation-message" data-bind="visible: field.isModified() && !field.isValid()">
-            <i class="fa fa-arrow-circle-up blinking"></i> <span data-bind="text: field.error"></span>
+            <i class="far fa-arrow-alt-circle-up blinking"></i> <span data-bind="text: field.error"></span>
         </div>
     </script>
+
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
+    <script type="text/javascript"  defer src="//use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script type="text/javascript"  async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-114039978-1');
+    </script>
+
 </body>
 </html>
 

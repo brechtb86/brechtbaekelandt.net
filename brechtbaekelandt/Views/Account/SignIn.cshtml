@@ -21,13 +21,13 @@
                 <form method="POST" asp-controller="account" asp-action="signIn" asp-route-returnurl="@this.Context.Request.Query["ReturnUrl"]">
                     <div class="form-group">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+                            <span class="input-group-addon"><i class="far fa-user"></i></span>
                             <input asp-for="Username" type="text" placeholder="username or email" class="form-control" />
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-unlock"></i></span>
+                            <span class="input-group-addon"><i class="far fa-unlock-alt"></i></span>
                             <input asp-for="Password" type="password" placeholder="password" class="form-control" />
                         </div>
                     </div>
