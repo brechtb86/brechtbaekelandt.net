@@ -10,7 +10,7 @@
 }
 
 <div style="display: none;" data-bind="visible: true">
-    <a style="cursor: pointer;" onclick="window.history.back();"><i class="fa fa-arrow-circle-left"></i> go back</a>
+    <a style="cursor: pointer;" onclick="window.history.back();"><i class="far fa-arrow-alt-circle-left"></i> go back</a>
 
     <div data-bind="template: { name: 'postTemplate', data: { post: post, viewModel: $root }, afterRender: function() { $root.initFancyBox(); $root.initAddThis(); $root.initPrettify(); } }"> </div>
 </div>
@@ -43,6 +43,8 @@
             brechtbaekelandt.post.init(@serverViewmodel);
         });
     </script>
+    
+    <script type="text/javascript" src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 }
 
 @{

@@ -37,46 +37,46 @@
                     <form>
                         <div class="form-group" data-bind="validationElement: userName">
                             <div class="input-group has-feedback" data-bind="css: { 'has-success': userName.isValid }">
-                                <span class="input-group-addon"><i class="fa fa-user-o"></i></span>
+                                <span class="input-group-addon"><i class="far fa-user"></i></span>
                                 <input type="text" placeholder="username" class="form-control" data-bind="textInput: userName" />
                                 <!-- ko if: userName.isValid -->
-                                <span class="fa fa-check form-control-feedback"></span>
+                                <span class="fas fa-check form-control-feedback"></span>
                                 <!-- /ko -->
                             </div>
                         </div>
                         <div class="form-group" data-bind="validationElement: firstName">
                             <div class="input-group" data-bind="css: { 'has-success': firstName.isValid }">
-                                <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+                                <span class="input-group-addon"><i class="far fa-id-card"></i></span>
                                 <input type="text" placeholder="first name" class="form-control" data-bind="textInput: firstName" />
                                 <!-- ko if: firstName.isValid -->
-                                <span class="fa fa-check form-control-feedback"></span>
+                                <span class="fas fa-check form-control-feedback"></span>
                                 <!-- /ko -->
                             </div>
                         </div>
                         <div class="form-group" data-bind="validationElement: lastName">
                             <div class="input-group" data-bind="css: { 'has-success': lastName.isValid }">
-                                <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+                                <span class="input-group-addon"><i class="far fa-id-card"></i></span>
                                 <input type="text" placeholder="last name" class="form-control" data-bind="textInput: lastName" />
                                 <!-- ko if: lastName.isValid -->
-                                <span class="fa fa-check form-control-feedback"></span>
+                                <span class="fas fa-check form-control-feedback"></span>
                                 <!-- /ko -->
                             </div>
                         </div>
                         <div class="form-group" data-bind="validationElement: emailAddress">
                             <div class="input-group" data-bind="css: { 'has-success': emailAddress.isValid }">
-                                <span class="input-group-addon"><i class="fa fa-at"></i></span>
+                                <span class="input-group-addon"><i class="fas fa-at"></i></span>
                                 <input type="email" placeholder="email address" class="form-control" data-bind="textInput: emailAddress" />
                                 <!-- ko if: emailAddress.isValid -->
-                                <span class="fa fa-check form-control-feedback"></span>
+                                <span class="fas fa-check form-control-feedback"></span>
                                 <!-- /ko -->
                             </div>
                         </div>
                         <div class="form-group" data-bind="validationElement: password">
                             <div class="input-group" data-bind="css: { 'has-success': password.isValid }">
-                                <span class="input-group-addon"><i class="fa fa-unlock"></i></span>
+                                <span class="input-group-addon"><i class="far fa-unlock-alt"></i></span>
                                 <input type="password" placeholder="password" class="form-control" data-bind="textInput: password" />
                                 <!-- ko if: password.isValid -->
-                                <span class="fa fa-check form-control-feedback"></span>
+                                <span class="fas fa-check form-control-feedback"></span>
                                 <!-- /ko -->
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                         <div class="form-group text-right">
-                            <button type="button" class="btn btn-primary" data-bind="click: function(){ $parent.addUser($data); }"><i class="fa fa-plus"></i> add</button>
+                            <button type="button" class="btn btn-primary" data-bind="click: function(){ $parent.addUser($data); }"><i class="fas fa-plus"></i> add</button>
                         </div>
                     </form>
                 </div>

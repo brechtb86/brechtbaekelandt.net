@@ -44,7 +44,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <select class="form-control" data-bind="options: categories, optionsText: 'name', optionsValue: 'id', value: categoryIdFilter, optionsCaption: '--category--', valueUpdate: 'change, keyup'"></select>
-                            <span class="input-group-addon"><i class="fa fa-filter"></i></span>
+                            <span class="input-group-addon"><i class="far fa-filter"></i></span>
                         </div>
                     </div>
                 </div>
@@ -53,7 +53,7 @@
                         <div class="input-group">
                             <input type="text" placeholder="type to start searching" class="form-control" data-bind="textInput: searchTermsFilterString, enterKey: function() { getPosts(); }, valueUpdate: 'input'" />
                             <span class="input-group-addon">
-                                <i class="fa fa-search"></i>
+                                <i class="far fa-search"></i>
                             </span>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                 <!-- ko if : tagsFilter().length > 0 -->
                 <label>tags:</label>
                 <!-- ko foreach: tagsFilter -->
-                <a href="#" class="label label-default" data-bind="click: function() { $root.tagsFilter.pop($data); }"><span data-bind="text: $data"></span> <i class="fa fa-times"></i></a>
+                <a href="#" class="label label-default" data-bind="click: function() { $root.tagsFilter.pop($data); }"><span data-bind="text: $data"></span> <i class="fas fa-times"></i></a>
                 <!-- /ko -->
                 <!-- /ko -->
             </div>
@@ -84,7 +84,7 @@
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
 
-            @* <button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="image-placeholder"></span><span>subscribe</span></button>*@
+            <button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="far fa-paper-plane"></span> subscribe</button>
             <hr />
             <img src="~/images/me.png" class="img-responsive img-thumbnail" />
             <hr />
@@ -173,11 +173,11 @@
                             <div class="form-group" data-bind="validationElement: subscriber.emailAddress">
                                 <div class="input-group" data-bind="css: { 'has-success': subscriber.emailAddress.isValid }">
                                     <span class="input-group-addon">
-                                        <i class="fa fa-at"></i>
+                                        <i class="fas fa-at"></i>
                                     </span>
                                     <input type="email" class="form-control" placeholder="your email address" data-bind="textInput: subscriber.emailAddress, disable: hasSubscribed" />
                                     <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe(subscriber) }, css: { 'btn-success':  subscriber.emailAddress.isValid }, enable: subscriber.emailAddress.isValid && !hasSubscribed()"><i class="fa fa-check"></i></button>
+                                        <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe(subscriber) }, css: { 'btn-success':  subscriber.emailAddress.isValid }, enable: subscriber.emailAddress.isValid && !hasSubscribed()"><i class="fas fa-check"></i></button>
                                     </span>
                                 </div>
                             </div>
@@ -186,11 +186,11 @@
                         <label>generate an RSS link</label>
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <i class="fa fa-rss-square"></i>
+                                <i class="far fa-rss-square"></i>
                             </span>
                             <input type="text" class="form-control" />
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" data-bind="click: function(){ copyRssLink($data) }"><i class="fa fa-copy"></i></button>
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ copyRssLink($data) }"><i class="far fa-copy"></i></button>
                             </span>
                         </div>
                     </form>
