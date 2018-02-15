@@ -155,7 +155,7 @@ header {
     display: inline-block;
     width: 30px;
     height: 18px;
-    margin-top: 6px;
+    margin-bottom: -4px;
 }
 
     .switch input {
