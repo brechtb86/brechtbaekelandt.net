@@ -14,16 +14,16 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         ko.mapping.fromJS(serverViewModel, {}, self);
 
-        self.totalPageCount = ko.computed(function() {
+        self.totalPageCount = ko.computed(function () {
             return Math.ceil(self.totalPostCount() / self.postsPerPage());
-        });  
+        });
 
         document.addEventListener("scroll", function (event) {
             if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.currentPage() < self.totalPageCount())) {
                 self.getPosts(true);
             }
         });
-        
+
         self.likedPostsIds = $.cookie("likedPostsIds") ? ko.mapping.fromJSON($.cookie("likedPostsIds")) : ko.observableArray();
 
         if (self.posts) {
@@ -54,22 +54,27 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             self.searchTermsFilter(newValue.trim().split(" "));
         });
 
-        self.searchTermsFilter.subscribe(function () {
-            self.getRequests().forEach(function (request) {
-                request.abort();
-            });
 
-            self.getRequests([]);
+        self.isSearching = ko.observable();
+        self.isSearching.subscribe(function (newValue) {
+            if (!newValue) {
+                var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
 
-            var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
+                self.searchTermsQueryString(searchTermsQueryString);
 
-            self.searchTermsQueryString(searchTermsQueryString);
+                self.currentPage(1);
 
-            self.currentPage(1);
+                self.getPosts();
+            } else {
+                self.getRequests().forEach(function (request) {
+                    request.abort();
+                });
 
-            self.getPosts();
+                self.getRequests([]);
+            }
         });
-        
+
+
         self.tagsFilter.subscribe(function () {
             self.currentPage(1);
 
@@ -81,7 +86,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             self.getPosts();
         });
-        
+
         var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
         self.searchTermsQueryString(searchTermsQueryString);
 
@@ -90,7 +95,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         var categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
         self.categoryQueryString(categoryQueryString);
-        
+
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(false);
 
@@ -308,7 +313,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     HomeViewModel.prototype.createCategoryIdQueryString = function (categoryIdFilter) {
         return categoryIdFilter ? "categoryId=" + categoryIdFilter + "&" : "";
     }
-    
+
     HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false, includeCurrentPage = false, currentPage = 1) {
         var self = this;
 
@@ -316,11 +321,11 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         return query ? "?" + query : "";
     }
-    
+
     function init(serverViewModel) {
 
         var viewModel = new HomeViewModel(serverViewModel);
-        
+
         ko.applyBindings(viewModel);
     };
 

@@ -44,16 +44,16 @@
                     <div class="form-group">
                         <div class="input-group">
                             <select class="form-control" data-bind="options: categories, optionsText: 'name', optionsValue: 'id', value: categoryIdFilter, optionsCaption: '--category--', valueUpdate: 'change, keyup'"></select>
-                            <span class="input-group-addon"><i class="far fa-filter"></i></span>
+                            <span class="input-group-addon"><i class="fas fa-filter"></i></span>
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" placeholder="type to start searching" class="form-control" data-bind="textInput: searchTermsFilterString, enterKey: function() { getPosts(); }, valueUpdate: 'input'" />
+                            <input type="text" placeholder="type to start searching" class="form-control" data-bind="textInput: searchTermsFilterString, enterKey: function() { getPosts(); }, isTyping: isSearching, timeOut: 150" />
                             <span class="input-group-addon">
-                                <i class="far fa-search"></i>
+                                <i class="fas fa-search"></i>
                             </span>
                         </div>
                     </div>
