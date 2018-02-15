@@ -57,6 +57,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.isSearching = ko.observable();
         self.isSearching.subscribe(function (newValue) {
+            self.getRequests().forEach(function (request) {
+                request.abort();
+            });
+
+            self.getRequests([]);
+
             if (!newValue) {
                 var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
 
@@ -65,12 +71,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.currentPage(1);
 
                 self.getPosts();
-            } else {
-                self.getRequests().forEach(function (request) {
-                    request.abort();
-                });
-
-                self.getRequests([]);
             }
         });
 
