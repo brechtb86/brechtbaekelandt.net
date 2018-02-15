@@ -173,7 +173,6 @@
     <script src="~/js/view-models/admin.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
-
         $(function () {
             @{
                 var jsonSerializerSettings = new JsonSerializerSettings {ContractResolver = new CamelCasePropertyNamesContractResolver()};
@@ -181,9 +180,7 @@
                 var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
             }
 
-brechtbaekelandt.admin.init(@serverViewmodel);
-
-});
+            brechtbaekelandt.admin.init(@serverViewmodel);
+        });
     </script>
-
 }
