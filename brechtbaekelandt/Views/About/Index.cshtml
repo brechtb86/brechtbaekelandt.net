@@ -1,18 +1,62 @@
-﻿@model brechtbaekelandt.ViewModels.AboutViewModel
+﻿@using System.Globalization
+
+@model brechtbaekelandt.ViewModels.AboutViewModel
 
 @{
     this.ViewData["Title"] = "about";
     this.ViewData["ActivePage"] = "about";
 }
 
-<h2 class="title">about</h2>
-<small>here's a little information about this site, to find out more about me see the <a asp-area="" asp-controller="Home" asp-action="Index">home page</a>.</small>
-<hr />
+@{
+    var today = DateTime.Today;
+    var bday = DateTime.Parse("07/02/1986", CultureInfo.InvariantCulture);
 
-<div class="text-center about-container">
-    <h4>these are the frame works I used to create this blog:</h4>
+    var age = today.Year - bday.Year;
+
+    if (today < bday.AddYears(-age))
+    {
+        age--;
+    }
+
+    var yearsActive = today.Year - 2009;
+}
+
+<div class="hidden-xs">
+    <h2 class="title">about</h2>
+    <small>here's a little information about this site, to find out more about me see the <a asp-area="" asp-controller="Home" asp-action="Index">home page</a>.</small>
+    <hr />
+</div>
+
+
+<div class="visible-xs">
+    <h2>about me</h2>
+    <small>a bit about me.</small>
+    <hr />
+    <img src="~/images/me.png" class="img-thumbnail" style="max-width: 100% !important;" />
+    <p>
+        Hi there! I am Brecht. I am a .Net developer living in Brussels, Belgium. I am also a metal lover, code addict and Microsoft enthousiast.
+        I absolutely love programming and I am very lucky to get to do what I love for a living.
+    </p>
+    <p>
+        I was born @(age) years ago and have been active as a developer for @(yearsActive) years now. I've studied electronics and wrote my thesis about home automation.
+    </p>
+    <p>
+        When I'm not working I enjoy hiking, a good movie and good music, keeping busy with an electronics project, or even experimenting with mobile app development.
+    </p>
+    <p>
+        With this blog I want to share my knowledge, my tips and my thoughts about programming, electronics, and other stuff I'm interested in.
+    </p>
+</div>
+
+<div class="visible-xs">
+    <h2>about this site</h2>
+    <small>here's a little information about this site.</small>
+    <hr />
+</div>
+<div class="text-center">
+    <h4><u>these are the frame works I used to create this blog:</u></h4>
     <div class="row row-eq-height front-end">
-        <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths">
+        <div class="hidden-xs col-sm-4 col-md-5ths col-lg-5ths">
         </div>
         <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths col-vertical-center text-center">
             <a href="https://getbootstrap.com/" target="_blank"><img src="~/images/about/bootstrap.svg" class="img-responsive" alt="bootstrap" /></a>
@@ -23,31 +67,31 @@
         <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths col-vertical-center text-center">
             <a href="https://knockoutjs.com/" target="_blank"> <img src="~/images/about/knockout.svg" class="img-responsive" alt="knockout" /></a>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-5ths col-lg-5ths">
+        <div class="hidden-xs col-sm-4 col-md-5ths col-lg-5ths">
         </div>
-    </div>
-    <div class="row row-eq-height back-end">
-        <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3"></div>
+
+        <div class="hidden-xs col-sm-3 col-md-3 col-lg-3"></div>
         <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
             <a href="https://docs.microsoft.com/en-us/ef/core/" target="_blank"> <img src="~/images/about/ef-core.png" class="img-responsive" alt="entity framework core" /></a>
         </div>
         <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
             <a href="https://www.microsoft.com/net/learn/get-started/windows" target="_blank"><img src="~/images/about/net-core.png" class="img-responsive" alt=".net core" /></a>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-3 col-lg-3"></div>
+        <div class="hidden-xs col-sm-4 col-md-3 col-lg-3"></div>
     </div>
-    <h4>database:</h4>
+    <hr />
+    <h4><u>database:</u></h4>
     <div class="row row-eq-height front-end">
-        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="hidden-xs col-sm-4 col-md-4 col-lg-4">
         </div>
-
         <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-vertical-center text-center">
             <a href="https://www.microsoft.com/en-us/sql-server/sql-server-2017" target="_blank"><img src="~/images/about/ms-sql.png" class="img-responsive" alt="sql server 2017" /></a>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+        <div class="hidden-xs col-sm-4 col-md-4 col-lg-4">
         </div>
     </div>
-    <h4>noteworthy mentions:</h4>
+    <hr />
+    <h4><u>noteworthy mentions:</u></h4>
     <div class="row row-eq-height noteworthy-mentions">
         <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 col-vertical-center text-center">
             <a href="http://automapper.org/" target="_blank"><img src="~/images/about/automapper.png" alt="automapper" /></a>
@@ -62,11 +106,12 @@
             <a href="https://www.newtonsoft.com/json" target="_blank"><img src="~/images/about/json-net.png" class="img-responsive" alt="JSON.net" /></a>
         </div>
     </div>
+    <hr />
     <h5 class="github">this blog is also open source, see my <a href="https://github.com/brechtb86/brechtbaekelandt.net" targent="_blank">Github page</a>.</h5>
 </div>
 
 @section styles{
-    <link href="~/css/about.css" rel="stylesheet" asp-append-version="true"/>
+    <link href="~/css/about.css" rel="stylesheet" asp-append-version="true" />
 }
 
 @{

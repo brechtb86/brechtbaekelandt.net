@@ -1,12 +1,4 @@
-﻿.about-container {
-    margin: 50px 0 0 0
-}
-
-.front-end {
-    margin: 50px 0 50px 0;
-}
-
-.back-end, .database, .noteworthy-mentions {
+﻿.front-end, .noteworthy-mentions, .back-end, .database {
     margin: 0 0 50px 0;
 }
 
