@@ -17,7 +17,7 @@
 
     var age = today.Year - bday.Year;
 
-    if (today < bday.AddYears(-age))
+    if (today >= bday.AddYears(age))
     {
         age--;
     }
