@@ -83,7 +83,7 @@
             <!-- /ko -->
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
-            @*<button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="far fa-paper-plane"></span> subscribe</button>*@
+            <button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="far fa-paper-plane"></span> subscribe</button>
             <hr />
             <img src="~/images/me.png" class="img-responsive img-thumbnail" />
             <hr />
@@ -148,6 +148,12 @@
                 </div>
                 <div class="modal-body text-center">
                     <h4>select the categories you want to subscribe to</h4>
+                    <!-- ko if: atLeastOneCategoryMessage -->
+                    <div class="alert alert-warning alert-dismissable">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <span data-bind="text: atLeastOneCategoryMessage"></span>
+                    </div>
+                    <!-- /ko -->
                     <form>
                         <div class="text-left">
                             <fieldset class="well well-sm row categories" data-bind="disable: hasSubscribed">
@@ -175,7 +181,7 @@
                                     </span>
                                     <input type="email" class="form-control" placeholder="your email address" data-bind="textInput: subscriber.emailAddress, disable: hasSubscribed" />
                                     <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe(subscriber) }, css: { 'btn-success':  subscriber.emailAddress.isValid }, enable: subscriber.emailAddress.isValid && !hasSubscribed()"><i class="fas fa-check"></i></button>
+                                        <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe(subscriber) }, css: { 'btn-success':  subscriber.emailAddress.isValid }, enable: subscriber.emailAddress.isValid() && !hasSubscribed()"><i class="far fa-paper-plane"></i></button>
                                     </span>
                                 </div>
                             </div>
