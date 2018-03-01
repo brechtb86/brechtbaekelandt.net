@@ -78,12 +78,12 @@
             <!-- ko if: isLoading -->
             <div data-bind="template: { name: 'loaderTemplate' }"></div>
             <!-- /ko -->
-            <!-- ko if: isLoadingMore -->
+            <!-- ko ifnot: isLastPage -->
             <div data-bind="template: { name: 'loaderTemplate' }"></div>
             <!-- /ko -->
         </div>
         <div class="hidden-xs hidden-sm hidden-md col-lg-3 col-lg-offset-1">
-            <button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="far fa-paper-plane"></span> subscribe</button>
+            @*<button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="far fa-paper-plane"></span> subscribe</button>*@
             <hr />
             <img src="~/images/me.png" class="img-responsive img-thumbnail" />
             <hr />

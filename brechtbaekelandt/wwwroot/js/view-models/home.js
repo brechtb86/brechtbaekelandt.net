@@ -18,9 +18,15 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             return Math.ceil(self.totalPostCount() / self.postsPerPage());
         });
 
+        self.isLastPage = ko.observable(false);
+
         document.addEventListener("scroll", function (event) {
             if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.currentPage() < self.totalPageCount())) {
                 self.getPosts(true);
+            }
+
+            if (self.currentPage() === self.totalPageCount()) {
+                self.isLastPage(true);
             }
         });
 
@@ -139,8 +145,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 if (!getMore) {
                     ko.mapping.fromJS(data.posts, {}, self.posts);
-
-
                 } else {
                     data.posts.forEach(function (post) {
                         self.posts.push(ko.mapping.fromJS(post));
