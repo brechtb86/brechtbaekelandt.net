@@ -6220,6 +6220,10 @@ a.thumbnail.active {
     border: 1px solid transparent;
 }
 
+    .alert a {
+        text-decoration: none;
+    }
+
     .alert h4 {
         margin-top: 0;
         color: inherit;
@@ -6227,6 +6231,7 @@ a.thumbnail.active {
 
     .alert .alert-link {
         font-weight: bold;
+        text-decoration: underline;
     }
 
     .alert > p,

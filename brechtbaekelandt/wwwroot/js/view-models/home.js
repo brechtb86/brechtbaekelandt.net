@@ -18,9 +18,15 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             return Math.ceil(self.totalPostCount() / self.postsPerPage());
         });
 
+        self.isLastPage = ko.observable(false);
+
         document.addEventListener("scroll", function (event) {
             if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.currentPage() < self.totalPageCount())) {
                 self.getPosts(true);
+            }
+
+            if (self.currentPage() === self.totalPageCount()) {
+                self.isLastPage(true);
             }
         });
 
@@ -111,6 +117,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriberErrors = ko.validation.group(self.subscriber);
 
         self.hasSubscribed = ko.observable(false);
+        self.atLeastOneCategoryMessage = ko.observable();
 
         self.getRequests = ko.observableArray();
 
@@ -138,8 +145,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 if (!getMore) {
                     ko.mapping.fromJS(data.posts, {}, self.posts);
-
-
                 } else {
                     data.posts.forEach(function (post) {
                         self.posts.push(ko.mapping.fromJS(post));
@@ -233,6 +238,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     HomeViewModel.prototype.subscribe = function (subscriber) {
         var self = this;
 
+        self.atLeastOneCategoryMessage(null);
+
+        if (self.subscriber.categories.length === 0) {
+            self.atLeastOneCategoryMessage("you must select at least one category to subscribe.");
+        }
+
         if (self.subscriberErrors().length > 0) {
             self.subscriberErrors.showAllMessages();
             return;
@@ -250,7 +261,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             success: function (data, textStatus, jqXhr) { }
         })
             .done(function (data, textStatus, jqXhr) {
-                //self.hasSubscribed(true);
+                self.hasSubscribed(true);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 
