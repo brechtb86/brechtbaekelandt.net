@@ -13,11 +13,10 @@
 <div style="display: none;" data-bind="visible: true">
     <h2>admin</h2>
     <hr />
+    <h4>posts</h4>
     <p>
         <a href="#" data-bind="click: function(){ $root.selectedPost(null); $root.resetMessages(); showCreate(true);  }">create a post...</a>
     </p>
-    <hr />
-    <h4>posts</h4>
     <hr />
     <!-- ko if: deletePostErrorMessage -->
     <div class="alert alert-danger alert-dismissable">
@@ -41,13 +40,16 @@
                 <input type="checkbox" data-bind="checked: isPostVisible, click: function() { $root.updatePost($data); return true; }">
                 <span class="slider"></span>
             </label>
-            <a href="" data-bind="text: title(), click: function() { $root.selectedPost($data); $root.resetMessages(); $root.showEdit(true); }"></a>
+            <a href="" data-bind="text: title(), click: function() { $root.selectedPost($data); $root.resetMessages(); $root.showPostEdit(true); }"></a>
             <span data-bind="text: moment(created()).format('DD/MM/YYYY, HH:mm:ss')"></span>
             <button type="button" data-bind="click: function() { $root.deletePost($data); }" class="btn btn-muted"><i class="far fa-trash-alt text-danger"></i></button>
         </li>
         <!-- /ko -->
     </ul>
     <h4>users</h4>
+    <p>
+        <a href="#" data-bind="click: function(){ }">create a user...</a>
+    </p>
     <hr />
     <!-- ko if: users().length === 0 -->
     <spen>there are no users...</spen>
@@ -67,13 +69,13 @@
     <ul class="list-group">
         <!-- ko foreach: users -->
         <li class="list-group-item">
-            <a href="" data-bind="text: fullName, click: function() { }"></a>
+            <a href="" data-bind="text: fullName, click: function() { $root.selectedUser($data); $root.resetMessages(); $root.showUserEdit(true); }"></a>
             <button type="button" data-bind="click: function() { $root.deleteUser($data); }, disable: id === $root.currentUser.id" class="btn btn-muted"><i class="far fa-trash-alt text-danger"></i></button>
 
         </li>
         <!-- /ko -->
     </ul>
-    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showCreate">
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showPostCreate">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -95,7 +97,9 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showEdit">
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showPostEdit">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -111,6 +115,29 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showUserEdit">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><span data-bind="text: selectedUser() ? selectedUser().firstName() + ' ' + selectedUser().lastName() : 'user'"></span></h4>
+                </div>
+                <div class="modal-body" data-bind="with: selectedUser">
+                    <div data-bind="template: { name: 'userEditorTemplate', data: { user: $data, viewModel: $root } }"> </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                    <!-- ko ifnot: $root.isPosted -->
+                    @*<button type="button" class="btn btn-primary" data-bind="click: function() { $root.createPost($root.newPost); }">post</button>*@
+                    <!-- /ko -->
+                    <!-- ko if: $root.isPosted -->
+                    @*<button type="button" class="btn btn-primary" data-bind="click: function() { $root.resetNewPost($root.newPost); $root.isPosted(false); $root.resetMessages(); }">create another post</button>*@
+                    <!-- /ko -->
+                </div>
+            </div>
         </div>
     </div>
 </div>
