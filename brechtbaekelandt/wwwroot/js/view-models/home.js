@@ -2,6 +2,7 @@
 /// <reference path="../addthis/addthis_widget.js" />
 /// <reference path="../../lib/jquery/dist/jquery.js" />
 /// <reference path="../../lib/knockout-mapping/build/output/knockout.mapping-latest.debug.js" />
+/// <reference path="../helpers/helpers.js" />
 /// <reference path="../../lib/fancybox/src/js/core.js" />
 
 var brechtbaekelandt = brechtbaekelandt || {};
@@ -115,6 +116,10 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriber.categories = ko.observableArray();
 
         self.subscriberErrors = ko.validation.group(self.subscriber);
+
+        self.rssLink = ko.computed(function () {
+            return "https://www.brechtbaekelandt.net/rss/?categories=" + self.subscriber.categories().map(c => c.name()).join();
+        });
 
         self.hasSubscribed = ko.observable(false);
         self.atLeastOneCategoryMessage = ko.observable();
@@ -233,6 +238,14 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             .always(function (data, textStatus, jqXhr) {
 
             });
+    }
+
+    HomeViewModel.prototype.copyRssLink = function () {
+        var self = this;
+
+        var clipboadHelper = new brechtbaekelandt.helpers.ClipboardHelper();
+
+        clipboadHelper.copyToClipboard(self.rssLink());
     }
 
     HomeViewModel.prototype.subscribe = function (subscriber) {

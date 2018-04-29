@@ -1,4 +1,4 @@
-﻿var brechtbaekelandt = brechtbaekelandt || {};
+﻿/// <reference path="../base.js" />
 
 brechtbaekelandt.helpers = (function () {
     "use strict";
@@ -150,11 +150,53 @@ brechtbaekelandt.helpers = (function () {
         return http.status !== 404;
     };
 
+    function ClipboardHelper() {
+    };
+
+    ClipboardHelper.prototype.copyToClipboard = function (text) {
+        if (!navigator.clipboard) {
+            var $textArea = $("<textarea/>");
+
+            $("body").append($textArea);
+
+            $textArea.css({
+                position: "absolute",
+                top: "0",
+                left: "-9999px"
+            });
+            $textArea.val(text);
+            $textArea.focus();
+            $textArea.select();
+
+            try {
+                document.execCommand("copy");
+            } catch (err) {
+
+            }
+
+            $textArea.remove();
+
+        } else {
+            /*
+              navigator.clipboard.writeText(text).then(
+                function () {
+                   
+                },
+                function (err) {
+                    
+                });
+            */
+
+            navigator.clipboard.writeText(text);
+        }
+    };
+
     return {
         ByteHelper: ByteHelper,
         GuidHelper: GuidHelper,
         NumberHelper: NumberHelper,
         UrlHelper: UrlHelper,
-        WebHelper: WebHelper
+        WebHelper: WebHelper,
+        ClipboardHelper: ClipboardHelper
     };
 })();
