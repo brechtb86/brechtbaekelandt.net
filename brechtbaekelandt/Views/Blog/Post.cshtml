@@ -17,7 +17,7 @@
 @section styles{
     <link href="~/lib/fancybox/dist/jquery.fancybox.css" rel="stylesheet" />
 
-    <link href="~/css/controls/post.css" rel="stylesheet" asp-append-version="true"/>
+    <link href="~/css/controls/post.css" rel="stylesheet" asp-append-version="true" />
 }
 
 @section scripts{
@@ -42,7 +42,7 @@
             brechtbaekelandt.post.init(@serverViewmodel);
         });
     </script>
-    
+
     <script type="text/javascript" src="//cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
 }
 
@@ -83,6 +83,8 @@
 
     <meta name="description" content="@this.Html.Raw(this.Model.Post.CleanDescription)" />
     <meta name="keywords" content="@string.Join(", ", allKeywords)" />
+
+    <link rel="canonical" href="@($"{this.Model.BaseUrl}{this.Model.Post.Url}")" />
 }
 
 @section social{

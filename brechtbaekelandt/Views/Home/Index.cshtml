@@ -187,14 +187,14 @@
                             </div>
                         </div>
                         <p class="line-on-sides"><span>or</span></p>
-                        <label>generate an RSS link</label>
+                        <label>copy the RSS link</label>
                         <div class="input-group">
                             <span class="input-group-addon">
-                                <i class="far fa-rss-square"></i>
+                                <i class="fas fa-rss-square"></i>
                             </span>
-                            <input type="text" class="form-control" />
+                            <input type="text" class="form-control" data-bind="value: rssLink" readonly="readonly" onclick="this.focus();this.select();" />
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" data-bind="click: function(){ copyRssLink($data) }"><i class="far fa-copy"></i></button>
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ copyRssLink($data) }, enable: subscriber.categories().length > 0"><i class="far fa-copy"></i></button>
                             </span>
                         </div>
                     </form>
@@ -211,9 +211,9 @@
 
     <link href="~/lib/fancybox/dist/jquery.fancybox.css" rel="stylesheet" />
 
-    <link href="~/css/controls/post-preview.css" rel="stylesheet" asp-append-version="true"/>
+    <link href="~/css/controls/post-preview.css" rel="stylesheet" asp-append-version="true" />
 
-    <link href="~/css/home.css" rel="stylesheet"  asp-append-version="true"/>
+    <link href="~/css/home.css" rel="stylesheet" asp-append-version="true" />
 }
 
 @section scripts{
@@ -263,6 +263,8 @@
 
     <meta name="description" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
     <meta name="keywords" content="@string.Join(" , ", keywords)" />
+
+    <link rel="canonical" href="@(this.Model.BaseUrl)" />
 }
 
 @section social{

@@ -55,7 +55,8 @@
 
     <environment include="Development">
     </environment>
-    <environment exclude="Development"></environment>
+    <environment exclude="Development">
+    </environment>
 
     @RenderSection("styles", required: false)
 
@@ -70,7 +71,8 @@
     <script type="text/javascript" src="~/js/knockout/knockout.validation-rules.js"></script>
     <script type="text/javascript" src="~/lib/moment/moment.js"></script>
 
-    <script type="text/javascript" src="~/js/helpers/helpers.js"></script>
+    <script type="text/javascript" src="~/js/base.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="~/js/helpers/helpers.js" asp-append-version="true"></script>
     <script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script>
 
     <script type="text/javascript">
@@ -408,54 +410,54 @@
 
     @*comment editor template*@
 
-<script type="text/html" id="commentEditorTemplate">
-    <!-- ko if: viewModel.addCommentValidationMessages().length > 0 -->
-    <div class="alert alert-danger">
-        <strong>error!</strong> there are some errors:
-        <ul class="list-unstyled">
-            <!-- ko foreach: viewModel.addCommentValidationMessages -->
-            <li><span data-bind="text: $data.errorMessage"></span></li>
-            <!-- /ko -->
-        </ul>
-    </div>
-    <!-- /ko -->
-    <!-- ko if: viewModel.captchaInvalidMessage -->
-    <div class="alert alert-danger">
-        <strong>error!</strong> <span data-bind="text:  viewModel.captchaInvalidMessage"></span>
-    </div>
-    <!-- /ko -->
-    <!-- ko if: viewModel.addCommentErrorMessage -->
-    <div class="alert alert-danger alert-dismissable">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>error!</strong> <span data-bind="text:  viewModel.addCommentErrorMessage"></span>
-    </div>
-    <!-- /ko -->
-    <!-- ko if:  viewModel.addCommentSucceededMessage -->
-    <div class="alert alert-success alert-dismissable">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>success!</strong> <span data-bind="text: viewModel.addCommentSucceededMessage"></span>
-    </div>
-    <!-- /ko -->
-    <form>
-        <div class="form-group" data-bind="validationElement: viewModel.newComment.name">
-            <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.name.isValid }">
-                <span class="input-group-addon"><i class="far fa-id-card"></i></span>
-                <input name="name" type="text" placeholder="enter your name" class="form-control" data-bind="textInput: viewModel.newComment.name" />
-                <!-- ko if: viewModel.newComment.name -->
-                <span class="fas fa-check form-control-feedback"></span>
+    <script type="text/html" id="commentEditorTemplate">
+        <!-- ko if: viewModel.addCommentValidationMessages().length > 0 -->
+        <div class="alert alert-danger">
+            <strong>error!</strong> there are some errors:
+            <ul class="list-unstyled">
+                <!-- ko foreach: viewModel.addCommentValidationMessages -->
+                <li><span data-bind="text: $data.errorMessage"></span></li>
                 <!-- /ko -->
-            </div>
+            </ul>
         </div>
-        <div class="form-group" data-bind="validationElement: viewModel.newComment.emailAddress">
-            <div class="input-group" data-bind="css: { 'has-success': viewModel.newComment.emailAddress }">
-                <span class="input-group-addon has-feedback"><i class="fas fa-at"></i></span>
-                <input name="emailAddress" type="text" placeholder="enter your email address (optional, will not be published)" class="form-control" data-bind="textInput: viewModel.newComment.emailAddress" />
-                <!-- ko if: viewModel.newComment.emailAddress() && viewModel.newComment.emailAddress.isValid() -->
-                <span class="fas fa-check form-control-feedback"></span>
-                <!-- /ko -->
-                <!-- ko ifnot: viewModel.newComment.emailAddress.isValid -->
-                <span class="fas fa-times form-control-feedback"></span>
-                <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko if: viewModel.captchaInvalidMessage -->
+        <div class="alert alert-danger">
+            <strong>error!</strong> <span data-bind="text:  viewModel.captchaInvalidMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: viewModel.addCommentErrorMessage -->
+        <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>error!</strong> <span data-bind="text:  viewModel.addCommentErrorMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if:  viewModel.addCommentSucceededMessage -->
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>success!</strong> <span data-bind="text: viewModel.addCommentSucceededMessage"></span>
+        </div>
+        <!-- /ko -->
+        <form>
+            <div class="form-group" data-bind="validationElement: viewModel.newComment.name">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.name.isValid }">
+                    <span class="input-group-addon"><i class="far fa-id-card"></i></span>
+                    <input name="name" type="text" placeholder="enter your name" class="form-control" data-bind="textInput: viewModel.newComment.name" />
+                    <!-- ko if: viewModel.newComment.name -->
+                    <span class="fas fa-check form-control-feedback"></span>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <div class="form-group" data-bind="validationElement: viewModel.newComment.emailAddress">
+                <div class="input-group" data-bind="css: { 'has-success': viewModel.newComment.emailAddress }">
+                    <span class="input-group-addon has-feedback"><i class="fas fa-at"></i></span>
+                    <input name="emailAddress" type="text" placeholder="enter your email address (optional, will not be published)" class="form-control" data-bind="textInput: viewModel.newComment.emailAddress" />
+                    <!-- ko if: viewModel.newComment.emailAddress() && viewModel.newComment.emailAddress.isValid() -->
+                    <span class="fas fa-check form-control-feedback"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: viewModel.newComment.emailAddress.isValid -->
+                    <span class="fas fa-times form-control-feedback"></span>
+                    <!-- /ko -->
                 </div>
             </div>
             <div class="form-group">
