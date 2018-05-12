@@ -45,7 +45,10 @@ namespace brechtbaekelandt.Controllers.WebApi
         [ValidationActionFilter]
         public async Task<IActionResult> AddUserAsyncActionResult([FromBody] ApplicationUserWithPassword user)
         {
-            var result = await this._applicationUserManager.CreateUserAsync(Guid.NewGuid(), user.UserName, user.Password, user.EmailAddress, user.FirstName, user.LastName, user.IsAdmin);
+            var newId = Guid.NewGuid();
+            user.Id = newId;
+
+            var result = await this._applicationUserManager.CreateUserAsync(newId, user.UserName, user.Password, user.EmailAddress, user.FirstName, user.LastName, user.IsAdmin);
 
             if (!result.Succeeded)
             {
@@ -56,7 +59,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             await this._blogDbContext.SaveChangesAsync();
 
-            return this.Ok(new { message = "the user was succesfully addded." });
+            return this.Ok(new { message = "the user was succesfully addded.", user });
         }
 
         [Authorize]

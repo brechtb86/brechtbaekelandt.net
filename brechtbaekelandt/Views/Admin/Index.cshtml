@@ -130,11 +130,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
-                    <!-- ko ifnot: $root.isPosted -->
-                    @*<button type="button" class="btn btn-primary" data-bind="click: function() { $root.createPost($root.newPost); }">post</button>*@
+                    <!-- ko ifnot: $root.isUserCreated -->
+                    <button type="button" class="btn btn-primary" data-bind="click: function() { $root.createUser($root.newUser); }">create</button>
                     <!-- /ko -->
-                    <!-- ko if: $root.isPosted -->
-                    @*<button type="button" class="btn btn-primary" data-bind="click: function() { $root.resetNewPost($root.newPost); $root.isPosted(false); $root.resetMessages(); }">create another post</button>*@
+                    <!-- ko if: $root.isUserCreated -->
+                    <button type="button" class="btn btn-primary" data-bind="click: function() { $root.resetNewUser($root.newUser); $root.isUserCreated(false); $root.resetMessages(); }">create another user</button>
                     <!-- /ko -->
                 </div>
             </div>
@@ -153,12 +153,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
-                    <!-- ko ifnot: $root.isPosted -->
-                    @*<button type="button" class="btn btn-primary" data-bind="click: function() { $root.createPost($root.newPost); }">post</button>*@
-                    <!-- /ko -->
-                    <!-- ko if: $root.isPosted -->
-                    @*<button type="button" class="btn btn-primary" data-bind="click: function() { $root.resetNewPost($root.newPost); $root.isPosted(false); $root.resetMessages(); }">create another post</button>*@
-                    <!-- /ko -->
+                    
                 </div>
             </div>
         </div>

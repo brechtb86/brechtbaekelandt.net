@@ -136,12 +136,14 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         self.createPostErrors = ko.validation.group(self.newPost);
         self.updatePostErrors = {};
+        self.createUserErrors = ko.validation.group(self.newUser);
 
         self.categoryToAdd = ko.observable();
         self.tagToAdd = ko.observable();
 
         self.isLoading = ko.observable(true);
         self.isPosted = ko.observable(false);
+        self.isUserCreated = ko.observable(false);
 
         self.descriptionFroalaOptions = ko.observable(
             {
@@ -431,7 +433,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
                 ko.mapping.fromJS(data, {}, post);
 
-                self.posts.unshift(post);
+                self.posts.unshift(self.clone(post));
 
                 self.isPosted(true);
             })
@@ -468,8 +470,6 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         })
             .done(function (data, textStatus, jqXhr) {
                 self.updatePostSucceededMessage("the post was successfully updated!");
-
-                var x = ko.isObservable(post);
 
                 var originalPost = self.posts().find((p) => p.id() === (ko.isObservable(post) ? post().id() : post.id()));
 
@@ -522,31 +522,37 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.createUser = function (user) {
         var self = this;
 
-        var sure = confirm("are you sure you want to delete this user? all posts will be deleted too!");
+        self.resetMessages();
 
-        if (!sure) {
+        self.isUserCreated(false);
+
+        if (self.createUserErrors().length > 0) {
+            self.createUserErrors.showAllMessages();
             return;
         }
 
-        self.resetMessages();
-
         $.ajax({
-                url: "../api/account/delete?userId=" + user.id(),
-                type: "POST",
-                contentType: "application/json; charset=UTF-8",
-                dataType: "json",
-                cache: false,
-                processData: false,
-                async: false,
-                success: function (data, textStatus, jqXhr) { }
-            })
+            url: "../api/account/add",
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            data: ko.toJSON(user),
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
             .done(function (data, textStatus, jqXhr) {
-                self.users.splice(self.users.indexOf(user), 1);
+                self.createUserSucceededMessage("the user was successfully created!");
 
-                self.deleteUserSucceededMessage("the user was sucessfully deleted.");
+                ko.mapping.fromJS(data.user, {}, user);
+
+                self.users.unshift(self.clone(user));
+
+                self.isUserCreated(true);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
-                self.deleteUserErrorMessage("there was an error while deleting the user, please try again.");
+                self.createUserErrorMessage(errorThrown);
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -603,6 +609,18 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.createPostErrors.showAllMessages(false);
     }
 
+    AdminViewModel.prototype.resetNewUser = function (newUser) {
+        var self = this;
+
+        newUser.userName("");
+        newUser.firstName("");
+        newUser.lastName("");
+        newUser.emailAddress("");
+        newUser.password("");
+        
+        self.createUserErrors.showAllMessages(false);
+    }
+
     AdminViewModel.prototype.resetMessages = function () {
         var self = this;
 
@@ -612,6 +630,10 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.updatePostSucceededMessage(null);
         self.deletePostErrorMessage(null);
         self.deletePostSucceededMessage(null);
+        self.createUserErrorMessage(null);
+        self.createUserSucceededMessage(null);
+        self.updateUserErrorMessage(null);
+        self.updateUserSucceededMessage(null);
         self.deleteUserErrorMessage(null);
         self.deleteUserSucceededMessage(null);
     }
@@ -658,7 +680,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         }
     };
 
-    AdminViewModel.prototype.clone = function(object) {
+    AdminViewModel.prototype.clone = function (object) {
         return ko.mapping.fromJS(ko.toJS(object));
     }
 
