@@ -171,6 +171,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 $.when.apply($, self.getRequests()).done(function () {
                     self.isLoading(false);
                     self.isLoadingMore(false);
+                    if (self.currentPage() === self.totalPageCount()) {
+                        self.isLastPage(true);
+                    }
                 });
 
                 history.pushState(null, "", location.href.split("?")[0]);

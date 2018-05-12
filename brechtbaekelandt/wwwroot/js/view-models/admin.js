@@ -19,13 +19,15 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             self.posts().forEach(function (post) {
                 post.title.extend({ required: { message: "you didn't fill in the title!" } });
                 post.description.extend({ required: { message: "you didn't fill in the description!" } });
-                post.categories.extend({ minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" }
+                post.categories.extend({
+                    minimumItemsInArray: { params: { minimum: 1 }, message: "you didn't select a category!" }
                 });
             });
         }
 
-        self.showCreate = ko.observable();
-        self.showEdit = ko.observable();
+        self.showPostCreate = ko.observable();
+        self.showPostEdit = ko.observable();
+        self.showUserEdit = ko.observable();
 
         self.newPost = {};
         self.newPost.title = ko.observable().extend({ required: { message: "you didn't fill in the title!" } });
@@ -55,6 +57,17 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 });
             }
         });
+
+        self.selectedUser = ko.observable();
+        self.selectedUser.subscribe(function (newValue) {
+            newValue.firstName.extend({ required: { message: "you didn't fill in your first name!" } });
+            newValue.lastName.extend({ required: { message: "you didn't fill in your last name!" } });
+            newValue.emailAddress.extend({
+                required: { message: "you didn't fill in your email address!" },
+                email: { message: "the email address is not valid!" }
+            });
+        });
+
 
         self.pictureToUpload = ko.observable();
         self.pictureToUpload.subscribe(function (newValue) {
@@ -102,31 +115,31 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 theme: "brechtbaekelandt",
                 placeholderText: "write a short description",
                 toolbarButtons:
-                [
-                    "bold",
-                    "italic",
-                    "underline",
-                    "strikeThrough",
-                    "subscript",
-                    "superscript",
-                    "|",
-                    "color",
-                    "|",
-                    "paragraphFormat",
-                    "align",
-                    "formatOL",
-                    "formatUL",
-                    "outdent",
-                    "indent",
-                    "quote",
-                    "|",
-                    "insertLink",
-                    "-",
-                    "undo",
-                    "redo",
-                    "clearFormatting",
-                    "selectAll"
-                ]
+                    [
+                        "bold",
+                        "italic",
+                        "underline",
+                        "strikeThrough",
+                        "subscript",
+                        "superscript",
+                        "|",
+                        "color",
+                        "|",
+                        "paragraphFormat",
+                        "align",
+                        "formatOL",
+                        "formatUL",
+                        "outdent",
+                        "indent",
+                        "quote",
+                        "|",
+                        "insertLink",
+                        "-",
+                        "undo",
+                        "redo",
+                        "clearFormatting",
+                        "selectAll"
+                    ]
             });
         self.contentFroalaOptions = ko.observable(
             {
@@ -136,43 +149,43 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 theme: "brechtbaekelandt",
                 placeholderText: "write your content",
                 toolbarButtons:
-                [
-                    "bold",
-                    "italic",
-                    "underline",
-                    "strikeThrough",
-                    "subscript",
-                    "superscript",
-                    "|",
-                    "color",
-                    "|",
-                    "paragraphFormat",
-                    "align",
-                    "formatOL",
-                    "formatUL",
-                    "outdent",
-                    "indent",
-                    "quote",
-                    "|",
-                    "insertC#",
-                    "insertHtml",
-                    "insertJavascript",
-                    "insertCss",
-                    "insertXml",
-                    "insertJson",
-                    "|",
-                    "insertLink",
-                    "insertImage",
-                    "insertFile",
-                    "insertTable",
-                    "insertHR",
-                    "-",
-                    "undo",
-                    "redo",
-                    "clearFormatting",
-                    "selectAll",
-                    "html"
-                ],
+                    [
+                        "bold",
+                        "italic",
+                        "underline",
+                        "strikeThrough",
+                        "subscript",
+                        "superscript",
+                        "|",
+                        "color",
+                        "|",
+                        "paragraphFormat",
+                        "align",
+                        "formatOL",
+                        "formatUL",
+                        "outdent",
+                        "indent",
+                        "quote",
+                        "|",
+                        "insertC#",
+                        "insertHtml",
+                        "insertJavascript",
+                        "insertCss",
+                        "insertXml",
+                        "insertJson",
+                        "|",
+                        "insertLink",
+                        "insertImage",
+                        "insertFile",
+                        "insertTable",
+                        "insertHR",
+                        "-",
+                        "undo",
+                        "redo",
+                        "clearFormatting",
+                        "selectAll",
+                        "html"
+                    ],
                 imageUploadParam: "picture",
                 imageUploadURL: "../api/blog/upload-picture",
                 imageUploadMethod: "POST",
@@ -400,7 +413,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.updateErrors = ko.validation.group(post);
 
         self.resetMessages();
-                
+
         if (self.updateErrors().length > 0) {
             self.updateErrors.showAllMessages();
             return;
@@ -420,10 +433,12 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.updatePostSucceededMessage("the post was successfully updated!");
 
-                ko.mapping.fromJS(data, {}, post);
+                var originalPost = self.posts().find((p) => p.id() === post().id());
+
+                ko.mapping.fromJS(data, {}, originalPost);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
-                self.createPostErrorMessage(errorThrown);
+                self.updatePostErrorMessage(errorThrown);
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -569,6 +584,10 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             tags.pop(tag);
         }
     };
+
+    AdminViewModel.prototype.clone = function(object) {
+        return ko.mapping.fromJS(ko.toJS(object));
+    }
 
     function init(serverViewModel) {
 

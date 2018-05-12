@@ -126,13 +126,13 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="@(activePage == "home" ? "active" : "")"><a asp-area="" asp-controller="Home" asp-action="Index">home</a></li>
+                    <li class="@(activePage == " home" ? "active" : "" )"><a asp-area="" asp-controller="Home" asp-action="Index">home</a></li>
                     <li><a href="https://www.brechtbaekelandt.net/tools">tools</a></li>
-                    <li class="@(activePage == "about" ? "active" : "")"><a asp-area="" asp-controller="About" asp-action="Index">about</a></li>
+                    <li class="@(activePage == " about" ? "active" : "" )"><a asp-area="" asp-controller="About" asp-action="Index">about</a></li>
 
                     @if (this.User.Identity.IsAuthenticated)
                     {
-                        <li class="@(activePage == "admin" ? "active" : "")"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
+                        <li class="@(activePage == " admin" ? "active" : "" )"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
                     }
                 </ul>
                 @if (this.User.Identity.IsAuthenticated)
@@ -690,6 +690,82 @@
             <a class="alert-link" data-bind="attr: { href:  post.url }">click here</a> to view...
         </div>
         <!-- /ko -->
+    </script>
+
+    @*user editor template*@
+
+    <script type="text/html" id="userEditorTemplate">
+        @*<!-- ko if: viewModel.addCommentValidationMessages().length > 0 -->
+            <div class="alert alert-danger">
+                <strong>error!</strong> there are some errors:
+                <ul class="list-unstyled">
+                    <!-- ko foreach: viewModel.addCommentValidationMessages -->
+                    <li><span data-bind="text: $data.errorMessage"></span></li>
+                    <!-- /ko -->
+                </ul>
+            </div>
+            <!-- /ko -->
+            <!-- ko if: viewModel.captchaInvalidMessage -->
+            <div class="alert alert-danger">
+                <strong>error!</strong> <span data-bind="text:  viewModel.captchaInvalidMessage"></span>
+            </div>
+            <!-- /ko -->
+            <!-- ko if: viewModel.addCommentErrorMessage -->
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>error!</strong> <span data-bind="text:  viewModel.addCommentErrorMessage"></span>
+            </div>
+            <!-- /ko -->
+            <!-- ko if:  viewModel.addCommentSucceededMessage -->
+            <div class="alert alert-success alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>success!</strong> <span data-bind="text: viewModel.addCommentSucceededMessage"></span>
+            </div>
+            <!-- /ko -->*@
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="far fa-user"></i></span>
+                    <input name="userName" type="text" class="form-control" data-bind="value: user.userName" disabled />
+                </div>
+            </div>
+            <div class="form-group" data-bind="validationElement: user.firstName">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': user.firstName.isValid }">
+                    <span class="input-group-addon"><i class="far fa-id-card"></i></span>
+                    <input name="firstName" type="text" placeholder="enter your first name" class="form-control" data-bind="textInput: user.firstName" />
+                    <!-- ko if: user.firstName.isValid -->
+                    <span class="fas fa-check form-control-feedback"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: user.firstName.isValid -->
+                    <span class="fas fa-times form-control-feedback"></span>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <div class="form-group" data-bind="validationElement: user.lastName">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': user.lastName.isValid }">
+                    <span class="input-group-addon"><i class="far fa-id-card"></i></span>
+                    <input name="lastName" type="text" placeholder="enter your last name" class="form-control" data-bind="textInput: user.lastName" />
+                    <!-- ko if: user.lastName.isValid -->
+                    <span class="fas fa-check form-control-feedback"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: user.lastName.isValid -->
+                    <span class="fas fa-times form-control-feedback"></span>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <div class="form-group" data-bind="validationElement: user.emailAddress">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': user.emailAddress.isValid }">
+                    <span class="input-group-addon"><i class="fas fa-at"></i></span>
+                    <input name="emailAddress" type="text" placeholder="enter your last email address" class="form-control" data-bind="textInput: user.emailAddress" />
+                    <!-- ko if: user.emailAddress.isValid -->
+                    <span class="fas fa-check form-control-feedback"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: user.emailAddress.isValid -->
+                    <span class="fas fa-times form-control-feedback"></span>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </form>
     </script>
 
     @*loader template*@
