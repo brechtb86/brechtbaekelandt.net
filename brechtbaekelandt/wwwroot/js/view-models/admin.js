@@ -436,6 +436,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 var originalPost = self.posts().find((p) => p.id() === post().id());
 
                 ko.mapping.fromJS(data, {}, originalPost);
+                ko.mapping.fromJS(data, {}, post);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.updatePostErrorMessage(errorThrown);
