@@ -71,7 +71,7 @@
         <li class="list-group-item">
             <a href="" data-bind="text: fullName, click: function() { $root.selectedUser($root.clone($data)); $root.resetMessages(); $root.showUserEdit(true); }"></a>
             <span data-bind="text: ' (username: ' + $data.userName() + ')'"></span>
-            <button type="button" data-bind="click: function() { $root.deleteUser($data); }, disable: id === $root.currentUser.id" class="btn btn-muted"><i class="far fa-trash-alt text-danger"></i></button>
+            <button type="button" data-bind="click: function() { $root.deleteUser($data); }, disable: id() === $root.currentUser.id()" class="btn btn-muted"><i class="far fa-trash-alt text-danger"></i></button>
         </li>
         <!-- /ko -->
     </ul>
