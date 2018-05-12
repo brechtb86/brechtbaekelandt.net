@@ -250,7 +250,7 @@
                 <div class="inline-block">
                     <a data-bind="attr: { href: post.url() + viewModel.createFullQueryString() + '#comments' }"><i class="far fa-comment"></i></a>
                     <!-- ko if: post.comments().length > 0 -->
-                    <i data-bind="text: post.comments().length"></i>
+                    <span data-bind="text: post.comments().length"></span>
                     <!-- /ko -->
                     <!-- ko if: post.comments().length === 0 -->
                     no comments yet...
@@ -335,7 +335,7 @@
                 <div class="inline-block">
                     <a href="#comments"><i class="far fa-comment"></i></a>
                     <!-- ko if: post.comments().length > 0 -->
-                    <i data-bind="text: post.comments().length"></i>
+                    <span data-bind="text: post.comments().length"></span>
                     <!-- /ko -->
                     <!-- ko if: post.comments().length === 0 -->
                     no comments yet...
@@ -723,16 +723,22 @@
             </div>
             <!-- /ko -->*@
         <form>
-            <div class="form-group">
-                <div class="input-group">
+            <div class="form-group" data-bind="validationElement: user.userName">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': user.userName.isValid }">
                     <span class="input-group-addon"><i class="far fa-user"></i></span>
-                    <input name="userName" type="text" class="form-control" data-bind="value: user.userName" disabled />
+                    <input name="userName" type="text" placeholder="enter a user name" class="form-control" data-bind="textInput: user.userName, disable: viewModel.showUserEdit" />
+                    <!-- ko if: user.userName.isValid -->
+                    <span class="fas fa-check form-control-feedback"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: user.userName.isValid -->
+                    <span class="fas fa-times form-control-feedback"></span>
+                    <!-- /ko -->
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: user.firstName">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': user.firstName.isValid }">
                     <span class="input-group-addon"><i class="far fa-id-card"></i></span>
-                    <input name="firstName" type="text" placeholder="enter your first name" class="form-control" data-bind="textInput: user.firstName" />
+                    <input name="firstName" type="text" placeholder="enter a first name" class="form-control" data-bind="textInput: user.firstName" />
                     <!-- ko if: user.firstName.isValid -->
                     <span class="fas fa-check form-control-feedback"></span>
                     <!-- /ko -->
@@ -744,7 +750,7 @@
             <div class="form-group" data-bind="validationElement: user.lastName">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': user.lastName.isValid }">
                     <span class="input-group-addon"><i class="far fa-id-card"></i></span>
-                    <input name="lastName" type="text" placeholder="enter your last name" class="form-control" data-bind="textInput: user.lastName" />
+                    <input name="lastName" type="text" placeholder="enter a last name" class="form-control" data-bind="textInput: user.lastName" />
                     <!-- ko if: user.lastName.isValid -->
                     <span class="fas fa-check form-control-feedback"></span>
                     <!-- /ko -->
@@ -756,7 +762,7 @@
             <div class="form-group" data-bind="validationElement: user.emailAddress">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': user.emailAddress.isValid }">
                     <span class="input-group-addon"><i class="fas fa-at"></i></span>
-                    <input name="emailAddress" type="text" placeholder="enter your last email address" class="form-control" data-bind="textInput: user.emailAddress" />
+                    <input name="emailAddress" type="text" placeholder="enter an email address" class="form-control" data-bind="textInput: user.emailAddress" />
                     <!-- ko if: user.emailAddress.isValid -->
                     <span class="fas fa-check form-control-feedback"></span>
                     <!-- /ko -->
@@ -764,6 +770,29 @@
                     <span class="fas fa-times form-control-feedback"></span>
                     <!-- /ko -->
                 </div>
+            </div>
+            <!-- ko if: viewModel.showUserCreate -->
+            <div class="form-group" data-bind="validationElement: user.password">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': user.password.isValid }">
+                    <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
+                    <input type="password" placeholder="enter a password" class="form-control" data-bind="textInput: user.password" />
+                    <!-- ko if: user.password.isValid -->
+                    <span class="fas fa-check form-control-feedback"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: user.password.isValid -->
+                    <span class="fas fa-times form-control-feedback"></span>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <!-- /ko -->
+            <div class="form-group">
+                <label>
+                    is admin:
+                    <label class="switch">
+                        <input type="checkbox" value="true" data-bind="checked: user.isAdmin" />
+                        <span class="slider"></span>
+                    </label>
+                </label>
             </div>
         </form>
     </script>
