@@ -27,6 +27,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         self.showPostCreate = ko.observable();
         self.showPostEdit = ko.observable();
+        self.showUserCreate = ko.observable();
         self.showUserEdit = ko.observable();
 
         self.newPost = {};
@@ -49,7 +50,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                         0);
                 });
 
-                self.updateErrors = ko.validation.group(newValue);
+                self.updatePostErrors = ko.validation.group(newValue);
 
             } else {
                 self.categories().forEach(function (category) {
@@ -58,14 +59,45 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             }
         });
 
+        self.newUser = {};
+        self.newUser.userName = ko.observable().extend({
+            required: { message: "you didn't fill in a user name!" },
+            pattern: {
+                message: "the username cannot contain any spaces or special charachters.",
+                params: "^[a-zA-Z0-9]*$"
+            }
+        });
+        self.newUser.firstName = ko.observable().extend({ required: { message: "you didn't fill in a first name!" } });
+        self.newUser.lastName = ko.observable().extend({ required: { message: "you didn't fill in a last name!" } });
+        self.newUser.fullName = ko.computed(function () {
+            return self.newUser.firstName() + " " + self.newUser.lastName();
+        });
+        self.newUser.emailAddress = ko.observable().extend({
+            required: { message: "you didn't fill in an email address!" },
+            email: { message: "the email address is not valid!" }
+        });
+        self.newUser.password = ko.observable().extend({
+            required: {
+                message: "you didn't fill in a password!"
+            },
+            pattern: {
+                message: "the password must contain at least one digit, one special character and must be minimum 6 charachters long.",
+                params: "^(?=.*[a-z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,255}$"
+            }
+        });
+        self.newUser.isAdmin = ko.observable();
+
         self.selectedUser = ko.observable();
         self.selectedUser.subscribe(function (newValue) {
-            newValue.firstName.extend({ required: { message: "you didn't fill in your first name!" } });
-            newValue.lastName.extend({ required: { message: "you didn't fill in your last name!" } });
-            newValue.emailAddress.extend({
-                required: { message: "you didn't fill in your email address!" },
-                email: { message: "the email address is not valid!" }
-            });
+            if (newValue) {
+                newValue.userName.extend({ required: { message: "you didn't fill in a user name!" } });
+                newValue.firstName.extend({ required: { message: "you didn't fill in a first name!" } });
+                newValue.lastName.extend({ required: { message: "you didn't fill in a last name!" } });
+                newValue.emailAddress.extend({
+                    required: { message: "you didn't fill in an email address!" },
+                    email: { message: "the email address is not valid!" }
+                });
+            }
         });
 
 
@@ -95,11 +127,15 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.updatePostSucceededMessage = ko.observable();
         self.deletePostErrorMessage = ko.observable();
         self.deletePostSucceededMessage = ko.observable();
+        self.createUserErrorMessage = ko.observable();
+        self.createUserSucceededMessage = ko.observable();
+        self.updateUserErrorMessage = ko.observable();
+        self.updateUserSucceededMessage = ko.observable();
         self.deleteUserErrorMessage = ko.observable();
         self.deleteUserSucceededMessage = ko.observable();
 
-        self.createErrors = ko.validation.group(self.newPost);
-        self.updateErrors = {};
+        self.createPostErrors = ko.validation.group(self.newPost);
+        self.updatePostErrors = {};
 
         self.categoryToAdd = ko.observable();
         self.tagToAdd = ko.observable();
@@ -374,8 +410,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         self.isPosted(false);
 
-        if (self.createErrors().length > 0) {
-            self.createErrors.showAllMessages();
+        if (self.createPostErrors().length > 0) {
+            self.createPostErrors.showAllMessages();
             return;
         }
 
@@ -410,12 +446,12 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.updatePost = function (post) {
         var self = this;
 
-        self.updateErrors = ko.validation.group(post);
+        self.updatePostErrors = ko.validation.group(post);
 
         self.resetMessages();
 
-        if (self.updateErrors().length > 0) {
-            self.updateErrors.showAllMessages();
+        if (self.updatePostErrors().length > 0) {
+            self.updatePostErrors.showAllMessages();
             return;
         }
 
@@ -433,7 +469,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.updatePostSucceededMessage("the post was successfully updated!");
 
-                var originalPost = self.posts().find((p) => p.id() === post().id());
+                var x = ko.isObservable(post);
+
+                var originalPost = self.posts().find((p) => p.id() === (ko.isObservable(post) ? post().id() : post.id()));
 
                 ko.mapping.fromJS(data, {}, originalPost);
                 ko.mapping.fromJS(data, {}, post);
@@ -475,6 +513,40 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.deletePostErrorMessage("there was an error while deleting the post, please try again.");
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    };
+
+    AdminViewModel.prototype.createUser = function (user) {
+        var self = this;
+
+        var sure = confirm("are you sure you want to delete this user? all posts will be deleted too!");
+
+        if (!sure) {
+            return;
+        }
+
+        self.resetMessages();
+
+        $.ajax({
+                url: "../api/account/delete?userId=" + user.id(),
+                type: "POST",
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                cache: false,
+                processData: false,
+                async: false,
+                success: function (data, textStatus, jqXhr) { }
+            })
+            .done(function (data, textStatus, jqXhr) {
+                self.users.splice(self.users.indexOf(user), 1);
+
+                self.deleteUserSucceededMessage("the user was sucessfully deleted.");
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.deleteUserErrorMessage("there was an error while deleting the user, please try again.");
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -528,7 +600,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         self.categories().forEach(function (category) { category.isSelected(false); });
 
-        self.createErrors.showAllMessages(false);
+        self.createPostErrors.showAllMessages(false);
     }
 
     AdminViewModel.prototype.resetMessages = function () {

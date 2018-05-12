@@ -17,7 +17,7 @@ brechtbaekelandt.account = (function ($, jQuery, ko, undefined) {
         self.newUser.firstName = ko.observable().extend({ required: { message: "please enter the first name." } });
         self.newUser.lastName = ko.observable().extend({ required: { message: "please enter the lastname." } });
         self.newUser.fullName = ko.computed(function () {
-            return self.newUser.firstName() + ' ' + self.newUser.lastName();
+            return self.newUser.firstName() + " " + self.newUser.lastName();
         });
         self.newUser.emailAddress = ko.observable().extend({
             required: { message: "please enter the email address." },
