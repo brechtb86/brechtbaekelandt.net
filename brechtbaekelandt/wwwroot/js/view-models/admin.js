@@ -62,6 +62,10 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.selectedUser.subscribe(function (newValue) {
             newValue.firstName.extend({ required: { message: "you didn't fill in your first name!" } });
             newValue.lastName.extend({ required: { message: "you didn't fill in your last name!" } });
+            newValue.emailAddress.extend({
+                required: { message: "you didn't fill in your email address!" },
+                email: { message: "the email address is not valid!" }
+            });
         });
 
 
@@ -432,7 +436,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 ko.mapping.fromJS(data, {}, post);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
-                self.createPostErrorMessage(errorThrown);
+                self.updatePostErrorMessage(errorThrown);
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -578,6 +582,10 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             tags.pop(tag);
         }
     };
+
+    AdminViewModel.prototype.clone = function(object) {
+        return ko.mapping.fromJS(ko.toJS(object));
+    }
 
     function init(serverViewModel) {
 

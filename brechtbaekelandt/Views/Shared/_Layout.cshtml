@@ -723,6 +723,12 @@
             </div>
             <!-- /ko -->*@
         <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="far fa-user"></i></span>
+                    <input name="userName" type="text" class="form-control" data-bind="value: user.userName" disabled />
+                </div>
+            </div>
             <div class="form-group" data-bind="validationElement: user.firstName">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': user.firstName.isValid }">
                     <span class="input-group-addon"><i class="far fa-id-card"></i></span>
@@ -738,11 +744,23 @@
             <div class="form-group" data-bind="validationElement: user.lastName">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': user.lastName.isValid }">
                     <span class="input-group-addon"><i class="far fa-id-card"></i></span>
-                    <input name="name" type="text" placeholder="enter your last name" class="form-control" data-bind="textInput: user.lastName" />
+                    <input name="lastName" type="text" placeholder="enter your last name" class="form-control" data-bind="textInput: user.lastName" />
                     <!-- ko if: user.lastName.isValid -->
                     <span class="fas fa-check form-control-feedback"></span>
                     <!-- /ko -->
                     <!-- ko ifnot: user.lastName.isValid -->
+                    <span class="fas fa-times form-control-feedback"></span>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <div class="form-group" data-bind="validationElement: user.emailAddress">
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': user.emailAddress.isValid }">
+                    <span class="input-group-addon"><i class="fas fa-at"></i></span>
+                    <input name="emailAddress" type="text" placeholder="enter your last email address" class="form-control" data-bind="textInput: user.emailAddress" />
+                    <!-- ko if: user.emailAddress.isValid -->
+                    <span class="fas fa-check form-control-feedback"></span>
+                    <!-- /ko -->
+                    <!-- ko ifnot: user.emailAddress.isValid -->
                     <span class="fas fa-times form-control-feedback"></span>
                     <!-- /ko -->
                 </div>
