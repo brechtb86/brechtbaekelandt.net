@@ -433,7 +433,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.updatePostSucceededMessage("the post was successfully updated!");
 
-                ko.mapping.fromJS(data, {}, post);
+                var originalPost = self.posts().find((p) => p.id() === post().id());
+
+                ko.mapping.fromJS(data, {}, originalPost);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.updatePostErrorMessage(errorThrown);
