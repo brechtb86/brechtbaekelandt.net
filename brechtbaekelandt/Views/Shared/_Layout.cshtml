@@ -132,70 +132,70 @@
 
                     @if (this.User.Identity.IsAuthenticated)
                     {
-                        <li class="@(activePage == " admin" ? "active" : "" )"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
+                    <li class="@(activePage == " admin" ? "active" : "" )"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
                     }
                 </ul>
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    var firstName = string.Empty;
-                    var lastName = string.Empty;
+                var firstName = string.Empty;
+                var lastName = string.Empty;
 
-                    var currentUser = this.ViewData["CurrentUser"];
+                var currentUser = this.ViewData["CurrentUser"];
 
-                    if (currentUser is ApplicationUser currentApplicationUser)
-                    {
-                        firstName = currentApplicationUser.FirstName;
-                        lastName = currentApplicationUser.LastName;
-                    }
+                if (currentUser is ApplicationUser currentApplicationUser)
+                {
+                firstName = currentApplicationUser.FirstName;
+                lastName = currentApplicationUser.LastName;
+                }
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li>
-                            <span class="navbar-text">@($"hello {firstName} {lastName}")</span>
-                        </li>
-                        <li>
-                            <form class="navbar-form" method="POST" asp-controller="account" asp-action="signout">
-                                <button type="submit" class="btn btn-sm btn-default"><i class="fas fa-sign-out-alt"></i> sign out</button>
-                            </form>
-                        </li>
-                    </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <span class="navbar-text">@($"hello {firstName} {lastName}")</span>
+                    </li>
+                    <li>
+                        <form class="navbar-form" method="POST" asp-controller="account" asp-action="signout">
+                            <button type="submit" class="btn btn-sm btn-default"><i class="fas fa-sign-out-alt"></i> sign out</button>
+                        </form>
+                    </li>
+                </ul>
                 }
                 else
                 {
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">sign in <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li class="sign-in-dropdown">
-                                    <form method="POST" asp-controller="account" asp-action="signin">
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="far fa-user"></i></span>
-                                                <input name="username" type="text" placeholder="username or email" class="form-control" />
-                                            </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">sign in <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li class="sign-in-dropdown">
+                                <form method="POST" asp-controller="account" asp-action="signin">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="far fa-user"></i></span>
+                                            <input name="username" type="text" placeholder="username or email" class="form-control" />
                                         </div>
-                                        <div class="form-group">
-                                            <div class="input-group">
-                                                <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
-                                                <input name="password" type="password" placeholder="password" class="form-control" />
-                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
+                                            <input name="password" type="password" placeholder="password" class="form-control" />
                                         </div>
-                                        <div class="form-group">
-                                            <label>
-                                                <label class="switch">
-                                                    <input name="rememberMe" type="checkbox" value="true" />
-                                                    <span class="slider"></span>
-                                                </label>
-                                                remember me
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            <label class="switch">
+                                                <input name="rememberMe" type="checkbox" value="true" />
+                                                <span class="slider"></span>
                                             </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> sign in</button>
-                                        </div>
-                                    </form>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
+                                            remember me
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> sign in</button>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
                 }
             </div>
         </nav>
@@ -393,7 +393,7 @@
                 <i class="far fa-comment"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span>
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                    <small><a href="#" data-bind="click: function() { viewModel.deleteComment(comment) }" class="pull-right">delete</a></small>
+                <small><a href="#" data-bind="click: function() { viewModel.deleteComment(comment) }" class="pull-right">delete</a></small>
                 }
             </h4>
             <small>
@@ -696,32 +696,32 @@
 
     <script type="text/html" id="userEditorTemplate">
         @*<!-- ko if: viewModel.addCommentValidationMessages().length > 0 -->
-            <div class="alert alert-danger">
-                <strong>error!</strong> there are some errors:
-                <ul class="list-unstyled">
-                    <!-- ko foreach: viewModel.addCommentValidationMessages -->
-                    <li><span data-bind="text: $data.errorMessage"></span></li>
-                    <!-- /ko -->
-                </ul>
-            </div>
-            <!-- /ko -->
-            <!-- ko if: viewModel.captchaInvalidMessage -->
-            <div class="alert alert-danger">
-                <strong>error!</strong> <span data-bind="text:  viewModel.captchaInvalidMessage"></span>
-            </div>
-            <!-- /ko -->
-            <!-- ko if: viewModel.addCommentErrorMessage -->
-            <div class="alert alert-danger alert-dismissable">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>error!</strong> <span data-bind="text:  viewModel.addCommentErrorMessage"></span>
-            </div>
-            <!-- /ko -->
-            <!-- ko if:  viewModel.addCommentSucceededMessage -->
-            <div class="alert alert-success alert-dismissable">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <strong>success!</strong> <span data-bind="text: viewModel.addCommentSucceededMessage"></span>
-            </div>
-            <!-- /ko -->*@
+        <div class="alert alert-danger">
+            <strong>error!</strong> there are some errors:
+            <ul class="list-unstyled">
+                <!-- ko foreach: viewModel.addCommentValidationMessages -->
+                <li><span data-bind="text: $data.errorMessage"></span></li>
+                <!-- /ko -->
+            </ul>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: viewModel.captchaInvalidMessage -->
+        <div class="alert alert-danger">
+            <strong>error!</strong> <span data-bind="text:  viewModel.captchaInvalidMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: viewModel.addCommentErrorMessage -->
+        <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>error!</strong> <span data-bind="text:  viewModel.addCommentErrorMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if:  viewModel.addCommentSucceededMessage -->
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>success!</strong> <span data-bind="text: viewModel.addCommentSucceededMessage"></span>
+        </div>
+        <!-- /ko -->*@
         <form>
             <div class="form-group" data-bind="validationElement: user.userName">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': user.userName.isValid }">
@@ -795,6 +795,30 @@
                 </label>
             </div>
         </form>
+        <!-- ko if: viewModel.createUserErrorMessage -->
+        <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>error!</strong> <span data-bind="text: viewModel.createUserErrorMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: viewModel.createUserSucceededMessage -->
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>success!</strong> <span data-bind="text: viewModel.createUserSucceededMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: viewModel.updateUserErrorMessage -->
+        <div class="alert alert-danger alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>error!</strong> <span data-bind="text: viewModel.updateUserErrorMessage"></span>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: viewModel.updateUserSucceededMessage -->
+        <div class="alert alert-success alert-dismissable">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>success!</strong> <span data-bind="text: viewModel.updateUserSucceededMessage"></span>
+        </div>
+        <!-- /ko -->
     </script>
 
     @*loader template*@
