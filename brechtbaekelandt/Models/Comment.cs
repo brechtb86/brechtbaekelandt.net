@@ -17,10 +17,10 @@ namespace brechtbaekelandt.Models
 
         [Required(ErrorMessage = "you didn't fill in your name!")]
         public string Name { get; set; }
-
+        
         [EmailAddress(ErrorMessage = "the email address is not valid!")]
-        public string EmailAddress { get; set; }
-
+        public string EmailAddress { internal get; set; }
+        
         [JsonIgnore]
         public virtual Post Post { get; set; }
     }
