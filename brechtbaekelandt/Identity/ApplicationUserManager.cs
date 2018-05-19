@@ -56,5 +56,10 @@ namespace brechtbaekelandt.Identity
                      IsAdmin = isAdmin,
                  }, password);
         }
+
+        public async Task<ApplicationUser> FindByIdAsync(Guid userId)
+        {
+            return await base.FindByIdAsync(userId.ToString());
+        }
     }
 }
