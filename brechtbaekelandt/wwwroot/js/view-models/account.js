@@ -95,8 +95,7 @@ brechtbaekelandt.account = (function ($, jQuery, ko, undefined) {
 
             });
     };
-
-
+    
     function init(serverViewModel) {
         var viewModel = new AccountViewModel();
 

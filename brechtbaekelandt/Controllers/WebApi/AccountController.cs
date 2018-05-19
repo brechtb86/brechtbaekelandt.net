@@ -39,7 +39,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             return this.Json(Mapper.Map<ICollection<Models.User>>(this._blogDbContext.Users.ToCollection()));
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("add")]
         [ValidationActionFilter]
@@ -60,6 +60,44 @@ namespace brechtbaekelandt.Controllers.WebApi
             await this._blogDbContext.SaveChangesAsync();
 
             return this.Ok(new { message = "the user was succesfully addded.", user });
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("update")]
+        [ValidationActionFilter]
+        public async Task<IActionResult> UpdateUserAsyncActionResult([FromBody] ApplicationUser user)
+        {
+            var userToUpdate = await this._applicationUserManager.FindByIdAsync(user.Id);
+
+            if (userToUpdate == null)
+            {
+                return this.NotFound();
+            }
+
+            userToUpdate.FirstName = user.FirstName;
+            userToUpdate.LastName = user.LastName;
+            userToUpdate.EmailAddress = user.EmailAddress;
+            userToUpdate.Email = user.Email;
+            userToUpdate.IsAdmin = user.IsAdmin;
+
+            var result = await this._applicationUserManager.UpdateAsync(userToUpdate);
+
+            if (!result.Succeeded)
+            {
+                return this.StatusCode((int)HttpStatusCode.BadRequest, result.Errors.Select(e => e.Description.ToLowerInvariant()));
+            }
+
+            if (!this._blogDbContext.Users.Any(u => u.Id == user.Id))
+            {
+                return this.NotFound();
+            }
+
+            this._blogDbContext.Users.Update(Mapper.Map<Data.Entities.User>(user));
+
+            await this._blogDbContext.SaveChangesAsync();
+
+            return this.Ok(new { message = "the user was succesfully updated.", user });
         }
 
         [Authorize]

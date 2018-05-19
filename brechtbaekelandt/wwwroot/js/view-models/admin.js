@@ -97,6 +97,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                     required: { message: "you didn't fill in an email address!" },
                     email: { message: "the email address is not valid!" }
                 });
+                newValue.email = ko.computed(() => { return newValue.emailAddress() });
+
+                self.updateUserErrors = ko.validation.group(newValue);
             }
         });
 
@@ -137,6 +140,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.createPostErrors = ko.validation.group(self.newPost);
         self.updatePostErrors = {};
         self.createUserErrors = ko.validation.group(self.newUser);
+        self.updateUserErrors = {};
 
         self.categoryToAdd = ko.observable();
         self.tagToAdd = ko.observable();
@@ -559,6 +563,43 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
     };
 
+    AdminViewModel.prototype.updateUser = function (user) {
+        var self = this;
+
+        self.resetMessages();
+
+        if (self.updateUserErrors().length > 0) {
+            self.updateUserErrors.showAllMessages();
+            return;
+        }
+
+        $.ajax({
+            url: "../api/account/update",
+            type: "POST",
+            contentType: "application/json; charset=UTF-8",
+            data: ko.toJSON(user),
+            dataType: "json",
+            cache: false,
+            processData: false,
+            async: false,
+            success: function (data, textStatus, jqXhr) { }
+        })
+            .done(function (data, textStatus, jqXhr) {
+                self.updateUserSucceededMessage("the user was successfully updated!");
+
+                var originalUser = self.users().find((u) => u.id() === (ko.isObservable(user) ? user().id() : user.id()));
+
+                ko.mapping.fromJS(data.user, {}, originalUser);
+                ko.mapping.fromJS(data.user, {}, user);
+            })
+            .fail(function (jqXhr, textStatus, errorThrown) {
+                self.updateUserErrorMessage(errorThrown);
+            })
+            .always(function (data, textStatus, jqXhr) {
+
+            });
+    };
+
     AdminViewModel.prototype.deleteUser = function (user) {
         var self = this;
 
@@ -617,7 +658,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         newUser.lastName("");
         newUser.emailAddress("");
         newUser.password("");
-        
+
         self.createUserErrors.showAllMessages(false);
     }
 
