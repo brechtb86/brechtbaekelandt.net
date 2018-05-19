@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace brechtbaekelandt.Filters
 {
-    public class ValidationActionFilterAttribute : ActionFilterAttribute
+    public class ValidateAttribute : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {

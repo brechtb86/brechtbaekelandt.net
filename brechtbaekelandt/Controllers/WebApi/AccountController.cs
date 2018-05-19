@@ -42,7 +42,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         [Authorize]
         [HttpPost]
         [Route("add")]
-        [ValidationActionFilter]
+        [Validate]
         public async Task<IActionResult> AddUserAsyncActionResult([FromBody] ApplicationUserWithPassword user)
         {
             var newId = Guid.NewGuid();
@@ -65,7 +65,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         [Authorize]
         [HttpPost]
         [Route("update")]
-        [ValidationActionFilter]
+        [Validate]
         public async Task<IActionResult> UpdateUserAsyncActionResult([FromBody] ApplicationUser user)
         {
             var userToUpdate = await this._applicationUserManager.FindByIdAsync(user.Id);

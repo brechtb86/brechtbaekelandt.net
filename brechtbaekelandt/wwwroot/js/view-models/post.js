@@ -63,10 +63,13 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
         }
 
         $.ajax({
-            url: "../../api/blog/post/add-comment?postId=" + postId + "&captchaAttemptedValue=" + self.captchaAttemptedValue(),
+            url: "../../api/blog/post/add-comment?postId=" + postId,
             type: "POST",
             contentType: "application/json; charset=UTF-8",
             data: ko.toJSON(comment),
+            headers: {
+                "captchaAttemptedValue": self.captchaAttemptedValue()
+            },
             dataType: "json",
             cache: false,
             processData: false,
