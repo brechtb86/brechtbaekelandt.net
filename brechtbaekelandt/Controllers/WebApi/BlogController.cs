@@ -223,7 +223,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         [Authorize]
         [HttpPost]
         [Route("post/add")]
-        [ValidationActionFilter]
+        [Validate]
         public async Task<IActionResult> CreatePostAsyncActionResult([FromBody]Models.Post post)
         {
             post.Id = Guid.NewGuid();
@@ -270,7 +270,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         [Authorize]
         [HttpPost]
         [Route("post/update")]
-        [ValidationActionFilter]
+        [Validate]
         public async Task<IActionResult> UpdatePostAsyncActionResult([FromBody]Models.Post post)
         {
             if (!this._blogDbContext.Posts.Any(p => p.Id == post.Id))
@@ -346,27 +346,10 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpPost]
         [Route("post/add-comment")]
-        [ValidationActionFilter]
-        public async Task<IActionResult> CreateCommentAsyncActionResult(Guid postId, string captchaAttemptedValue, [FromBody]Models.Comment comment)
+        [Validate]
+        [ValidateCaptcha("commentCaptcha")]
+        public async Task<IActionResult> CreateCommentAsyncActionResult(Guid postId, [FromBody]Models.Comment comment)
         {
-            const string captchaName = "commentCaptcha";
-
-            var captchaJson = this.HttpContext.Request.Cookies[captchaName];
-
-            if (string.IsNullOrEmpty(captchaJson))
-            {
-                return this.BadRequest(new { error = "noCaptcha" });
-            }
-
-            var validatedCaptcha = this._captchaHelper.ValidateCaptcha(JsonConvert.DeserializeObject<Captcha>(captchaJson), captchaAttemptedValue);
-
-            if (validatedCaptcha.AttemptFailed)
-            {
-                this.SetCaptcha(validatedCaptcha, captchaName);
-
-                return this.BadRequest(new { error = "invalidCaptcha", errorMessage = validatedCaptcha.AttemptFailedMessage });
-            }
-
             var postEntity = await this._blogDbContext.Posts.FirstOrDefaultAsync(p => p.Id == postId);
 
             if (postEntity == null)
@@ -384,15 +367,13 @@ namespace brechtbaekelandt.Controllers.WebApi
             await this._blogDbContext.Comments.AddAsync(newCommentEntity);
             await this._blogDbContext.SaveChangesAsync();
 
-            this.DeleteCaptcha(captchaName);
-
             return this.Json(comment);
         }
 
         [Authorize]
         [HttpPost]
         [Route("post/delete-comment")]
-        [ValidationActionFilter]
+        [Validate]
         public async Task<IActionResult> DeleteCommentAsyncActionResult(Guid commentId)
         {
             if (!this._blogDbContext.Comments.Any(c => c.Id == commentId))
@@ -459,24 +440,14 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         [HttpPost]
         [Route("subscribe")]
-        [ValidationActionFilter]
+        [Validate]
         public async Task<IActionResult> SubscribeAsyncActionResult([FromBody]Models.Subscriber subscriber)
         {
             await this._emailService.SendSubscribedEmailAsync(subscriber.EmailAddress, this.CreateSubscribeConfirmationLink(subscriber));
 
             return this.Json(new { message = "you have successfully subscribed!" });
         }
-
-        private void SetCaptcha(Captcha captcha, string captchaName)
-        {
-            this.Response.Cookies.Append(captchaName, JsonConvert.SerializeObject(captcha, Formatting.None, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
-        }
-
-        private void DeleteCaptcha(string captchaName)
-        {
-            this.Response.Cookies.Delete(captchaName);
-        }
-
+        
         private string CreateSubscribeConfirmationLink(Models.Subscriber subscriber)
         {
             var subscriberString = this.SerializeSubscriber(subscriber);
