@@ -443,7 +443,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         [Validate]
         public async Task<IActionResult> SubscribeAsyncActionResult([FromBody]Models.Subscriber subscriber)
         {
-            await this._emailService.SendSubscribedEmailAsync(subscriber.EmailAddress, this.CreateSubscribeConfirmationLink(subscriber));
+            await this._emailService.SendSubscribedEmailAsync(subscriber.EmailAddress, this.CreateSubscribeConfirmationLink(subscriber), subscriber.Categories);
 
             return this.Json(new { message = "you have successfully subscribed!" });
         }
