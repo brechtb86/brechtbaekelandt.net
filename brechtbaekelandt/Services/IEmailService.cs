@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using brechtbaekelandt.Models;
 
 namespace brechtbaekelandt.Services
 {
@@ -6,6 +8,6 @@ namespace brechtbaekelandt.Services
     {
         string TemplateRootPath { get; set; }
 
-        Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink);
+        Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink, ICollection<Category> categories);
     }
 }

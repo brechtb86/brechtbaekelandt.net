@@ -1,10 +1,14 @@
-﻿using brechtbaekelandt.Settings;
+﻿using System.Collections.Generic;
+using brechtbaekelandt.Settings;
 using Mailjet.Client;
 using Mailjet.Client.Resources;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.IO;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using brechtbaekelandt.Models;
 
 namespace brechtbaekelandt.Services
 {
@@ -13,6 +17,8 @@ namespace brechtbaekelandt.Services
         public string SubscriberEmailAddress { get; set; }
 
         public string ConfirmationLink { get; set; }
+
+        public ICollection<Category> Categories { get; set; }
     }
 
     public class EmailService : IEmailService
@@ -26,12 +32,13 @@ namespace brechtbaekelandt.Services
             this._mailjetSettings = mailjetSettingsOptions.Value;
         }
 
-        public async Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink)
+        public async Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink, ICollection<Category> categories)
         {
             var data = new SubscribedData
             {
                 ConfirmationLink = confirmationLink,
-                SubscriberEmailAddress = subscriberEmailAddress
+                SubscriberEmailAddress = subscriberEmailAddress,
+                Categories = categories
             };
 
             var emailHtmString = await this.ParseSubscribedHtmlEmail("subscribed", data);
@@ -75,6 +82,13 @@ namespace brechtbaekelandt.Services
 
             var parsedHtmlString = htmlString.Replace("%%confirmationLink%%", data.ConfirmationLink);
             parsedHtmlString = parsedHtmlString.Replace("%%subscriberEmailAddress%%", data.SubscriberEmailAddress);
+
+            var categoriesStringBuilder = new StringBuilder();
+            categoriesStringBuilder.Append("<ul>");
+            data.Categories.ToList().ForEach((c) => { categoriesStringBuilder.Append($"<li>{c.Name}</li>"); });
+            categoriesStringBuilder.Append("</ul>");
+
+            parsedHtmlString = parsedHtmlString.Replace("%%categories%%", categoriesStringBuilder.ToString());
 
             return parsedHtmlString;
         }

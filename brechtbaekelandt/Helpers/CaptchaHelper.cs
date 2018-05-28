@@ -24,7 +24,6 @@ namespace brechtbaekelandt.Helpers
 
             var captcha = new Captcha()
             {
-
                 ValueString = this.SerializeCaptchaValue(captchaValue)
             };
 

@@ -260,8 +260,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.atLeastOneCategoryMessage(null);
 
-        if (self.subscriber.categories.length === 0) {
+        if (self.subscriber.categories().length === 0) {
             self.atLeastOneCategoryMessage("you must select at least one category to subscribe.");
+            return;
         }
 
         if (self.subscriberErrors().length > 0) {
