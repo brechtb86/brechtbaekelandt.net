@@ -15,7 +15,7 @@
     <hr />
     <h4>posts</h4>
     <p>
-        <a href="#" data-bind="click: function(){ $root.selectedPost(null); $root.resetMessages(); showPostCreate(true);  }">create a post...</a>
+        <a href="#" data-bind="click: function(){ $root.selectedPost(null); $root.resetNewPost($root.newPost); $root.isPosted(false); $root.resetMessages(); showPostCreate(true);  }">create a post...</a>
     </p>
     <hr />
     <!-- ko if: deletePostErrorMessage -->
@@ -48,7 +48,7 @@
     </ul>
     <h4>users</h4>
     <p>
-        <a href="#" data-bind="click: function(){ $root.selectedUser(null); $root.resetMessages(); showUserCreate(true);  }">create a user...</a>
+        <a href="#" data-bind="click: function(){ $root.selectedUser(null); $root.resetNewUser($root.newUser); $root.isUserCreated(false); $root.resetMessages(); showUserCreate(true);  }">create a user...</a>
     </p>
     <hr />
     <!-- ko if: users().length === 0 -->
@@ -76,7 +76,7 @@
         <!-- /ko -->
     </ul>
 
-    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showPostCreate" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showPostCreate" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -100,7 +100,7 @@
     </div>
 
 
-    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showPostEdit" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showPostEdit" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -118,7 +118,7 @@
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal: showUserCreate" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal: showUserCreate" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -141,7 +141,7 @@
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showUserEdit" data-backdrop="static" data-keyboard="false">
+    <div class="modal fade" tabindex="-1" role="dialog" data-bind="modal:showUserEdit" data-backdrop="static">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
