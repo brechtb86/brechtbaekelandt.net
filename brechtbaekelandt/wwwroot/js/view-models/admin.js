@@ -26,9 +26,92 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         }
 
         self.showPostCreate = ko.observable();
+        self.showPostCreate.subscribe(function(newValue) {
+            function eventHandler(event) {
+                if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
+                    return true;
+                };
+
+                self.createPost(self.newPost);
+
+                event.preventDefault();
+
+                return false;
+            }
+
+            if (newValue) {
+                $(window).on("keypress", eventHandler);
+
+            } else {
+                $(window).off("keypress", eventHandler);
+            }
+        });
+
         self.showPostEdit = ko.observable();
+        self.showPostEdit.subscribe(function(newValue) {
+            function eventHandler(event) {
+                if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
+                    return true;
+                };
+
+                self.updatePost(self.selectedPost);
+
+                event.preventDefault();
+
+                return false;
+            }
+
+            if (newValue) {
+                $(window).on("keypress", eventHandler);
+
+            } else {
+                $(window).off("keypress", eventHandler);
+            }
+        });
+
         self.showUserCreate = ko.observable();
+        self.showUserCreate.subscribe(function(newValue) {
+            function eventHandler(event) {
+                if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
+                    return true;
+                };
+
+                self.createUser(self.newUser);
+
+                event.preventDefault();
+
+                return false;
+            }
+
+            if (newValue) {
+                $(window).on("keydown", () => alert("ok"));
+
+            } else {
+                $(window).on("keydown", eventHandler);
+            }
+        });
+
         self.showUserEdit = ko.observable();
+        self.showUserEdit.subscribe(function(newValue) {
+            function eventHandler(event) {
+                if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
+                    return true;
+                };
+
+                self.updateUser(self.selectedUser);
+
+                event.preventDefault();
+
+                return false;
+            }
+
+            if (newValue) {
+                $(window).on("keypress", eventHandler);
+
+            } else {
+                $(window).off("keypress", eventHandler);
+            }
+        });
 
         self.newPost = {};
         self.newPost.title = ko.observable().extend({ required: { message: "you didn't fill in the title!" } });
