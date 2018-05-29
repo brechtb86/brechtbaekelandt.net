@@ -28,88 +28,88 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.showPostCreate = ko.observable();
         self.showPostCreate.subscribe(function(newValue) {
             function eventHandler(event) {
-                if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
-                    return true;
+                if (event.which === 83 && event.ctrlKey) {
+                    event.preventDefault();
+
+                    self.createPost(self.newPost);
+
+                    return false;
                 };
 
-                self.createPost(self.newPost);
-
-                event.preventDefault();
-
-                return false;
+                return true;
             }
 
             if (newValue) {
-                $(window).on("keypress", eventHandler);
+                $(document).bind("keydown", eventHandler);
 
             } else {
-                $(window).off("keypress", eventHandler);
+                $(document).unbind("keydown", eventHandler);
             }
         });
 
         self.showPostEdit = ko.observable();
         self.showPostEdit.subscribe(function(newValue) {
             function eventHandler(event) {
-                if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
-                    return true;
+                if (event.which === 83 && event.ctrlKey) {
+                    event.preventDefault();
+
+                    self.updatePost(self.selectedPost);
+
+                    return false;
                 };
 
-                self.updatePost(self.selectedPost);
-
-                event.preventDefault();
-
-                return false;
+                return true;
             }
 
             if (newValue) {
-                $(window).on("keypress", eventHandler);
+                $(document).bind("keydown", eventHandler);
 
             } else {
-                $(window).off("keypress", eventHandler);
+                $(document).unbind("keydown", eventHandler);
             }
         });
 
         self.showUserCreate = ko.observable();
         self.showUserCreate.subscribe(function(newValue) {
             function eventHandler(event) {
-                if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
-                    return true;
+                if (event.which === 83 && event.ctrlKey) {
+                    event.preventDefault();
+
+                    self.createUser(self.newUser);
+
+                    return false;
                 };
 
-                self.createUser(self.newUser);
-
-                event.preventDefault();
-
-                return false;
+                return true;
             }
 
             if (newValue) {
-                $(window).on("keydown", () => alert("ok"));
+                $(document).bind("keydown", eventHandler);
 
             } else {
-                $(window).on("keydown", eventHandler);
+                $(document).unbind("keydown", eventHandler);
             }
         });
 
         self.showUserEdit = ko.observable();
         self.showUserEdit.subscribe(function(newValue) {
             function eventHandler(event) {
-                if (!(event.which === 115 && event.ctrlKey) && !(event.which === 19)) {
-                    return true;
+                if (event.which === 83 && event.ctrlKey) {
+                    event.preventDefault();
+
+                    self.updateUser(self.selectedUser);
+
+                    return false;
                 };
 
-                self.updateUser(self.selectedUser);
-
-                event.preventDefault();
-
-                return false;
+                return true;
             }
 
             if (newValue) {
-                $(window).on("keypress", eventHandler);
+                $(document).bind("keydown", eventHandler);
 
             } else {
-                $(window).off("keypress", eventHandler);
+                $(document).unbind("keydown", eventHandler);
             }
         });
 
