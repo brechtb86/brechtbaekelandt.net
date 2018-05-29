@@ -238,3 +238,9 @@ input:checked + .slider:before {
     -webkit-animation: webkit-blinker 1.5s linear infinite;
     animation: blinker 1.5s linear infinite;
 }
+
+/* Froala overrides */
+
+.fr-element.fr-view ul, .fr-element.fr-view ol {
+    padding-left: 20px;
+}
