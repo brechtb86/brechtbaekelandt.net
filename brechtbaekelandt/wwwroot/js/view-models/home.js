@@ -19,11 +19,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             return Math.ceil(self.totalPostCount() / self.postsPerPage());
         });
 
-        self.isLastPage = ko.observable(false);
-
-        if (self.currentPage() === self.totalPageCount()) {
-            self.isLastPage(true);
-        }
+        self.isLastPage = ko.observable(self.totalPostCount() === 0 || self.currentPage() === self.totalPageCount());
 
         document.addEventListener("scroll", function (event) {
             if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.currentPage() < self.totalPageCount())) {

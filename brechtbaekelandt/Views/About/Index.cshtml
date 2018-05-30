@@ -1,4 +1,5 @@
 ﻿@using System.Globalization
+@using Microsoft.ApplicationInsights.AspNetCore.Extensions
 
 @model brechtbaekelandt.ViewModels.AboutViewModel
 
@@ -119,6 +120,8 @@
 }
 
 @section seo {
+    <meta name="robots" content="index,follow" />
+
     <script type="application/ld+json">
         {
         "@@context": "http://schema.org",
@@ -137,7 +140,7 @@
     <meta name="description" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
     <meta name="keywords" content="@string.Join(", ", keywords)" />
     
-    <link rel="canonical" href="@($"{this.Model.BaseUrl}/about)")" />
+    <link rel="canonical" href="@this.Context.Request.GetUri().GetLeftPart(UriPartial.Path)" />
 }
 
 @section social{
