@@ -15,6 +15,41 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         self.post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === self.post.id() }).length > 0);
 
+        self.post.styledDescription = ko.computed(function () {
+            if (self.post.description && self.post.description()) {
+
+                var tempStyledDescription = self.post.description();
+
+                if (self.post.pictureUrl) {
+                    // TODO
+                }
+
+                return tempStyledDescription;
+            }
+
+            return null;
+        });
+
+        self.post.styledContent = ko.computed(function () {
+            if (self.post.content && self.post.content()) {
+                var tempStyledContent = self.post.content();
+
+                var imgMatches = self.post.content().match(/(<img.*?src=[\"'](.+?)[\"'].*?>)/g);
+
+                imgMatches.forEach(function (imgMatch) {
+                    var imgTag = imgMatch;
+                    var imgSrc = imgMatch.match(/src\s*=\s*"(.+?)"/)[1];
+
+                    tempStyledContent = tempStyledContent.replace(imgTag,
+                        "<a href=\"" + imgSrc + "\" data-fancybox>" + imgTag + "</a>");
+                });
+
+                return tempStyledContent;
+            }
+
+            return null;
+        });
+
         self.newComment = {};
         self.newComment.title = ko.observable();
         self.newComment.content = ko.observable().extend({ required: { message: "you didn't fill in the comment!" } });
@@ -126,7 +161,7 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
         self.deleteCommentErrorMessage(null);
 
         $.ajax({
-            url: "../../api/blog/post/delete-comment?commentId=" + comment.id(),           
+            url: "../../api/blog/post/delete-comment?commentId=" + comment.id(),
             type: "POST",
             contentType: "application/json; charset=UTF-8",
             dataType: "json",
