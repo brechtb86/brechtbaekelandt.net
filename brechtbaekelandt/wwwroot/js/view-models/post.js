@@ -36,13 +36,15 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
                 var imgMatches = self.post.content().match(/(<img.*?src=[\"'](.+?)[\"'].*?>)/g);
 
-                imgMatches.forEach(function (imgMatch) {
-                    var imgTag = imgMatch;
-                    var imgSrc = imgMatch.match(/src\s*=\s*"(.+?)"/)[1];
+                if (imgMatches) {
+                    imgMatches.forEach(function (imgMatch) {
+                        var imgTag = imgMatch;
+                        var imgSrc = imgMatch.match(/src\s*=\s*"(.+?)"/)[1];
 
-                    tempStyledContent = tempStyledContent.replace(imgTag,
-                        "<a href=\"" + imgSrc + "\" data-fancybox>" + imgTag + "</a>");
-                });
+                        tempStyledContent = tempStyledContent.replace(imgTag,
+                            "<a href=\"" + imgSrc + "\" data-fancybox>" + imgTag + "</a>");
+                    });
+                }
 
                 return tempStyledContent;
             }
