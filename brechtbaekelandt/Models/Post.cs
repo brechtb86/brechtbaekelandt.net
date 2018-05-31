@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text.RegularExpressions;
 using brechtbaekelandt.Extensions;
 
@@ -28,9 +29,37 @@ namespace brechtbaekelandt.Models
 
         public string CleanDescription => !string.IsNullOrEmpty(this.Description) ? Regex.Replace(this.Description, "<.*?>", string.Empty) : string.Empty;
 
+        // TODO: do this client-side
         public string DescriptionWithPicture => !string.IsNullOrEmpty(this.PictureUrl) ? Description.Insert(Description.IndexOf('>') + 1, $"<a href=\"{this.PictureUrl}\" data-fancybox data-caption=\"{this.Title}\"><img src=\"{this.PictureUrl}\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>") : this.Description;
 
         public string Content { get; set; }
+
+        // TODO: do this client side
+        public string StyledContent
+        {
+            get
+            {
+               if(!string.IsNullOrEmpty(this.Content))
+               {
+                   var tempStyledContent = this.Content;
+                       
+                   var imgMatches = Regex.Matches(this.Content, "(<img.*?src=[\"'](.+?)[\"'].*?>)");
+
+                   foreach (var imgMatch in imgMatches.Cast<Match>())
+                   {
+                       var imgTag = imgMatch.Value;
+                       var imgSrc = imgMatch.Groups[2].Value;
+
+                       tempStyledContent =
+                           tempStyledContent.Replace(imgTag, $"<a href=\"{imgSrc}\" data-fancybox>{imgTag}</a>");
+                   }
+
+                   return tempStyledContent;
+                }
+
+                return null;
+            }
+        }
 
         public string CleanContent => !string.IsNullOrEmpty(this.Content) ? Regex.Replace(this.Content, "<.*?>", string.Empty) : string.Empty;
 

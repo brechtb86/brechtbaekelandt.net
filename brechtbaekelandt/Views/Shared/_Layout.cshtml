@@ -304,7 +304,7 @@
             <div class="post-description" data-bind=", highlight: { text:  post.descriptionWithPicture(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <div class="clearfix" />
-            <div class="post-content" data-bind=", highlight: { text:  post.content(), keywords: viewModel.searchTermsFilter() }">
+            <div class="post-content" data-bind=", highlight: { text:  post.styledContent(), keywords: viewModel.searchTermsFilter() }">
             </div>
             <div class="clearfix" />
             <!-- ko if: post.attachments().length > 0 -->
