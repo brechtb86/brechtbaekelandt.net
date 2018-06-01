@@ -29,9 +29,6 @@ namespace brechtbaekelandt.Models
 
         public string CleanDescription => !string.IsNullOrEmpty(this.Description) ? Regex.Replace(this.Description, "<.*?>", string.Empty) : string.Empty;
 
-        // TODO: do this client-side
-        public string DescriptionWithPicture => !string.IsNullOrEmpty(this.PictureUrl) ? Description.Insert(Description.IndexOf('>') + 1, $"<a href=\"{this.PictureUrl}\" data-fancybox data-caption=\"{this.Title}\"><img src=\"{this.PictureUrl}\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>") : this.Description;
-
         public string Content { get; set; }
         
         public string CleanContent => !string.IsNullOrEmpty(this.Content) ? Regex.Replace(this.Content, "<.*?>", string.Empty) : string.Empty;

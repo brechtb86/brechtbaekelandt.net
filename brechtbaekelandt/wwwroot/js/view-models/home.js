@@ -36,6 +36,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         if (self.posts) {
             self.posts().forEach(function (post) {
                 post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === post.id() }).length > 0);
+
+                self.addStyledDescriptionToPost(post);
             });
         }
 
@@ -149,12 +151,33 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         })
             .done(function (data, textStatus, jqXhr) {
                 if (!getMore) {
-                    ko.mapping.fromJS(data.posts, {}, self.posts);
-                } else {
-                    data.posts.forEach(function (post) {
-                        self.posts.push(ko.mapping.fromJS(post));
-                    });
+                    self.posts([]);
                 }
+
+                data.posts.forEach(function (plainPost) {
+                    var post = ko.mapping.fromJS(plainPost);
+
+                    self.addStyledDescriptionToPost(post);
+
+                    self.posts.push(post);
+                });
+
+
+                //self.posts().forEach(function(post) {
+                //    post.styledDescription = ko.computed(function () {
+                //        var tempStyledDescription = post.description();
+
+                //        if (post.pictureUrl()) {
+                //            var afterFirstClosingTagIndex = post.description().indexOf(">") + 1;
+
+                //            if (afterFirstClosingTagIndex > -1) {
+                //                tempStyledDescription = [post.description().slice(0, afterFirstClosingTagIndex), "<a href =\"" + post.pictureUrl() + "\" data-fancybox data-caption=\"" + post.title() + "\"><img src=\"" + post.pictureUrl() + "\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>", post.description().slice(afterFirstClosingTagIndex)].join("");
+                //            }
+                //        }
+
+                //        return tempStyledDescription;
+                //    });
+                //});
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 
@@ -242,6 +265,22 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             });
     }
+
+    HomeViewModel.prototype.addStyledDescriptionToPost = function (post) {
+        post.styledDescription = ko.computed(function () {
+            var tempStyledDescription = post.description();
+
+            if (post.pictureUrl()) {
+                var afterFirstClosingTagIndex = post.description().indexOf(">") + 1;
+
+                if (afterFirstClosingTagIndex > -1) {
+                    tempStyledDescription = [post.description().slice(0, afterFirstClosingTagIndex), "<a href =\"" + post.pictureUrl() + "\" data-fancybox data-caption=\"" + post.title() + "\"><img src=\"" + post.pictureUrl() + "\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>", post.description().slice(afterFirstClosingTagIndex)].join("");
+                }
+            }
+
+            return tempStyledDescription;
+        });
+    };
 
     HomeViewModel.prototype.copyRssLink = function () {
         var self = this;
