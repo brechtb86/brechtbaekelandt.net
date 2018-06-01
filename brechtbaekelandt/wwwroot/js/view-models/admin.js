@@ -475,13 +475,13 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         $(".attachments-drop-zone input:file").val();
     };
 
-    AdminViewModel.prototype.deleteUploadedAttachment = function (postId, attachment) {
+    AdminViewModel.prototype.deleteUploadedAttachment = function (post, attachment) {
         var self = this;
 
         self.attachmentDeleteErrorMessage(null);
 
         $.ajax({
-            url: "../api/blog/delete-attachment?postId=" + postId,
+            url: "../api/blog/delete-attachment",
             type: "POST",
             contentType: "application/json; charset=UTF-8",
             data: ko.toJSON(attachment),
@@ -492,9 +492,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             success: function (data, textStatus, jqXhr) { }
         })
             .done(function (data, textStatus, jqXhr) {
-                ko.mapping.fromJS(self.newPost.attachments().filter(function (a) {
+                ko.mapping.fromJS(self.post.attachments().filter(function (a) {
                     return a.id !== data.id;
-                }), {}, self.newPost.attachments);
+                }), {}, self.post.attachments);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.attachmentDeleteErrorMessage("there was an error while deleting the file, please try again.");
