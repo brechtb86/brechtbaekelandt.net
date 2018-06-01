@@ -655,7 +655,7 @@
                             <!-- ko foreach: post.attachments -->
                             <li class="list-group-item">
                                 <b class="" data-bind="text: name"></b>
-                                <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteUploadedAttachment($data); }" class="btn btn-muted pull-right"><i class="far fa-trash-alt text-danger"></i></button>
+                                <button type="button" data-bind="click: function() { $parentContext.$data.viewModel.deleteUploadedAttachment($parentContext.$data.post, $data); }" class="btn btn-muted pull-right"><i class="far fa-trash-alt text-danger"></i></button>
                             </li>
                             <!-- /ko -->
                         </ul>
