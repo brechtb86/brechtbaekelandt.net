@@ -43,13 +43,21 @@
 }
 
 .post-content {
-}
 
+}
+    
     .post-content img {
         padding: 4px;
         border: 1px solid #ddd;
         width: 100% !important;
     }
+
+@media (max-width: 767px) {
+    .post-content img {
+        width: 100% !important;
+    }
+}
+
 
 .post-attachments {
 }
