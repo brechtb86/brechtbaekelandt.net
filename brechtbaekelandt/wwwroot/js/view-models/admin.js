@@ -114,6 +114,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         });
 
         self.newPost = {};
+        self.newPost.id = ko.observable();
         self.newPost.title = ko.observable().extend({ required: { message: "you didn't fill in the title!" } });
         self.newPost.description = ko.observable().extend({ required: { message: "you didn't fill in the description!" } });
         self.newPost.content = ko.observable();
@@ -123,17 +124,30 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.newPost.attachments = ko.observableArray();
         self.newPost.isPostVisible = ko.observable(false);
         self.newPost.url = ko.observable();
+        self.newPost.pictureToUpload = ko.observable();
+        self.newPost.pictureToUpload.subscribe(function (picture) {
+            if (picture) {
+                self.uploadPicture(self.newPost, picture);
+            }
+        });
 
         self.selectedPost = ko.observable();
-        self.selectedPost.subscribe(function (newValue) {
-            if (newValue) {
+        self.selectedPost.subscribe(function (post) {
+            if (post) {
                 self.categories().forEach(function (category) {
-                    category.isSelected(newValue.categories().filter(function (c) { return category.id() === c.id() })
+                    category.isSelected(post.categories().filter(function (c) { return category.id() === c.id() })
                         .length >
                         0);
                 });
 
-                self.updatePostErrors = ko.validation.group(newValue);
+                post.pictureToUpload = ko.observable();
+                post.pictureToUpload.subscribe(function (picture) {
+                    if (picture) {
+                        self.uploadPicture(post, picture);
+                    }
+                });
+
+                self.updatePostErrors = ko.validation.group(post);
 
             } else {
                 self.categories().forEach(function (category) {
@@ -185,15 +199,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 self.updateUserErrors = ko.validation.group(newValue);
             }
         });
-
-
-        self.pictureToUpload = ko.observable();
-        self.pictureToUpload.subscribe(function (newValue) {
-            if (newValue) {
-                self.uploadPicture(newValue);
-            }
-        });
-
+        
         self.attachmentsToUpload = ko.observableArray();
         self.attachmentsUploadRequest = ko.observable();
 
@@ -317,7 +323,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
     };
 
-    AdminViewModel.prototype.uploadPicture = function (picture) {
+    AdminViewModel.prototype.uploadPicture = function (post, picture) {
         var self = this;
 
         self.pictureUploadErrorMessage(null);
@@ -345,8 +351,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             }
         })
             .done(function (data, textStatus, jqXhr) {
-                self.pictureToUpload(null);
-                self.newPost.pictureUrl(data.link);
+                post.pictureToUpload(null);
+                post.pictureUrl(data.link);
 
                 $(".picture-drop-zone input:file").val();
             })
@@ -357,19 +363,25 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
     };
 
-    AdminViewModel.prototype.deletePicture = function (pictureUrl) {
+    AdminViewModel.prototype.deletePicture = function (post) {
         var self = this;
 
         self.pictureDeleteErrorMessage(null);
 
+        if (!post.id()) {
+            post.pictureUrl(null);
+
+            return;
+        }
+
         $.ajax({
-            url: "../api/blog/delete-picture?picture=" + pictureUrl(),
+            url: "../api/blog/delete-picture?picture=" + post.pictureUrl(),
             type: "POST",
             success: function (data, textStatus, jqXhr) { },
             async: false
         })
             .done(function (data, textStatus, jqXhr) {
-                self.newPost.pictureUrl(null);
+                post.pictureUrl(null);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.pictureDeleteErrorMessage("there was an error while deleting the file, please try again.");
@@ -463,13 +475,13 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         $(".attachments-drop-zone input:file").val();
     };
 
-    AdminViewModel.prototype.deleteUploadedAttachment = function (attachment) {
+    AdminViewModel.prototype.deleteUploadedAttachment = function (postId, attachment) {
         var self = this;
 
         self.attachmentDeleteErrorMessage(null);
 
         $.ajax({
-            url: "../api/blog/delete-attachment",
+            url: "../api/blog/delete-attachment?postId=" + postId,
             type: "POST",
             contentType: "application/json; charset=UTF-8",
             data: ko.toJSON(attachment),
