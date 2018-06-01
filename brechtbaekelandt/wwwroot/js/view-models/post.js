@@ -15,42 +15,8 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         self.post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === self.post.id() }).length > 0);
 
-        self.post.styledDescription = ko.computed(function () {
-            if (self.post.description && self.post.description()) {
-
-                var tempStyledDescription = self.post.description();
-
-                if (self.post.pictureUrl) {
-                    // TODO
-                }
-
-                return tempStyledDescription;
-            }
-
-            return null;
-        });
-
-        self.post.styledContent = ko.computed(function () {
-            if (self.post.content && self.post.content()) {
-                var tempStyledContent = self.post.content();
-
-                var imgMatches = self.post.content().match(/(<img.*?src=[\"'](.+?)[\"'].*?>)/g);
-
-                if (imgMatches) {
-                    imgMatches.forEach(function (imgMatch) {
-                        var imgTag = imgMatch;
-                        var imgSrc = imgMatch.match(/src\s*=\s*"(.+?)"/)[1];
-
-                        tempStyledContent = tempStyledContent.replace(imgTag,
-                            "<a href=\"" + imgSrc + "\" data-fancybox>" + imgTag + "</a>");
-                    });
-                }
-
-                return tempStyledContent;
-            }
-
-            return null;
-        });
+        self.addStyledDescriptionToPost(self.post);
+        self.addStyledContentToPost(self.post);
 
         self.newComment = {};
         self.newComment.title = ko.observable();
@@ -244,6 +210,46 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
             });
     }
+
+    PostViewModel.prototype.addStyledDescriptionToPost = function (post) {
+        post.styledDescription = ko.computed(function () {
+            var tempStyledDescription = post.description();
+
+            if (post.pictureUrl()) {
+                var afterFirstClosingTagIndex = post.description().indexOf(">") + 1;
+
+                if (afterFirstClosingTagIndex > -1) {
+                    tempStyledDescription = [post.description().slice(0, afterFirstClosingTagIndex), "<a href =\"" + post.pictureUrl() + "\" data-fancybox data-caption=\"" + post.title() + "\"><img src=\"" + post.pictureUrl() + "\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>", post.description().slice(afterFirstClosingTagIndex)].join("");
+                }
+            }
+
+            return tempStyledDescription;
+        });
+    };
+
+    PostViewModel.prototype.addStyledContentToPost = function (post) {
+        post.styledContent = ko.computed(function () {
+            if (post.content()) {
+                var tempStyledContent = post.content();
+
+                var imgMatches = post.content().match(/(<img.*?src=[\"'](.+?)[\"'].*?>)/g);
+
+                if (imgMatches) {
+                    imgMatches.forEach(function (imgMatch) {
+                        var imgTag = imgMatch;
+                        var imgSrc = imgMatch.match(/src\s*=\s*"(.+?)"/)[1];
+
+                        tempStyledContent = tempStyledContent.replace(imgTag,
+                            "<a href=\"" + imgSrc + "\" data-fancybox>" + imgTag + "</a>");
+                    });
+                }
+
+                return tempStyledContent;
+            }
+
+            return null;
+        });
+    };
 
     PostViewModel.prototype.getCaptcha = function (captchaName) {
         var self = this;
