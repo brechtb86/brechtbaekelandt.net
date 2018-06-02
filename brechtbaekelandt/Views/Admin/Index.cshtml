@@ -42,6 +42,7 @@
             </label>
             <a href="" data-bind="text: title(), click: function() { $root.selectedPost($root.clone($data)); $root.resetMessages(); $root.showPostEdit(true); }"></a>
             <span data-bind="text: moment(created()).format('DD/MM/YYYY, HH:mm:ss')"></span>
+            <a href="" data-bind="attr: { href: $data.url() }">(view)</a>
             <button type="button" data-bind="click: function() { $root.deletePost($data); }" class="btn btn-muted"><i class="far fa-trash-alt text-danger"></i></button>
         </li>
         <!-- /ko -->
