@@ -1,5 +1,3 @@
-User-Agent: *
+User-agent: *
 Disallow: 
-Allow: /
-
-Sitemap: http://www.brechtbaekelandt.net/sitemap/sitemap.xml
+Sitemap: https://www.brechtbaekelandt.net/sitemap
