@@ -573,7 +573,7 @@
                     <div class="form-group">
                         <label>tags:</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="add a new tag or select one or more below" data-bind="textInput: viewModel.tagToAdd, enterKey: function() { viewModel.addTag(viewModel.tagToAdd, post.tags); }" />
+                            <input type="text" class="form-control" placeholder="add some tags" data-bind="textInput: viewModel.tagToAdd, enterKey: function() { viewModel.addTag(viewModel.tagToAdd, post.tags); }" />
                             <span class="input-group-btn">
                                 <button class="btn btn-primary" type="button" data-bind="click: function(){ viewModel.addTag(viewModel.tagToAdd, post.tags); }"><i class="fas fa-plus"></i></button>
                             </span>
