@@ -44,11 +44,22 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         try {
             self.initAddThis();
-            self.initFancyBox();
-            self.initPrettify();
+            
         } catch (e) {
 
         }
+
+        try {
+            self.initFancyBox();
+        } catch (e) {
+
+        }
+
+        try {
+            self.initPrettify();
+        } catch (e) {
+
+        } 
     };
 
     PostViewModel.prototype.addComment = function (comment, postId) {

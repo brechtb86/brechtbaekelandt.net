@@ -130,10 +130,15 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         try {
             self.initAddThis();
-            self.initFancyBox();
         } catch (e) {
 
         }
+
+        try {
+            self.initFancyBox();
+        } catch (e) {
+
+        } 
 
     };
 
