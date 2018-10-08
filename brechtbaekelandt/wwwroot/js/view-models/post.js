@@ -42,9 +42,13 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         self.getCaptcha("commentCaptcha");
 
-        self.initAddThis();
-        self.initFancyBox();
-        self.initPrettify();
+        try {
+            self.initAddThis();
+            self.initFancyBox();
+            self.initPrettify();
+        } catch (e) {
+
+        }
     };
 
     PostViewModel.prototype.addComment = function (comment, postId) {

@@ -128,8 +128,13 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.getRequests = ko.observableArray();
 
-        self.initAddThis();
-        self.initFancyBox();
+        try {
+            self.initAddThis();
+            self.initFancyBox();
+        } catch (e) {
+
+        }
+
     };
 
     HomeViewModel.prototype.getPosts = function (getMore = false) {
