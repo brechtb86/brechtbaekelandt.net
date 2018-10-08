@@ -22,7 +22,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.isLastPage = ko.observable(self.totalPostCount() === 0 || self.currentPage() === self.totalPageCount());
 
         document.addEventListener("scroll", function (event) {
-            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) && (self.currentPage() < self.totalPageCount())) {
+            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) || (document.height < document.scrollTop + window.height) && (self.currentPage() < self.totalPageCount())) {
                 self.getPosts(true);
             }
 
