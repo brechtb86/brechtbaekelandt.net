@@ -128,18 +128,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.getRequests = ko.observableArray();
 
-        try {
-            self.initAddThis();
-        } catch (e) {
-
-        }
-
-        try {
-            self.initFancyBox();
-        } catch (e) {
-
-        } 
-
+        self.initAddThis();
+        self.initFancyBox();
     };
 
     HomeViewModel.prototype.getPosts = function (getMore = false) {
@@ -342,25 +332,33 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     };
 
     HomeViewModel.prototype.initAddThis = function () {
-        addthis.init();
+        try {
+            addthis.init();
 
-        if (addthis.layers.refresh) {
-            addthis.layers.refresh();
+            if (addthis.layers.refresh) {
+                addthis.layers.refresh();
+            }
+        } catch (e) {
+
         }
     }
 
     HomeViewModel.prototype.initFancyBox = function () {
-        $("[data-fancybox]").fancybox({
-            buttons: [
-                //'slideShow',
-                "fullScreen",
-                //'thumbs',
-                //'share',
-                "download",
-                "zoom",
-                "close"
-            ]
-        });
+        try {
+            $("[data-fancybox]").fancybox({
+                buttons: [
+                    //'slideShow',
+                    "fullScreen",
+                    //'thumbs',
+                    //'share',
+                    "download",
+                    "zoom",
+                    "close"
+                ]
+            });
+        } catch (e) {
+
+        }
     }
 
     HomeViewModel.prototype.createSearchTermsQueryString = function (searchTermsFilter) {

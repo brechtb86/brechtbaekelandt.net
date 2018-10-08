@@ -42,24 +42,9 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
         self.getCaptcha("commentCaptcha");
 
-        try {
-            self.initAddThis();
-            
-        } catch (e) {
-
-        }
-
-        try {
-            self.initFancyBox();
-        } catch (e) {
-
-        }
-
-        try {
-            self.initPrettify();
-        } catch (e) {
-
-        } 
+        self.initAddThis();
+        self.initFancyBox();
+        self.initPrettify();
     };
 
     PostViewModel.prototype.addComment = function (comment, postId) {
@@ -293,29 +278,41 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
     };
 
     PostViewModel.prototype.initFancyBox = function () {
-        $("[data-fancybox]").fancybox({
-            buttons: [
-                //'slideShow',
-                "fullScreen",
-                //'thumbs',
-                //'share',
-                "download",
-                "zoom",
-                "close"
-            ]
-        });
+        try {
+            $("[data-fancybox]").fancybox({
+                buttons: [
+                    //'slideShow',
+                    "fullScreen",
+                    //'thumbs',
+                    //'share',
+                    "download",
+                    "zoom",
+                    "close"
+                ]
+            });
+        } catch (e) {
+
+        }
     }
 
     PostViewModel.prototype.initAddThis = function () {
-        addthis.init();
+        try {
+            addthis.init();
 
-        if (addthis.layers.refresh) {
-            addthis.layers.refresh();
+            if (addthis.layers.refresh) {
+                addthis.layers.refresh();
+            }
+        } catch (e) {
+
         }
     }
 
     PostViewModel.prototype.initPrettify = function () {
-        PR.prettyPrint();
+        try {
+            PR.prettyPrint();
+        } catch (e) {
+
+        }
     }
 
     function init(serverViewModel) {
