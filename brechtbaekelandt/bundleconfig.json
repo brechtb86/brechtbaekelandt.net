@@ -6,7 +6,6 @@
     // An array of relative input file paths. Globbing patterns supported
     "inputFiles": [
       "wwwroot/css/bootstrap/bootstrap-custom.css",
-      "wwwroot/css/froala/froala-theme.css",
       "wwwroot/css/site.css",
       "wwwroot/css/about.css",
       "wwwroot/css/admin.css",
@@ -20,7 +19,6 @@
     "outputFileName": "wwwroot/js/site.min.js",
     "inputFiles": [
       "wwwroot/js/addthis/addthis_widget.js",
-      "wwwroot/js/froala/froala_custom_buttons.js",
       "wwwroot/js/knockout/knockout.drop-upload-bindings.js",
       "wwwroot/js/knockout/knockout.extenders.js",
       "wwwroot/js/knockout/knockout.extensions.js",
