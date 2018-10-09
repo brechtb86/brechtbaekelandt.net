@@ -213,21 +213,25 @@
 
     <link href="~/lib/fancybox/dist/jquery.fancybox.css" rel="stylesheet" />
 
-    <link href="~/css/controls/post-preview.css" rel="stylesheet" asp-append-version="true" />
+    <environment include="Development">
+        <link href="~/css/controls/post-preview.css" rel="stylesheet" asp-append-version="true" />
 
-    <link href="~/css/home.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/home.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
 }
 
 @section scripts{
     <script src="~/lib/fancybox/dist/jquery.fancybox.js"></script>
+    
+    <environment include="Development">
+        <script src="~/js/knockout/knockout.key-binding-handlers.js"></script>
+        <script src="~/js/knockout/knockout.modal-bindings.js"></script>
+        <script src="~/js/knockout/knockout.highlight-bindings.js"></script>
 
-    <script src="~/js/knockout/knockout.key-binding-handlers.js"></script>
-    <script src="~/js/knockout/knockout.modal-bindings.js"></script>
-    <script src="~/js/knockout/knockout.highlight-bindings.js"></script>
+        <script src="~/js/extensions/string-extensions.js"></script>
 
-    <script src="~/js/extensions/string-extensions.js"></script>
-
-    <script src="~/js/view-models/home.js" asp-append-version="true"></script>
+        <script src="~/js/view-models/home.js" asp-append-version="true"></script>
+    </environment>
 
     <script type="text/javascript">
         $(function () {
