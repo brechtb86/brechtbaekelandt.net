@@ -21,7 +21,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
-        self.isLastPage = ko.observable(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0 );
+        self.isLastPage = ko.observable(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0);
 
         document.addEventListener("scroll", function (event) {
 
