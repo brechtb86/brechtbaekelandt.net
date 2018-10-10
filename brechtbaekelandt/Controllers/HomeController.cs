@@ -64,9 +64,9 @@ namespace brechtbaekelandt.Controllers
             var totalPostCount = postEntities.Count();
             var allPostsUrls = postEntities.Select(p => $"{this._baseUrl}/blog/post/{p.InternalTitle}").ToCollection();
 
+
             postEntities = postEntities.OrderByDescending(p => p.Created)
-                .Skip((currentPage - 1) * PostsPerPage)
-                .Take(PostsPerPage);
+                .Take(PostsPerPage * currentPage);
 
             if (includeComments)
             {
