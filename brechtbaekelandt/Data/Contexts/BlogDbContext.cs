@@ -1,4 +1,5 @@
-﻿using brechtbaekelandt.Data.Entities;
+﻿using System;
+using brechtbaekelandt.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace brechtbaekelandt.Data
@@ -23,6 +24,14 @@ namespace brechtbaekelandt.Data
         public DbSet<Subscriber> Subscribers { get; set; }
 
         public DbSet<Attachment> Attachments { get; set; }
+
+
+        [DbFunction("RemoveDiacritics", "dbo")]
+        public static string RemoveDiacritics(string input)
+        {
+            throw new NotImplementedException("This method can only be called in LINQ-to-Entities!");
+        }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
