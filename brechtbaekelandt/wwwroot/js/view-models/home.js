@@ -57,7 +57,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             }
         });
 
-        self.searchTermsFilterString = ko.observable();
+        self.searchTermsFilterString = ko.observable(getQueryParameterByName("searchTerms"));
         self.searchTermsFilterString.subscribe(function (newValue) {
             self.searchTermsFilter(newValue.trim().split(" "));
         });
@@ -106,8 +106,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         var categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
         self.categoryQueryString(categoryQueryString);
-
-
 
         self.showSubscribe = ko.observable(false);
 
@@ -183,7 +181,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                     self.isLastPage(self.currentPage() === self.totalPageCount() || self.totalPostCount() === 0);
                 });
 
-                history.pushState(null, "", location.href.split("?")[0]);
+                //history.pushState(null, "", location.href.split("?")[0]);
+
+                history.pushState(null, "", location.href.split("?")[0] + fullQueryString);
             });
 
         self.getRequests.push(request);
@@ -379,6 +379,16 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         var query = self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "") + (includeCurrentPage ? "currentPage=" + currentPage : "");
 
         return query ? "?" + query : "";
+    }
+
+    function getQueryParameterByName(name, url) {
+        if (!url) url = window.location.href;
+        name = name.replace(/[\[\]]/g, '\\$&');
+        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
 
     function init(serverViewModel) {
