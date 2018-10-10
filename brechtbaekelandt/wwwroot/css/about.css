@@ -12,9 +12,9 @@
 }
 
 @media (max-width: 768px) {
-  .about-container  img {
-        max-width: 200px !important;
-    }
+  .about-container img {
+    max-width: 200px !important;
+  }
 
   .about-container  .col-vertical-center {
         flex-direction: unset;
