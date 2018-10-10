@@ -19,7 +19,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             return Math.ceil(self.totalPostCount() / self.postsPerPage());
         });
 
-        self.isLastPage = ko.observable(self.totalPostCount() === 0 || self.currentPage() === self.totalPageCount());
+        self.isLoading = ko.observable(false);
+        self.isLoadingMore = ko.observable(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
+        self.isLastPage = ko.observable(self.currentPage() === self.totalPageCount() || self.totalPostCount() === 0 );
 
         document.addEventListener("scroll", function (event) {
 
@@ -105,8 +107,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         var categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
         self.categoryQueryString(categoryQueryString);
 
-        self.isLoading = ko.observable(false);
-        self.isLoadingMore = ko.observable(false);
+
 
         self.showSubscribe = ko.observable(false);
 
@@ -169,8 +170,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.totalPostCount(data.totalPostCount);
                 self.postsPerPage(data.postsPerPage);
                 self.isLoading(false);
-                self.isLoadingMore(self.currentPage() < self.totalPageCount());
-                self.isLastPage(self.currentPage() === self.totalPageCount());
+                self.isLoadingMore(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
+                self.isLastPage(self.currentPage() === self.totalPageCount() || self.totalPostCount() === 0);
 
                 self.posts().forEach(function (post) {
                     post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === post.id() }).length > 0);
@@ -178,8 +179,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
                 $.when.apply($, self.getRequests()).done(function () {
                     self.isLoading(false);
-                    self.isLoadingMore(self.currentPage() < self.totalPageCount());
-                    self.isLastPage(self.currentPage() === self.totalPageCount());
+                    self.isLoadingMore(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
+                    self.isLastPage(self.currentPage() === self.totalPageCount() || self.totalPostCount() === 0);
                 });
 
                 history.pushState(null, "", location.href.split("?")[0]);
