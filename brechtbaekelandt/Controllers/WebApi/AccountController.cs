@@ -1,18 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using AutoMapper;
-using brechtbaekelandt.Data;
+﻿using AutoMapper;
+using brechtbaekelandt.Data.Contexts;
 using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Filters;
 using brechtbaekelandt.Identity;
 using brechtbaekelandt.Identity.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace brechtbaekelandt.Controllers.WebApi
 {

@@ -1,9 +1,8 @@
-﻿using System;
+﻿using brechtbaekelandt.Extensions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text.RegularExpressions;
-using brechtbaekelandt.Extensions;
 
 namespace brechtbaekelandt.Models
 {

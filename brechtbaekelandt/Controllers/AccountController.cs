@@ -1,12 +1,11 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using brechtbaekelandt.Identity;
+﻿using brechtbaekelandt.Identity;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using System;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace brechtbaekelandt.Controllers
@@ -34,7 +33,7 @@ namespace brechtbaekelandt.Controllers
         [HttpGet]
         public IActionResult SignIn(string returnUrl = null)
         {
-            return View();
+            return this.View();
         }
 
         [HttpPost]

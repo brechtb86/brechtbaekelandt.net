@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml;
-using AutoMapper;
-using brechtbaekelandt.Data;
+﻿using AutoMapper;
+using brechtbaekelandt.Data.Contexts;
 using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Identity;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace brechtbaekelandt.Controllers
 {
