@@ -14,7 +14,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 
     <meta name="copyright" content="www.brechtbaekelandt.net falls under GNU General Public License version 3" />
-    
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
     <script>
@@ -60,25 +60,25 @@
     <link href="//fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic" rel="stylesheet" type="text/css">
-    
-   <environment include="Development">
-        <link href="~/css/bootstrap/bootstrap-custom.css" rel="stylesheet" asp-append-version="true"/>
-        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true"/>
+
+    <environment include="Development">
+        <link href="~/css/bootstrap/bootstrap-custom.css" rel="stylesheet" asp-append-version="true" />
+        <link href="~/css/site.css" rel="stylesheet" asp-append-version="true" />
     </environment>
     <environment exclude="Development">
         <link href="~/css/site.min.css" rel="stylesheet" asp-append-version="true" />
     </environment>
 
     @RenderSection("styles", required: false)
-    
+
     <script type="text/javascript" src="~/lib/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="~/lib/jquery.cookie/jquery.cookie.js"></script>
     <script type="text/javascript" src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script type="text/javascript" src="~/lib/knockout/dist/knockout.js"></script>
     <script type="text/javascript" src="~/lib/knockout-mapping/knockout.mapping.js"></script>
     <script type="text/javascript" src="~/lib/moment/moment.js"></script>
-    
-  <environment include="Development">
+
+    <environment include="Development">
         <script type="text/javascript" src="~/js/knockout/knockout.extenders.js"></script>
         <script type="text/javascript" src="~/js/knockout/knockout.extensions.js"></script>
         <script type="text/javascript" src="~/js/knockout/knockout.validation-custom.js"></script>
@@ -86,7 +86,7 @@
         <script type="text/javascript" src="~/js/base.js" asp-append-version="true"></script>
         <script type="text/javascript" src="~/js/helpers/helpers.js" asp-append-version="true"></script>
     </environment>
-    
+
     <environment exclude="Development">
         <script type="text/javascript" src="/js/site.min.js" asp-append-version="true"></script>
     </environment>
@@ -148,70 +148,70 @@
 
                     @if (this.User.Identity.IsAuthenticated)
                     {
-                    <li class="@(activePage == "admin" ? "active" : "" )"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
+                        <li class="@(activePage == "admin" ? "active" : "" )"><a asp-area="" asp-controller="Admin" asp-action="Index">admin</a></li>
                     }
                 </ul>
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                var firstName = string.Empty;
-                var lastName = string.Empty;
+                    var firstName = string.Empty;
+                    var lastName = string.Empty;
 
-                var currentUser = this.ViewData["CurrentUser"];
+                    var currentUser = this.ViewData["CurrentUser"];
 
-                if (currentUser is ApplicationUser currentApplicationUser)
-                {
-                firstName = currentApplicationUser.FirstName;
-                lastName = currentApplicationUser.LastName;
-                }
+                    if (currentUser is ApplicationUser currentApplicationUser)
+                    {
+                        firstName = currentApplicationUser.FirstName;
+                        lastName = currentApplicationUser.LastName;
+                    }
 
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <span class="navbar-text">@($"hello {firstName} {lastName}")</span>
-                    </li>
-                    <li>
-                        <form class="navbar-form" method="POST" asp-controller="account" asp-action="signout">
-                            <button type="submit" class="btn btn-sm btn-default"><i class="fas fa-sign-out-alt"></i> sign out</button>
-                        </form>
-                    </li>
-                </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <span class="navbar-text">@($"hello {firstName} {lastName}")</span>
+                        </li>
+                        <li>
+                            <form class="navbar-form" method="POST" asp-controller="account" asp-action="signout">
+                                <button type="submit" class="btn btn-sm btn-default"><i class="fas fa-sign-out-alt"></i> sign out</button>
+                            </form>
+                        </li>
+                    </ul>
                 }
                 else
                 {
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">sign in <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li class="sign-in-dropdown">
-                                <form method="POST" asp-controller="account" asp-action="signin">
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="far fa-user"></i></span>
-                                            <input name="username" type="text" placeholder="username or email" class="form-control" />
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">sign in <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="sign-in-dropdown">
+                                    <form method="POST" asp-controller="account" asp-action="signin">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="far fa-user"></i></span>
+                                                <input name="username" type="text" placeholder="username or email" class="form-control" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
-                                            <input name="password" type="password" placeholder="password" class="form-control" />
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fas fa-unlock-alt"></i></span>
+                                                <input name="password" type="password" placeholder="password" class="form-control" />
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>
-                                            <label class="switch">
-                                                <input name="rememberMe" type="checkbox" value="true" />
-                                                <span class="slider"></span>
+                                        <div class="form-group">
+                                            <label>
+                                                <label class="switch">
+                                                    <input name="rememberMe" type="checkbox" value="true" />
+                                                    <span class="slider"></span>
+                                                </label>
+                                                remember me
                                             </label>
-                                            remember me
-                                        </label>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> sign in</button>
-                                    </div>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> sign in</button>
+                                        </div>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 }
             </div>
         </nav>
@@ -409,7 +409,7 @@
                 <i class="far fa-comment"></i> <span data-bind="text: comment.title() ? comment.title() : 're: ' + postTitle"></span>
                 @if (this.User.Identity.IsAuthenticated)
                 {
-                <small><a href="#" data-bind="click: function() { viewModel.deleteComment(comment) }" class="pull-right">delete</a></small>
+                    <small><a href="#" data-bind="click: function() { viewModel.deleteComment(comment) }" class="pull-right">delete</a></small>
                 }
             </h4>
             <small>
@@ -487,12 +487,13 @@
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.content">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.content.isValid }">
-                    <!-- ko ifnot: viewModel.isTyping -->
+                    <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment"></i></span>
+                    @*<!-- ko ifnot: viewModel.isTyping -->
                     <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment"></i></span>
                     <!-- /ko -->
                     <!-- ko if: viewModel.isTyping -->
                     <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment-alt"></i></span>
-                    <!-- /ko -->
+                    <!-- /ko -->*@
                     <textarea rows="6" placeholder="enter your comment" class="form-control" data-bind="textInput: viewModel.newComment.content, isTyping: viewModel.isTyping, timeOut: 750"></textarea>
                     <!-- ko if: viewModel.newComment.content -->
                     <span class="fas fa-check form-control-feedback"></span>
@@ -711,33 +712,6 @@
     @*user editor template*@
 
     <script type="text/html" id="userEditorTemplate">
-        @*<!-- ko if: viewModel.addCommentValidationMessages().length > 0 -->
-        <div class="alert alert-danger">
-            <strong>error!</strong> there are some errors:
-            <ul class="list-unstyled">
-                <!-- ko foreach: viewModel.addCommentValidationMessages -->
-                <li><span data-bind="text: $data.errorMessage"></span></li>
-                <!-- /ko -->
-            </ul>
-        </div>
-        <!-- /ko -->
-        <!-- ko if: viewModel.captchaInvalidMessage -->
-        <div class="alert alert-danger">
-            <strong>error!</strong> <span data-bind="text:  viewModel.captchaInvalidMessage"></span>
-        </div>
-        <!-- /ko -->
-        <!-- ko if: viewModel.addCommentErrorMessage -->
-        <div class="alert alert-danger alert-dismissable">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>error!</strong> <span data-bind="text:  viewModel.addCommentErrorMessage"></span>
-        </div>
-        <!-- /ko -->
-        <!-- ko if:  viewModel.addCommentSucceededMessage -->
-        <div class="alert alert-success alert-dismissable">
-            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <strong>success!</strong> <span data-bind="text: viewModel.addCommentSucceededMessage"></span>
-        </div>
-        <!-- /ko -->*@
         <form>
             <div class="form-group" data-bind="validationElement: user.userName">
                 <div class="input-group has-feedback" data-bind="css: { 'has-success': user.userName.isValid }">
