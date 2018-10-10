@@ -30,91 +30,91 @@
         padding-right: 10px;
     }
 
-.progress-label-container {
+  .post-editor .progress-label-container {
     width: 100%;
     text-align: center;
-}
+  }
 
 
 @media(max-width:767px), (min-width:768px) {
-    .picture-description, .picture, .description {
-        display: block;
-    }
+  .post-editor .picture-description, .post-editor .picture, .post-editor .description {
+    display: block;
+  }
 }
 
 @media(min-width:992px), (min-width:1200px) {
-    .picture-description {
+  .post-editor .picture-description {
         display: table-row;
     }
 
-    .picture {
+  .post-editor .picture {
         padding-right: 15px;
         white-space: nowrap;
     }
 
-    .description {
+  .post-editor .description {
         width: 100%;
     }
 
-    .picture, .description {
-        display: table-cell;
-    }
+  .post-editor .picture, .post-editor .description {
+    display: table-cell;
+  }
 }
 
-.picture-drop-zone, .attachments-drop-zone {
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -o-user-select: none;
-    border: 1px solid #540804;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
+.post-editor .picture-drop-zone, .post-editor .attachments-drop-zone {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -o-user-select: none;
+  border: 1px solid #540804;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
 }
 
-    .picture-drop-zone.enter-drag, .attachments-drop-zone.enter-drag {
-        border: 1px solid #078d13;
-        background-color: #6ca984;
-        background-image: none;
-    }
+  .post-editor .picture-drop-zone.enter-drag, .post-editor .attachments-drop-zone.enter-drag {
+    border: 1px solid #078d13;
+    background-color: #6ca984;
+    background-image: none;
+  }
 
-    .picture-drop-zone > label, .attachments-drop-zone > label {
-        margin: 0 5px;
-    }
+  .post-editor .picture-drop-zone > label, .post-editor .attachments-drop-zone > label {
+    margin: 0 5px;
+  }
 
-.picture-drop-zone {
-    background: url('../../images/no-picture.png') center center no-repeat;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    height: 279px;
-    margin-bottom: 15px;
+.post-editor .picture-drop-zone {
+  background: url('../../images/no-picture.png') center center no-repeat;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 279px;
+  margin-bottom: 15px;
 }
 
-.thumbnail-container {
-    position: relative;
-    height: 279px;
-    margin-bottom: 15px;
+.post-editor .thumbnail-container {
+  position: relative;
+  height: 279px;
+  margin-bottom: 15px;
 }
 
-.img-thumbnail {
-    display: block;
-    max-width: 240px;
-    max-height: 279px;
-    width: auto;
-    height: auto;
+.post-editor .img-thumbnail {
+  display: block;
+  max-width: 240px;
+  max-height: 279px;
+  width: auto;
+  height: auto;
 }
 
-.btn-delete-picture {
-    position: absolute;
-    right: 15px;
-    top: 15px;
+.post-editor .btn-delete-picture {
+  position: absolute;
+  right: 15px;
+  top: 15px;
 }
 
-.attachments-drop-zone {
-    height: 200px;
-    background-color: #d8d6d9;
+.post-editor .attachments-drop-zone {
+  height: 200px;
+  background-color: #d8d6d9;
 }
