@@ -1,7 +1,4 @@
-﻿using System;
-using System.Buffers;
-using System.Diagnostics;
-using brechtbaekelandt.Data;
+﻿using brechtbaekelandt.Data.Contexts;
 using brechtbaekelandt.Data.Contexts.Identity;
 using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Helpers;
@@ -23,6 +20,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using System;
+using System.Buffers;
+using System.Diagnostics;
 
 namespace brechtbaekelandt
 {
