@@ -367,6 +367,15 @@ namespace brechtbaekelandt.Controllers.WebApi
             await this._blogDbContext.Comments.AddAsync(newCommentEntity);
             await this._blogDbContext.SaveChangesAsync();
 
+            try
+            {
+                await this._emailService.SendCommentNotificationEmailAsync(comment.Name, comment.EmailAddress, comment.Title, comment.Content);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
             return this.Json(comment);
         }
 

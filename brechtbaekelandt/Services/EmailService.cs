@@ -32,18 +32,8 @@ namespace brechtbaekelandt.Services
             this._mailjetSettings = mailjetSettingsOptions.Value;
         }
 
-        public async Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink, ICollection<Category> categories)
+        public async Task<EmailResponse> SendEmailAsync(string toName, string toEmailAddress, string subject, string emailHtmlString, string emailTextString = null)
         {
-            var data = new SubscribedData
-            {
-                ConfirmationLink = confirmationLink,
-                SubscriberEmailAddress = subscriberEmailAddress,
-                Categories = categories
-            };
-
-            var emailHtmString = await this.ParseSubscribedHtmlEmail("subscribed", data);
-            //var emailTextString = await this.ParseTextEmail("subscribed", data);
-
             var client = new MailjetClient(this._mailjetSettings.ApiKey, this._mailjetSettings.ApiSecret, new MailjetClientHandler())
             {
                 BaseAdress = this._mailjetSettings.BaseAddress,
@@ -54,29 +44,60 @@ namespace brechtbaekelandt.Services
             {
                 Resource = Send.Resource
             }
-            .Property(Send.Messages, new JArray {
-                new JObject {
-                    {"From", new JObject {
-                        {"Email", this._mailjetSettings.From},
-                        {"Name",  this._mailjetSettings.FromName}
-                    }},
-                    {"To", new JArray {
-                        new JObject {
-                            {"Email", subscriberEmailAddress},
-                            {"Name", subscriberEmailAddress}
-                        }
-                    }},
-                    {"Subject", ""},
-                    {"TextPart", ""},
-                    {"HTMLPart", emailHtmString}
-                }
-            });
+                .Property(Send.Messages, new JArray {
+                    new JObject {
+                        {"From", new JObject {
+                            {"Email", this._mailjetSettings.From},
+                            {"Name",  this._mailjetSettings.FromName}
+                        }},
+                        {"To", new JArray {
+                            new JObject {
+                                {"Email", toEmailAddress},
+                                {"Name", toName}
+                            }
+                        }},
+                        {"Subject", subject},
+                        {"TextPart", !string.IsNullOrEmpty(emailTextString) ? emailTextString: "This email is HTML only."},
+                        {"HTMLPart", emailHtmlString}
+                    }
+                });
 
             var response = await client.PostAsync(request);
+
+            return new EmailResponse
+            {
+                IsSuccess = response.IsSuccessStatusCode
+            };
         }
 
+        public async Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink, ICollection<Category> categories)
+        {
+            var data = new SubscribedData
+            {
+                ConfirmationLink = confirmationLink,
+                SubscriberEmailAddress = subscriberEmailAddress,
+                Categories = categories
+            };
 
-        private async Task<string> ParseSubscribedHtmlEmail(string templateName, SubscribedData data)
+            var emailHtmlString = await this.ParseSubscribedHtmlEmailAsync("subscribed", data);
+            var emailTextString = await this.ParseTextEmailAsync("subscribed", data);
+
+            await this.SendEmailAsync(subscriberEmailAddress, subscriberEmailAddress, "You have subscribed to brechtbaekelandt.net!", emailHtmlString, emailTextString);
+        }
+
+        public async Task SendCommentNotificationEmailAsync(string commentorName, string commentorEmailAddress, string commentTitle, string comment)
+        {
+            var commentNotificationEmailBodyStringBuilder = new StringBuilder();
+            commentNotificationEmailBodyStringBuilder.Append($"<h4>You have a new comment from {commentorName} {(!string.IsNullOrEmpty(commentorEmailAddress) ? $"({ commentorEmailAddress})" : string.Empty)}</h4>");
+            commentNotificationEmailBodyStringBuilder.Append($"<u>{(!string.IsNullOrEmpty(commentTitle) ? commentTitle : string.Empty)}</u>");
+            commentNotificationEmailBodyStringBuilder.Append($"<p>{comment}</p>");
+
+            var emailHtmlString = commentNotificationEmailBodyStringBuilder.ToString();
+
+            await this.SendEmailAsync("Brecht Baekelandt", "brecht.baekelandt@outlook.com", $"New blog comment {(!string.IsNullOrEmpty(commentTitle) ? $": {commentTitle}" : string.Empty)}", emailHtmlString);
+        }
+
+        private async Task<string> ParseSubscribedHtmlEmailAsync(string templateName, SubscribedData data)
         {
             var htmlString = await File.ReadAllTextAsync(Path.Combine(this.TemplateRootPath, $@"EmailTemplates\{templateName}.html"));
 
@@ -93,11 +114,11 @@ namespace brechtbaekelandt.Services
             return parsedHtmlString;
         }
 
-        private async Task<string> ParseTextEmail(string templateName, params string[] parameters)
+        private async Task<string> ParseTextEmailAsync(string templateName, params object[] parameters)
         {
             var textString = await File.ReadAllTextAsync(Path.Combine(this.TemplateRootPath, $@"EmailTemplates\{templateName}.txt"));
 
-            return string.Format(textString, parameters);
+            return parameters != null ? string.Format(textString, parameters) : string.Empty;
         }
     }
 }
