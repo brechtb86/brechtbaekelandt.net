@@ -88,7 +88,7 @@ namespace brechtbaekelandt.Services
         public async Task SendCommentNotificationEmailAsync(string commentorName, string commentorEmailAddress, string commentTitle, string comment)
         {
             var commentNotificationEmailBodyStringBuilder = new StringBuilder();
-            commentNotificationEmailBodyStringBuilder.Append($"<h4>You have a new comment from {commentorName} {(!string.IsNullOrEmpty(commentorEmailAddress) ? $"({ commentorEmailAddress})" : string.Empty)}</h4>");
+            commentNotificationEmailBodyStringBuilder.Append($"<h4>You have a new comment from {commentorName} {(!string.IsNullOrEmpty(commentorEmailAddress) ? $"({commentorEmailAddress})" : string.Empty)}</h4>");
             commentNotificationEmailBodyStringBuilder.Append($"<u>{(!string.IsNullOrEmpty(commentTitle) ? commentTitle : string.Empty)}</u>");
             commentNotificationEmailBodyStringBuilder.Append($"<p>{comment}</p>");
 
