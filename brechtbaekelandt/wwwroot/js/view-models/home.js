@@ -21,7 +21,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
-        self.isLastPage = ko.observable(self.currentPage() === self.totalPageCount() || self.totalPostCount() === 0 );
+        self.isLastPage = ko.observable(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0 );
 
         document.addEventListener("scroll", function (event) {
 
@@ -169,7 +169,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.postsPerPage(data.postsPerPage);
                 self.isLoading(false);
                 self.isLoadingMore(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
-                self.isLastPage(self.currentPage() === self.totalPageCount() || self.totalPostCount() === 0);
+                self.isLastPage(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0);
 
                 self.posts().forEach(function (post) {
                     post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === post.id() }).length > 0);
@@ -178,7 +178,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 $.when.apply($, self.getRequests()).done(function () {
                     self.isLoading(false);
                     self.isLoadingMore(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
-                    self.isLastPage(self.currentPage() === self.totalPageCount() || self.totalPostCount() === 0);
+                    self.isLastPage(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0);
                 });
 
                 //history.pushState(null, "", location.href.split("?")[0]);
