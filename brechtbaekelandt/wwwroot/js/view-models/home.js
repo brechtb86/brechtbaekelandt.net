@@ -57,7 +57,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             }
         });
 
-        self.searchTermsFilterString = ko.observable(getQueryParameterByName("searchTerms"));
+        self.searchTermsFilterString = ko.observable(self.searchTermsFilter());
         self.searchTermsFilterString.subscribe(function (newValue) {
             self.searchTermsFilter(newValue.trim().split(" "));
         });
@@ -380,17 +380,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         return query ? "?" + query : "";
     }
-
-    function getQueryParameterByName(name, url) {
-        if (!url) url = window.location.href;
-        name = name.replace(/[\[\]]/g, '\\$&');
-        var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-            results = regex.exec(url);
-        if (!results) return null;
-        if (!results[2]) return '';
-        return decodeURIComponent(results[2].replace(/\+/g, ' '));
-    }
-
+  
     function init(serverViewModel) {
 
         var viewModel = new HomeViewModel(serverViewModel);
