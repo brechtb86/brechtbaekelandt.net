@@ -22,12 +22,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.isLastPage = ko.observable(self.totalPostCount() === 0 || self.currentPage() === self.totalPageCount());
 
         document.addEventListener("scroll", function (event) {
-            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight) || ($(window).scrollTop() + 7 >= $(document).height() - $(window).height()) && (self.currentPage() < self.totalPageCount())) {
-                self.getPosts(true);
-            }
 
-            if (self.currentPage() === self.totalPageCount()) {
-                self.isLastPage(true);
+            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight || ($(window).scrollTop() + 7 >= $(document).height() - $(window).height())) && !self.isLastPage()) {
+                self.getPosts(true);
             }
         });
 
@@ -78,6 +75,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.searchTermsQueryString(searchTermsQueryString);
 
                 self.currentPage(1);
+                self.isLastPage(false);
+                self.isLoading(true);
+                self.isLoadingMore(false);
 
                 self.getPosts();
             }
@@ -138,8 +138,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.isLoading(!getMore);
         self.isLoadingMore(getMore);
 
-        var currentPage = getMore ? self.currentPage() + 1 : self.currentPage();
-        self.currentPage(currentPage);
+        self.currentPage(getMore ? self.currentPage() + 1 : self.currentPage());
 
         var fullQueryString = self.createFullQueryString(true, true, self.currentPage());
 
@@ -161,23 +160,6 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
                     self.posts.push(post);
                 });
-
-
-                //self.posts().forEach(function(post) {
-                //    post.styledDescription = ko.computed(function () {
-                //        var tempStyledDescription = post.description();
-
-                //        if (post.pictureUrl()) {
-                //            var afterFirstClosingTagIndex = post.description().indexOf(">") + 1;
-
-                //            if (afterFirstClosingTagIndex > -1) {
-                //                tempStyledDescription = [post.description().slice(0, afterFirstClosingTagIndex), "<a href =\"" + post.pictureUrl() + "\" data-fancybox data-caption=\"" + post.title() + "\"><img src=\"" + post.pictureUrl() + "\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>", post.description().slice(afterFirstClosingTagIndex)].join("");
-                //            }
-                //        }
-
-                //        return tempStyledDescription;
-                //    });
-                //});
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
 
@@ -186,6 +168,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.currentPage(data.currentPage);
                 self.totalPostCount(data.totalPostCount);
                 self.postsPerPage(data.postsPerPage);
+                self.isLoading(false);
+                self.isLoadingMore(self.currentPage() < self.totalPageCount());
+                self.isLastPage(self.currentPage() === self.totalPageCount());
 
                 self.posts().forEach(function (post) {
                     post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === post.id() }).length > 0);
@@ -193,10 +178,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
                 $.when.apply($, self.getRequests()).done(function () {
                     self.isLoading(false);
-                    self.isLoadingMore(false);
-                    if (self.currentPage() === self.totalPageCount()) {
-                        self.isLastPage(true);
-                    }
+                    self.isLoadingMore(self.currentPage() < self.totalPageCount());
+                    self.isLastPage(self.currentPage() === self.totalPageCount());
                 });
 
                 history.pushState(null, "", location.href.split("?")[0]);
