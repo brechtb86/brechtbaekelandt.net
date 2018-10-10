@@ -91,7 +91,7 @@
     <meta name="description" content="@this.Html.Raw(this.Model.Post.CleanDescription)" />
     <meta name="keywords" content="@string.Join(", ", allKeywords)" />
 
-    <link rel="canonical" href="@($"{this.Model.BaseUrl}{this.Model.Post.Url}")" />
+    <link rel="canonical" href="@($"{this.Model.BaseUrl}{this.Model.Post.Url}".TrimEnd('/'))" />
 }
 
 @section social{
