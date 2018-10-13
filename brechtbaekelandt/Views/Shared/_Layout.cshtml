@@ -16,7 +16,7 @@
     <meta name="copyright" content="www.brechtbaekelandt.net falls under GNU General Public License version 3" />
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
+    <script async src="//www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
@@ -48,6 +48,9 @@
     <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
     <meta name="theme-color" content="##540804">
 
+
+
+
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
     <script type="text/javascript">
         WebFont.load({
@@ -56,6 +59,8 @@
             }
         });
     </script>
+
+    <link href="//use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz"  rel="stylesheet" type="text/css" crossorigin="anonymous">
 
     <link href="//fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
     <link href="//fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
@@ -486,14 +491,13 @@
                 </div>
             </div>
             <div class="form-group" data-bind="validationElement: viewModel.newComment.content">
-                <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.content.isValid }">
-                    <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment"></i></span>
-                    @*<!-- ko ifnot: viewModel.isTyping -->
+                <div class="input-group has-feedback" data-bind="css: { 'has-success': viewModel.newComment.content.isValid }">                  
+                    <!-- ko ifnot: viewModel.isTyping -->
                     <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment"></i></span>
                     <!-- /ko -->
                     <!-- ko if: viewModel.isTyping -->
-                    <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment-alt"></i></span>
-                    <!-- /ko -->*@
+                    <span class="input-group-addon" style="vertical-align: top;"><i class="far fa-comment-dots"></i></span>
+                    <!-- /ko -->
                     <textarea rows="6" placeholder="enter your comment" class="form-control" data-bind="textInput: viewModel.newComment.content, isTyping: viewModel.isTyping, timeOut: 750"></textarea>
                     <!-- ko if: viewModel.newComment.content -->
                     <span class="fas fa-check form-control-feedback"></span>
@@ -816,7 +820,7 @@
     <script type="text/html" id="loaderTemplate">
         <div class="loader">
             <i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>
-            <p>loading, please wait...</p>
+            <p>loading</p>
         </div>
     </script>
 
@@ -829,15 +833,6 @@
     </script>
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
-    <script type="text/javascript" defer src="//use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <script type="text/javascript" async src="https://www.googletagmanager.com/gtag/js?id=UA-114039978-1"></script>
-    <script type="text/javascript">
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'UA-114039978-1');
-    </script>
 </body>
 </html>
 
