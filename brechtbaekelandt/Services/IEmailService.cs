@@ -8,7 +8,7 @@ namespace brechtbaekelandt.Services
     {
         string TemplateRootPath { get; set; }
 
-        Task<EmailResponse> SendEmailAsync(string toName, string toEmailAddress, string subject, string emailHtmlString, string emailTextString = null);
+        Task<EmailResponse> SendEmailAsync(string fromName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string emailHtmlString, string emailTextString = null);
 
         Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink, ICollection<Category> categories);
 

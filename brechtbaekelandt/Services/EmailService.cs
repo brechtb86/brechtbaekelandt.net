@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using brechtbaekelandt.Models;
 using brechtbaekelandt.Settings;
 using Mailjet.Client;
 using Mailjet.Client.Resources;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using brechtbaekelandt.Models;
 
 namespace brechtbaekelandt.Services
 {
@@ -32,7 +32,7 @@ namespace brechtbaekelandt.Services
             this._mailjetSettings = mailjetSettingsOptions.Value;
         }
 
-        public async Task<EmailResponse> SendEmailAsync(string toName, string toEmailAddress, string subject, string emailHtmlString, string emailTextString = null)
+        public async Task<EmailResponse> SendEmailAsync(string fromName, string fromEmailAddress, string toName, string toEmailAddress, string subject, string emailHtmlString, string emailTextString = null)
         {
             var client = new MailjetClient(this._mailjetSettings.ApiKey, this._mailjetSettings.ApiSecret, new MailjetClientHandler())
             {
@@ -47,8 +47,8 @@ namespace brechtbaekelandt.Services
                 .Property(Send.Messages, new JArray {
                     new JObject {
                         {"From", new JObject {
-                            {"Email", this._mailjetSettings.From},
-                            {"Name",  this._mailjetSettings.FromName}
+                            {"Email", fromEmailAddress},
+                            {"Name",  fromName}
                         }},
                         {"To", new JArray {
                             new JObject {
@@ -82,7 +82,7 @@ namespace brechtbaekelandt.Services
             var emailHtmlString = await this.ParseSubscribedHtmlEmailAsync("subscribed", data);
             var emailTextString = await this.ParseTextEmailAsync("subscribed", data);
 
-            await this.SendEmailAsync(subscriberEmailAddress, subscriberEmailAddress, "You have subscribed to brechtbaekelandt.net!", emailHtmlString, emailTextString);
+            await this.SendEmailAsync(this._mailjetSettings.NewsletterFromName, this._mailjetSettings.NewsletterFrom, subscriberEmailAddress, subscriberEmailAddress, "You have subscribed to brechtbaekelandt.net!", emailHtmlString, emailTextString);
         }
 
         public async Task SendCommentNotificationEmailAsync(string commentorName, string commentorEmailAddress, string commentTitle, string comment)
@@ -94,7 +94,7 @@ namespace brechtbaekelandt.Services
 
             var emailHtmlString = commentNotificationEmailBodyStringBuilder.ToString();
 
-            await this.SendEmailAsync("Brecht Baekelandt", "brecht.baekelandt@outlook.com", $"New blog comment {(!string.IsNullOrEmpty(commentTitle) ? $": {commentTitle}" : string.Empty)}", emailHtmlString);
+            await this.SendEmailAsync(this._mailjetSettings.FromName, this._mailjetSettings.From, "Brecht Baekelandt", "brecht.baekelandt@outlook.com", $"New blog comment {(!string.IsNullOrEmpty(commentTitle) ? $": {commentTitle}" : string.Empty)}", emailHtmlString);
         }
 
         private async Task<string> ParseSubscribedHtmlEmailAsync(string templateName, SubscribedData data)

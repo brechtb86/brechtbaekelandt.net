@@ -1,8 +1,8 @@
-﻿using System;
-using brechtbaekelandt.Data.Entities;
+﻿using brechtbaekelandt.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
-namespace brechtbaekelandt.Data
+namespace brechtbaekelandt.Data.Contexts
 {
 
     public class BlogDbContext : DbContext
@@ -51,12 +51,12 @@ namespace brechtbaekelandt.Data
                 .HasForeignKey(pc => pc.CategoryId);
 
             builder.Entity<SubscriberCategory>()
-                .HasKey(sc => new { sc.subscriberId, sc.CategoryId });
+                .HasKey(sc => new { subscriberId = sc.SubscriberId, sc.CategoryId });
 
             builder.Entity<SubscriberCategory>()
                 .HasOne(sc => sc.Subscriber)
                 .WithMany(s => s.SubscriberCategories)
-                .HasForeignKey(sc => sc.subscriberId);
+                .HasForeignKey(sc => sc.SubscriberId);
 
             builder.Entity<SubscriberCategory>()
                 .HasOne(sc => sc.Category)

@@ -1,12 +1,5 @@
-﻿using System;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using AutoMapper;
-using brechtbaekelandt.Data;
+﻿using AutoMapper;
+using brechtbaekelandt.Data.Contexts;
 using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Helpers;
 using brechtbaekelandt.Identity;
@@ -14,7 +7,9 @@ using brechtbaekelandt.Models;
 using brechtbaekelandt.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Xml;
 
 namespace brechtbaekelandt.Controllers
 {
@@ -33,18 +28,7 @@ namespace brechtbaekelandt.Controllers
             this._applicationUserManager = applicationUserManager;
             this._captchaHelper = captchaHelper;
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        //public IActionResult Post()
-        //{
-        //    return View();
-        //}
-
-
+        
         [HttpGet("post/{internalTitle}")]
         public async Task<IActionResult> Post(string internalTitle, string[] searchTerms = null)
         {

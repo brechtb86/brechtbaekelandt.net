@@ -15,6 +15,10 @@
     <MSBuildCommunityTasksPath>$(SolutionDir)\.build</MSBuildCommunityTasksPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20181010181028_TypoInSubscriberCategory.cs" />
+    <Compile Remove="Data\Migrations\20181010181028_TypoInSubscriberCategory.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
     <PackageReference Include="CoreCompat.System.Drawing.v2" Version="5.2.0-preview1-r131" />

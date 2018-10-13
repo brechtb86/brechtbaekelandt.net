@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace brechtbaekelandt.Settings
+﻿namespace brechtbaekelandt.Settings
 {
     public class MailjetSettings
     {
@@ -16,5 +11,9 @@ namespace brechtbaekelandt.Settings
         public string From { get; set; }
 
         public string FromName { get; set; }
+
+        public string NewsletterFrom { get; set; }
+
+        public string NewsletterFromName { get; set; }
     }
 }
