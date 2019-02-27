@@ -39,7 +39,6 @@ namespace brechtbaekelandt.Controllers
             this.ViewData["Keywords"] = this._keywords;
 
             base.OnActionExecuted(context);
-
         }
     }
 }

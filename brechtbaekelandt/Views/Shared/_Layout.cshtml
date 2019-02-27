@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - brecht|baekelandt</title>
+    <title>@this.ViewData["Title"] - brecht|baekelandt</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
@@ -148,6 +148,7 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="@(activePage == "home" ? "active" : "" )"><a asp-area="" asp-controller="Home" asp-action="Index">home</a></li>
+                    <li class="@(activePage == "archive" ? "active" : "" )"><a asp-area="" asp-controller="Blog" asp-action="Archive">archive</a></li>
                     <li><a href="https://www.brechtbaekelandt.net/tools">tools</a></li>
                     <li class="@(activePage == "about" ? "active" : "" )"><a asp-area="" asp-controller="About" asp-action="Index">about</a></li>
 

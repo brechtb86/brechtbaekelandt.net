@@ -6,6 +6,10 @@
     margin-bottom: 9px;
 }
 
+.btn-archive {
+  text-decoration: none;
+}
+
 .title {
     margin-top: 0;
 }
