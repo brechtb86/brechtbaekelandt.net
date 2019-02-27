@@ -34,7 +34,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         if (self.posts) {
             self.posts().forEach(function (post) {
-                post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === post.id() }).length > 0);
+                post.liked = ko.observable(self.likedPostsIds().filter(function (postId) {
+                    return postId === post.id();
+                }).length > 0);
 
                 self.addStyledDescriptionToPost(post);
             });
@@ -172,7 +174,9 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.isLastPage(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0);
 
                 self.posts().forEach(function (post) {
-                    post.liked = ko.observable(self.likedPostsIds().filter(function (postId) { return postId === post.id() }).length > 0);
+                    post.liked = ko.observable(self.likedPostsIds().filter(function (postId) {
+                        return postId === post.id();
+                    }).length > 0);
                 });
 
                 $.when.apply($, self.getRequests()).done(function () {
@@ -323,7 +327,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 addthis.layers.refresh();
             }
         } catch (e) {
-
+            console.log("AddThis failed to load.");
         }
     }
 
@@ -341,7 +345,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 ]
             });
         } catch (e) {
-
+            console.log("FancyBox failed to load.");
         }
     }
 

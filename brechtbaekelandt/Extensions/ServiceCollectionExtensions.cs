@@ -41,6 +41,8 @@ namespace brechtbaekelandt.Extensions
                         opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.Tags) ? src.Tags.Split(",", StringSplitOptions.None).ToArray() : new string[0])
                     );
 
+                cfg.CreateMap<Data.Entities.Post, ArchivedPost>();
+
                 cfg.CreateMap<Data.Entities.Subscriber, Subscriber>()
                    .ForMember(
                    dest => dest.Categories,

@@ -1,0 +1,118 @@
+﻿@using brechtbaekelandt.Extensions
+@using brechtbaekelandt.ViewModels
+@using Microsoft.ApplicationInsights.AspNetCore.Extensions
+@using Microsoft.AspNetCore.Html
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Serialization
+
+@model brechtbaekelandt.ViewModels.ArchiveViewModel
+
+@{
+    this.ViewData["Title"] = "archive";
+    this.ViewData["ActivePage"] = "archive";
+}
+
+<div class="loader" data-bind="visible: false">
+    <i class="fas fa-spinner fa-pulse fa-2x fa-fw"></i>
+    <p>loading, this won't take long...</p>
+</div>
+
+<div style="display: none;" data-bind="visible: true" class="row archive-container">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <h2>archive</h2>
+        <hr />
+        <!-- ko if: archivedPosts().length === 0 -->
+        <div class="text-center">no posts found...</div>
+        <!-- /ko -->
+        <!-- ko foreach: archivedPosts -->
+        <h4 data-bind="text: key"></h4>
+        <ul>
+            <!-- ko foreach: value -->
+            <li>
+                <a data-bind="attr: { href: url }, text: title"></a>
+            </li>
+            <!-- /ko -->
+        </ul>
+        <!-- /ko -->
+    </div>
+</div>
+
+@section styles{
+
+    <environment include="Development">
+        <link href="~/css/archive.css" rel="stylesheet" asp-append-version="true" />
+    </environment>
+}
+
+@section scripts{
+
+    <environment include="Development">
+        <script src="~/js/view-models/archive.js" asp-append-version="true"></script>
+    </environment>
+
+    <script type="text/javascript">
+        $(function () {
+            @{
+                var jsonSerializerSettings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() };
+
+                var serverViewmodel = new HtmlString(JsonConvert.SerializeObject(this.Model, Formatting.None, jsonSerializerSettings)).ToEscapedJSHtmlString();
+
+            }
+
+            brechtbaekelandt.archive.init(@serverViewmodel);
+        });
+    </script>
+}
+
+@{
+    var keywords = (string[])this.ViewData["Keywords"];
+}
+
+@section seo {
+    <meta name="robots" content="index,follow" />
+
+    <script type="application/ld+json">
+        {
+        "@@context": "http://schema.org",
+        "@@type": "Person",
+        "name": "Brecht Baekelandt",
+        "url": "@this.Model.BaseUrl",
+        "sameAs": [
+        "https://facebook.com/brecht.baekelandt",
+        "https://twitter.com/BaekelandtB",
+        "https://www.linkedin.com/in/brechtbaekelandt/",
+        "https://github.com/brechtb86"
+        ]
+        }
+    </script>
+
+    <meta name="description" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
+    <meta name="keywords" content="@string.Join(" , ", keywords)" />
+
+    <link rel="canonical" href="@this.Context.Request.GetUri().GetLeftPart(UriPartial.Path).ToLower().TrimEnd('/')" />
+}
+
+@section social{
+    <!-- Open Graph data -->
+    <meta property="og:site_name" content="@(this.Model.BaseUrl)" />
+    <meta property="og:title" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast." />
+    <meta property="og:image" itemprop="image" content="@($"{this.Model.BaseUrl}/images/me-social.png")" />
+    <meta name="medium" content="image">
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="This blog talks about development, electronics and other stuff that I like." />
+    <meta property="og:url" content="@(this.Model.BaseUrl)" />
+    <meta property="fb:app_id" content="495540337506240">
+
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast.">
+    <meta itemprop="description" content="This blog talks about development, electronics and other stuff that I like.">
+    <meta itemprop="image" content="@($"{this.Model.BaseUrl}/images/me-social.png")">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="brechtbaekelandt">
+    <meta name="twitter:creator" content="Brecht Baekelandt">
+    <meta name="twitter:title" content="Personal blog of Brecht Baekelandt, .Net developer, metal lover, code addict and Microsoft enthousiast.">
+    <meta name="twitter:description" content="This blog talks about development, electronics and other stuff that I like.">
+    <meta name="twitter:image:src" content="@($"{this.Model.BaseUrl}/images/me-social.png")">
+}

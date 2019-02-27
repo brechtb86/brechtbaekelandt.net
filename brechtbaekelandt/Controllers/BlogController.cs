@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using AutoMapper;
 using brechtbaekelandt.Data.Contexts;
 using brechtbaekelandt.Extensions;
 using brechtbaekelandt.Helpers;
@@ -51,6 +54,21 @@ namespace brechtbaekelandt.Controllers
             {
                 Post = Mapper.Map<Post>(postEntity),
                 SearchTermsFilter = searchTerms
+            };
+
+            return this.View(vm);
+        }
+
+        [HttpGet("archive")]
+        public async Task<IActionResult> Archive()
+        {
+            var postEntities = this._blogDbContext.Posts.Where(p => p.IsPostVisible).GroupBy(p => new {p.Created.Year, p.Created.Month});
+
+            var groupedPosts = postEntities.OrderByDescending(g => new DateTime(g.Key.Year, g.Key.Month, 1)).Select(g => new KeyValuePair<string,ICollection<ArchivedPost>>(new DateTime(g.Key.Year, g.Key.Month, 1).ToString("MMMM yyyy", CultureInfo.InvariantCulture), Mapper.Map<ICollection<ArchivedPost>>(g.OrderByDescending(p => p.Created).ToCollection()))).ToCollection();
+
+            var vm = new ArchiveViewModel
+            {
+                ArchivedPosts = groupedPosts
             };
 
             return this.View(vm);

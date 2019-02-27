@@ -9,6 +9,7 @@
       "wwwroot/css/site.css",
       "wwwroot/css/about.css",
       "wwwroot/css/admin.css",
+      "wwwroot/css/archive.css",
       "wwwroot/css/home.css",
       "wwwroot/css/controls/post.css",
       "wwwroot/css/controls/post-editor.css",
@@ -34,7 +35,8 @@
       "wwwroot/js/helpers/helpers.js",
       "wwwroot/js/view-models/account.js",
       "wwwroot/js/view-models/home.js",
-      "wwwroot/js/view-models/post.js"
+      "wwwroot/js/view-models/post.js",
+      "wwwroot/js/view-models/archive.js"
     ],
     // Optionally specify minification options
     "minify": {
