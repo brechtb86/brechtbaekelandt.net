@@ -116,7 +116,7 @@ namespace brechtbaekelandt.Controllers
             var homeLastModifiedElement = doc.CreateElement("lastmod");
             homeLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
             var homePriorityElement = doc.CreateElement("priority");
-            homePriorityElement.InnerText = "0.10";
+            homePriorityElement.InnerText = "0.90";
             var homeChangeFrequencyElement = doc.CreateElement("changefreq");
             homeChangeFrequencyElement.InnerText = "always";
 
@@ -126,6 +126,24 @@ namespace brechtbaekelandt.Controllers
             homeUrlElement.AppendChild(homeChangeFrequencyElement);
 
             rootElement.AppendChild(homeUrlElement);
+
+            var archiveUrlElement = doc.CreateElement("url");
+
+            var archiveLocationElement = doc.CreateElement("loc");
+            archiveLocationElement.InnerText = $"https://www.brechtbaekelandt.net/blog/archive";
+            var archiveLastModifiedElement = doc.CreateElement("lastmod");
+            archiveLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
+            var archivePriorityElement = doc.CreateElement("priority");
+            archivePriorityElement.InnerText = "0.80";
+            var archiveChangeFrequencyElement = doc.CreateElement("changefreq");
+            archiveChangeFrequencyElement.InnerText = "never";
+
+            archiveUrlElement.AppendChild(archiveLocationElement);
+            archiveUrlElement.AppendChild(archiveLastModifiedElement);
+            archiveUrlElement.AppendChild(archivePriorityElement);
+            archiveUrlElement.AppendChild(archiveChangeFrequencyElement);
+
+            rootElement.AppendChild(archiveUrlElement);
 
             var aboutUrlElement = doc.CreateElement("url");
 
