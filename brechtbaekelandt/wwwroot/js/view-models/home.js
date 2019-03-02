@@ -19,15 +19,47 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             return Math.ceil(self.totalPostCount() / self.postsPerPage());
         });
 
+        var postAnchors = [];
+
+        for (var postNumber = 1; postNumber <= self.totalPostCount(); postNumber += self.postsPerPage()) {
+            postAnchors.push("a[href='#post" + postNumber + "']");
+        };
+
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
         self.isLastPage = ko.observable(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0);
 
+        var lastScrollTop = 0;
+
         document.addEventListener("scroll", function (event) {
 
-            if (((window.innerHeight + window.scrollY) >= document.body.offsetHeight || ($(window).scrollTop() + 7 >= $(document).height() - $(window).height())) && !self.isLastPage()) {
+            var scrollTop = $(window).scrollTop();
+            var windowHeight = $(window).height();
+            var documentHeight = $(document).height();
+            var documentBottom = scrollTop + windowHeight;
+            
+            if (scrollTop > lastScrollTop && (((window.innerHeight + window.scrollY) >= document.body.offsetHeight || (scrollTop + 10 >= documentHeight - windowHeight))) && !self.isLastPage()) {
                 self.getPosts(true);
             }
+
+            lastScrollTop = scrollTop;
+
+            function changeCurrentPage() {
+                for (var i = 0; i < postAnchors.length; i++) {
+                    var anchor = postAnchors[i];
+
+                    var elementTop = $(anchor).offset().top;
+                    var elementBottom = elementTop + $(anchor).height();
+
+                    if (((elementBottom <= documentBottom) && (elementTop >= scrollTop))) {
+                        self.currentPage(i + 1);
+
+                        history.pushState(null, "", location.href.split("?")[0] + self.createFullQueryString(true, true, newValue));
+                    }
+                }
+            }
+
+            debounce(changeCurrentPage(), 500);
         });
 
         self.likedPostsIds = $.cookie("likedPostsIds") ? ko.mapping.fromJSON($.cookie("likedPostsIds")) : ko.observableArray();
@@ -64,30 +96,34 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             self.searchTermsFilter(newValue.trim().split(" "));
         });
 
-
         self.isSearching = ko.observable();
         self.isSearching.subscribe(function (newValue) {
+            self.busySearching(true);
+
             self.getRequests().forEach(function (request) {
                 request.abort();
             });
 
             self.getRequests([]);
 
-            if (!newValue) {
-                var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
+            function startSearching() {
+                if (!newValue) {
+                    var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
 
-                self.searchTermsQueryString(searchTermsQueryString);
+                    self.searchTermsQueryString(searchTermsQueryString);
 
-                self.currentPage(1);
-                self.isLastPage(false);
-                self.isLoading(true);
-                self.isLoadingMore(false);
+                    self.currentPage(1);
+                    self.isLastPage(false);
 
-                self.getPosts();
+                    self.getPosts();
+                }
             }
+
+            throttle(startSearching(), 350);
         });
 
-
+        self.busySearching = ko.observable();
+        
         self.tagsFilter.subscribe(function () {
             self.currentPage(1);
 
@@ -99,7 +135,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             self.getPosts();
         });
-
+      
         var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
         self.searchTermsQueryString(searchTermsQueryString);
 
@@ -172,7 +208,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.isLoading(false);
                 self.isLoadingMore(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
                 self.isLastPage(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0);
-
+                self.busySearching(false);
+            
                 self.posts().forEach(function (post) {
                     post.liked = ko.observable(self.likedPostsIds().filter(function (postId) {
                         return postId === post.id();
@@ -384,6 +421,44 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         return query ? "?" + query : "";
     }
+
+    function throttle(func, wait, scope) {
+        wait || (wait = 250);
+        var last,
+            deferTimer;
+        return function () {
+            var context = scope || this;
+
+            var now = +new Date,
+                args = arguments;
+            if (last && now < last + wait) {
+                // hold on to it
+                clearTimeout(deferTimer);
+                deferTimer = setTimeout(function () {
+                    last = now;
+                    func.apply(context, args);
+                }, wait);
+            } else {
+                last = now;
+                func.apply(context, args);
+            }
+        };
+    }
+
+    function debounce(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    };
   
     function init(serverViewModel) {
 
