@@ -58,9 +58,14 @@
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                     <div class="form-group">
                         <div class="input-group">
-                            <input type="text" placeholder="type to start searching" class="form-control" data-bind="textInput: searchTermsFilterString, enterKey: function() { getPosts(); }, isTyping: isSearching, timeOut: 200" />
+                            <input type="text" placeholder="type to start searching" class="form-control" data-bind="textInput: searchTermsFilterString, enterKey: function() { getPosts(); }, isTyping: isSearching, timeOut: 350" />
                             <span class="input-group-addon">
+                                <!-- ko ifnot : busySearching -->
                                 <i class="fas fa-search"></i>
+                                <!-- /ko -->
+                                <!-- ko if : busySearching -->
+                                <i class="fas fa-spinner fa-pulse fa-fw"></i>
+                                <!-- /ko -->
                             </span>
                         </div>
                     </div>
