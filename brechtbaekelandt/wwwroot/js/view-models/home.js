@@ -54,7 +54,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                     if (((elementBottom <= documentBottom) && (elementTop >= scrollTop))) {
                         self.currentPage(i + 1);
 
-                        history.pushState(null, "", location.href.split("?")[0] + self.createFullQueryString(true, true, newValue));
+                        history.pushState(null, "", location.href.split("?")[0] + self.createFullQueryString(true, true, self.currentPage()));
                     }
                 }
             }
