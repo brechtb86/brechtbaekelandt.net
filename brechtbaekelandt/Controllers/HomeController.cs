@@ -134,9 +134,9 @@ namespace brechtbaekelandt.Controllers
             var archiveLastModifiedElement = doc.CreateElement("lastmod");
             archiveLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
             var archivePriorityElement = doc.CreateElement("priority");
-            archivePriorityElement.InnerText = "0.80";
+            archivePriorityElement.InnerText = "0.75";
             var archiveChangeFrequencyElement = doc.CreateElement("changefreq");
-            archiveChangeFrequencyElement.InnerText = "never";
+            archiveChangeFrequencyElement.InnerText = "always";
 
             archiveUrlElement.AppendChild(archiveLocationElement);
             archiveUrlElement.AppendChild(archiveLastModifiedElement);
@@ -152,7 +152,7 @@ namespace brechtbaekelandt.Controllers
             var aboutLastModifiedElement = doc.CreateElement("lastmod");
             aboutLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
             var aboutPriorityElement = doc.CreateElement("priority");
-            aboutPriorityElement.InnerText = "0.80";
+            aboutPriorityElement.InnerText = "0.75";
             var aboutChangeFrequencyElement = doc.CreateElement("changefreq");
             aboutChangeFrequencyElement.InnerText = "never";
 
