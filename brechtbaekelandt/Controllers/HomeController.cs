@@ -163,6 +163,24 @@ namespace brechtbaekelandt.Controllers
 
             rootElement.AppendChild(aboutUrlElement);
 
+            var toolsUrlElement = doc.CreateElement("url");
+
+            var toolsLocationElement = doc.CreateElement("loc");
+            toolsLocationElement.InnerText = $"https://www.brechtbaekelandt.net/tools";
+            var toolsLastModifiedElement = doc.CreateElement("lastmod");
+            toolsLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
+            var toolsPriorityElement = doc.CreateElement("priority");
+            toolsPriorityElement.InnerText = "0.75";
+            var toolsChangeFrequencyElement = doc.CreateElement("changefreq");
+            toolsChangeFrequencyElement.InnerText = "never";
+
+            toolsUrlElement.AppendChild(toolsLocationElement);
+            toolsUrlElement.AppendChild(toolsLastModifiedElement);
+            toolsUrlElement.AppendChild(toolsPriorityElement);
+            toolsUrlElement.AppendChild(toolsChangeFrequencyElement);
+
+            rootElement.AppendChild(toolsUrlElement);
+
             doc.AppendChild(rootElement);
 
             return this.Content(doc.OuterXml, "application/xml");
