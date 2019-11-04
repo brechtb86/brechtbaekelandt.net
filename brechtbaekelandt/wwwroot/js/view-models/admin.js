@@ -793,7 +793,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         var self = this;
 
         if (category.isSelected()) {
-            categories.pop(category);
+            
+            categories = categories.splice(categories.indexOf(category), 1);
+
             category.isSelected(false);
         }
         else {
@@ -814,7 +816,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         var self = this;
 
         if (tags.indexOf(tag) > -1) {
-            tags.pop(tag);
+            tags = tags.splice(tags.indexOf(tag), 1);
         }
     };
 
