@@ -525,7 +525,7 @@
 
     <script type="text/html" id="postEditorTemplate">
         <form>
-            <fieldset data-bind="disable: viewModel.isPosted">
+            <fieldset>
                 <div class="post-editor">
                     <div class="form-group" data-bind="validationElement: post.title">
                         <label>title:</label>
@@ -552,14 +552,14 @@
                             <div class="form-group" data-bind="validationElement: post.description">
                                 <label>description:</label>
                                 <div class="input-group stretch-horizontal">
-                                    <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions, disable: viewModel.isPosted"></textarea>
+                                    <textarea data-bind="value: post.description, froala: post.description, froalaOptions: viewModel.descriptionFroalaOptions"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <label>content:</label>
-                        <textarea data-bind="value: post.content, froala: post.content, froalaOptions: viewModel.contentFroalaOptions, disable: viewModel.isPosted"></textarea>
+                        <textarea data-bind="value: post.content, froala: post.content, froalaOptions: viewModel.contentFroalaOptions"></textarea>
                     </div>
                     <div class="form-group">
                         <label>categories:</label>

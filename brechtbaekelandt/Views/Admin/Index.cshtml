@@ -93,6 +93,7 @@
                     <button type="button" class="btn btn-primary" data-bind="click: function() { $root.createPost($root.newPost); }">post</button>
                     <!-- /ko -->
                     <!-- ko if: $root.isPosted -->
+                    <button type="button" class="btn btn-primary" data-bind="click: function() { $root.updatePost($root.newPost); }">save</button>
                     <button type="button" class="btn btn-primary" data-bind="click: function() { $root.resetNewPost($root.newPost); $root.isPosted(false); $root.resetMessages(); }">create another post</button>
                     <!-- /ko -->
                 </div>
