@@ -265,12 +265,11 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                         "quote",
                         "|",
                         "insertLink",
-                        "-",
-                        "undo",
-                        "redo",
+                        "insertImage",
+                        "|",
                         "clearFormatting",
                         "selectAll",
-                        "-",
+                        "|",
                         "html"
                     ]
             });
@@ -312,11 +311,10 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                         "insertFile",
                         "insertTable",
                         "insertHR",
-                        "-",
-                        "undo",
-                        "redo",
+                        "|",
                         "clearFormatting",
                         "selectAll",
+                        "|",
                         "html"
                     ],
                 imageUploadParam: "picture",
