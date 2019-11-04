@@ -45,7 +45,7 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
         self.initAddThis();
         self.initFancyBox();
         self.initPrettify();
-    };
+    }
 
     PostViewModel.prototype.addComment = function (comment, postId) {
         var self = this;
@@ -100,7 +100,7 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
             .fail(function (jqXhr, textStatus, errorThrown) {
                 if (jqXhr.status === 400) {
 
-                    var response = jqXhr.responseJSON;
+                    const response = jqXhr.responseJSON;
 
                     if (response.error === "validation") {
                         ko.mapping.fromJS(response.validationErrors, self.addCommentValidationMessages);
@@ -122,49 +122,49 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
             });
     };
 
-    PostViewModel.prototype.deleteComment = function (comment) {
+    PostViewModel.prototype.deleteComment = function(comment) {
         var self = this;
 
         self.deleteCommentSucceededMessage(null);
         self.deleteCommentErrorMessage(null);
 
         $.ajax({
-            url: "../../api/blog/post/delete-comment?commentId=" + comment.id(),
-            type: "POST",
-            contentType: "application/json; charset=UTF-8",
-            dataType: "json",
-            cache: false,
-            processData: false,
-            async: false,
-            success: function (data, textStatus, jqXhr) { }
-        })
-            .done(function (data, textStatus, jqXhr) {
+                url: "../../api/blog/post/delete-comment?commentId=" + comment.id(),
+                type: "POST",
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                cache: false,
+                processData: false,
+                async: false,
+                success: function(data, textStatus, jqXhr) {}
+            })
+            .done(function(data, textStatus, jqXhr) {
                 self.post.comments.splice(self.post.comments.indexOf(comment, 1));
 
                 self.deleteCommentSucceededMessage("the comment was successfully deleted");
             })
-            .fail(function (jqXhr, textStatus, errorThrown) {
+            .fail(function(jqXhr, textStatus, errorThrown) {
                 self.deleteCommentErrorMessage("there was a problem while deleting the comment.");
             })
-            .always(function (data, textStatus, jqXhr) {
+            .always(function(data, textStatus, jqXhr) {
 
             });
-    }
+    };
 
-    PostViewModel.prototype.likePost = function (post) {
+    PostViewModel.prototype.likePost = function(post) {
         var self = this;
 
         $.ajax({
-            url: "../../api/blog/post/like?postId=" + post.id(),
-            type: "POST",
-            contentType: "application/json; charset=UTF-8",
-            dataType: "json",
-            cache: false,
-            processData: false,
-            async: false,
-            success: function (data, textStatus, jqXhr) { }
-        })
-            .done(function (data, textStatus, jqXhr) {
+                url: "../../api/blog/post/like?postId=" + post.id(),
+                type: "POST",
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                cache: false,
+                processData: false,
+                async: false,
+                success: function(data, textStatus, jqXhr) {}
+            })
+            .done(function(data, textStatus, jqXhr) {
                 self.likedPostsIds.push(post.id());
 
                 $.cookie("likedPostsIds", ko.toJSON(self.likedPostsIds()), { expires: 365, path: "/" });
@@ -173,28 +173,28 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
                 post.likes(data);
             })
-            .fail(function (jqXhr, textStatus, errorThrown) {
+            .fail(function(jqXhr, textStatus, errorThrown) {
 
             })
-            .always(function (data, textStatus, jqXhr) {
+            .always(function(data, textStatus, jqXhr) {
 
             });
-    }
+    };
 
-    PostViewModel.prototype.unlikePost = function (post) {
+    PostViewModel.prototype.unlikePost = function(post) {
         var self = this;
 
         $.ajax({
-            url: "../../api/blog/post/unlike?postId=" + post.id(),
-            type: "POST",
-            contentType: "application/json; charset=UTF-8",
-            dataType: "json",
-            cache: false,
-            processData: false,
-            async: false,
-            success: function (data, textStatus, jqXhr) { }
-        })
-            .done(function (data, textStatus, jqXhr) {
+                url: "../../api/blog/post/unlike?postId=" + post.id(),
+                type: "POST",
+                contentType: "application/json; charset=UTF-8",
+                dataType: "json",
+                cache: false,
+                processData: false,
+                async: false,
+                success: function(data, textStatus, jqXhr) {}
+            })
+            .done(function(data, textStatus, jqXhr) {
                 self.likedPostsIds.splice(self.likedPostsIds.indexOf(post.id(), 1));
 
                 $.cookie("likedPostsIds", ko.toJSON(self.likedPostsIds()), { expires: 365, path: "/" });
@@ -203,20 +203,20 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
 
                 post.likes(data);
             })
-            .fail(function (jqXhr, textStatus, errorThrown) {
+            .fail(function(jqXhr, textStatus, errorThrown) {
 
             })
-            .always(function (data, textStatus, jqXhr) {
+            .always(function(data, textStatus, jqXhr) {
 
             });
-    }
+    };
 
     PostViewModel.prototype.addStyledDescriptionToPost = function (post) {
         post.styledDescription = ko.computed(function () {
             var tempStyledDescription = post.description();
 
             if (post.pictureUrl()) {
-                var afterFirstClosingTagIndex = post.description().indexOf(">") + 1;
+                const afterFirstClosingTagIndex = post.description().indexOf(">") + 1;
 
                 if (afterFirstClosingTagIndex > -1) {
                     tempStyledDescription = [post.description().slice(0, afterFirstClosingTagIndex), "<a href =\"" + post.pictureUrl() + "\" data-fancybox data-caption=\"" + post.title() + "\"><img src=\"" + post.pictureUrl() + "\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>", post.description().slice(afterFirstClosingTagIndex)].join("");
@@ -232,12 +232,12 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
             if (post.content()) {
                 var tempStyledContent = post.content();
 
-                var imgMatches = post.content().match(/(<img.*?src=[\"'](.+?)[\"'].*?>)/g);
+                const imgMatches = post.content().match(/(<img.*?src=[\"'](.+?)[\"'].*?>)/g);
 
                 if (imgMatches) {
                     imgMatches.forEach(function (imgMatch) {
-                        var imgTag = imgMatch;
-                        var imgSrc = imgMatch.match(/src\s*=\s*"(.+?)"/)[1];
+                        const imgTag = imgMatch;
+                        const imgSrc = imgMatch.match(/src\s*=\s*"(.+?)"/)[1];
 
                         tempStyledContent = tempStyledContent.replace(imgTag,
                             "<a href=\"" + imgSrc + "\" data-fancybox>" + imgTag + "</a>");
@@ -277,7 +277,7 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
             });
     };
 
-    PostViewModel.prototype.initFancyBox = function () {
+    PostViewModel.prototype.initFancyBox = function() {
         try {
             $("[data-fancybox]").fancybox({
                 buttons: [
@@ -291,11 +291,11 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
                 ]
             });
         } catch (e) {
-
+            console.log("could not initialize fancybox!");
         }
-    }
+    };
 
-    PostViewModel.prototype.initAddThis = function () {
+    PostViewModel.prototype.initAddThis = function() {
         try {
             addthis.init();
 
@@ -303,23 +303,23 @@ brechtbaekelandt.post = (function ($, jQuery, ko, undefined) {
                 addthis.layers.refresh();
             }
         } catch (e) {
-
+            console.log("could not initialize addthis!");
         }
-    }
+    };
 
-    PostViewModel.prototype.initPrettify = function () {
+    PostViewModel.prototype.initPrettify = function() {
         try {
             PR.prettyPrint();
         } catch (e) {
-
+            console.log("could not initialize prettify!");
         }
-    }
+    };
 
     function init(serverViewModel) {
-        var viewModel = new PostViewModel(serverViewModel);
+        const viewModel = new PostViewModel(serverViewModel);
 
         ko.applyBindings(viewModel);
-    };
+    }
 
     return {
         PostViewModel: PostViewModel,
