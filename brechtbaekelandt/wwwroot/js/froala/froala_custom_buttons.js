@@ -6,7 +6,7 @@ $.FroalaEditor.RegisterCommand("insertC#",
         icon: "c#ButtonIcon",
         undo: true,
         focus: true,
-        refreshAfterCallback: false,
+        refreshAfterCallback: true,
         callback: function () {
             this.html.insert(" <pre class=\"prettyprint lang-cs\"></pre>");
         }
@@ -20,7 +20,7 @@ $.FroalaEditor.RegisterCommand("insertHtml",
         icon: "htmlButtonIcon",
         undo: true,
         focus: true,
-        refreshAfterCallback: false,
+        refreshAfterCallback: true,
         callback: function () {
             this.html.insert(" <pre class=\"prettyprint lang-html\"></pre>");
         }
@@ -34,7 +34,7 @@ $.FroalaEditor.RegisterCommand("insertJavascript",
         icon: "javascriptButtonIcon",
         undo: true,
         focus: true,
-        refreshAfterCallback: false,
+        refreshAfterCallback: true,
         callback: function () {
             this.html.insert(" <pre class=\"prettyprint lang-js\"></pre>");
         }
@@ -48,7 +48,7 @@ $.FroalaEditor.RegisterCommand("insertCss",
         icon: "cssButtonIcon",
         undo: true,
         focus: true,
-        refreshAfterCallback: false,
+        refreshAfterCallback: true,
         callback: function () {
             this.html.insert(" <pre class=\"prettyprint lang-css\"></pre>");
         }
@@ -62,7 +62,7 @@ $.FroalaEditor.RegisterCommand("insertXml",
         icon: "xmlButtonIcon",
         undo: true,
         focus: true,
-        refreshAfterCallback: false,
+        refreshAfterCallback: true,
         callback: function () {
             this.html.insert(" <pre class=\"prettyprint lang-xml\"></pre>");
         }
@@ -76,7 +76,7 @@ $.FroalaEditor.RegisterCommand("insertJson",
         icon: "jsonButtonIcon",
         undo: true,
         focus: true,
-        refreshAfterCallback: false,
+        refreshAfterCallback: true,
         callback: function () {
             this.html.insert(" <pre class=\"prettyprint lang-json\"></pre>");
         }

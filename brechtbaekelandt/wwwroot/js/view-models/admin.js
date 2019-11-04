@@ -269,7 +269,9 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                         "undo",
                         "redo",
                         "clearFormatting",
-                        "selectAll"
+                        "selectAll",
+                        "-",
+                        "html"
                     ]
             });
         self.contentFroalaOptions = ko.observable(
@@ -319,7 +321,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                     ],
                 imageUploadParam: "picture",
                 imageUploadURL: "../api/blog/upload-picture",
-                imageUploadMethod: "POST",
+                imageUploadMethod: "POST"
             });
     };
 
