@@ -23,7 +23,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         for (var postNumber = 1; postNumber <= self.totalPostCount(); postNumber += self.postsPerPage()) {
             postAnchors.push("a[href='#post" + postNumber + "']");
-        };
+        }
 
         self.isLoading = ko.observable(false);
         self.isLoadingMore = ko.observable(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
@@ -34,10 +34,10 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         document.addEventListener("scroll", function (event) {
 
             var scrollTop = $(window).scrollTop();
-            var windowHeight = $(window).height();
-            var documentHeight = $(document).height();
+            const windowHeight = $(window).height();
+            const documentHeight = $(document).height();
             var documentBottom = scrollTop + windowHeight;
-            
+
             if (scrollTop > lastScrollTop && (((window.innerHeight + window.scrollY) >= document.body.offsetHeight || (scrollTop + 10 >= documentHeight - windowHeight))) && !self.isLastPage()) {
                 self.getPosts(true);
             }
@@ -45,11 +45,11 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             lastScrollTop = scrollTop;
 
             function changeCurrentPage() {
-                for (var i = 0; i < postAnchors.length; i++) {
-                    var anchor = postAnchors[i];
+                for (let i = 0; i < postAnchors.length; i++) {
+                    const anchor = postAnchors[i];
 
-                    var elementTop = $(anchor).offset().top;
-                    var elementBottom = elementTop + $(anchor).height();
+                    const elementTop = $(anchor).offset().top;
+                    const elementBottom = elementTop + $(anchor).height();
 
                     if (((elementBottom <= documentBottom) && (elementTop >= scrollTop))) {
                         self.currentPage(i + 1);
@@ -81,7 +81,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.categoryIdFilter.subscribeChanged(function (newValue, oldValue) {
             if ((newValue || oldValue) && (newValue !== oldValue)) {
 
-                var categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
+                const categoryQueryString = self.createCategoryIdQueryString(self.categoryIdFilter());
 
                 self.categoryQueryString(categoryQueryString);
 
@@ -108,7 +108,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             function startSearching() {
                 if (!newValue) {
-                    var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
+                    const searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
 
                     self.searchTermsQueryString(searchTermsQueryString);
 
@@ -123,11 +123,11 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         });
 
         self.busySearching = ko.observable();
-        
+
         self.tagsFilter.subscribe(function () {
             self.currentPage(1);
 
-            var tagsQueryString = self.createTagsQueryString(self.tagsFilter());
+            const tagsQueryString = self.createTagsQueryString(self.tagsFilter());
 
             self.tagsQueryString(tagsQueryString);
 
@@ -135,7 +135,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
             self.getPosts();
         });
-      
+
         var searchTermsQueryString = self.createSearchTermsQueryString(self.searchTermsFilter());
         self.searchTermsQueryString(searchTermsQueryString);
 
@@ -151,7 +151,8 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriber.emailAddress = ko.observable().extend({
             email: { message: "the email address is not valid!" },
             required: { message: "you must fill in your email address!" }
-        });;
+        });
+
         self.subscriber.categories = ko.observableArray();
 
         self.subscriberErrors = ko.validation.group(self.subscriber);
@@ -179,7 +180,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         var fullQueryString = self.createFullQueryString(true, true, self.currentPage());
 
-        var request = $.ajax({
+        const request = $.ajax({
             url: "../api/blog/posts" + fullQueryString,
             type: "GET",
             success: function (data, textStatus, jqXhr) { },
@@ -191,7 +192,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 }
 
                 data.posts.forEach(function (plainPost) {
-                    var post = ko.mapping.fromJS(plainPost);
+                    const post = ko.mapping.fromJS(plainPost);
 
                     self.addStyledDescriptionToPost(post);
 
@@ -209,7 +210,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 self.isLoadingMore(self.currentPage() < self.totalPageCount() && self.totalPostCount() !== 0);
                 self.isLastPage(self.currentPage() >= self.totalPageCount() || self.totalPostCount() === 0);
                 self.busySearching(false);
-            
+
                 self.posts().forEach(function (post) {
                     post.liked = ko.observable(self.likedPostsIds().filter(function (postId) {
                         return postId === post.id();
@@ -258,8 +259,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             .always(function (data, textStatus, jqXhr) {
 
             });
-    }
-
+    };
 
     HomeViewModel.prototype.unlikePost = function (post) {
         var self = this;
@@ -289,14 +289,14 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             .always(function (data, textStatus, jqXhr) {
 
             });
-    }
+    };
 
     HomeViewModel.prototype.addStyledDescriptionToPost = function (post) {
         post.styledDescription = ko.computed(function () {
             var tempStyledDescription = post.description();
 
             if (post.pictureUrl()) {
-                var afterFirstClosingTagIndex = post.description().indexOf(">") + 1;
+                const afterFirstClosingTagIndex = post.description().indexOf(">") + 1;
 
                 if (afterFirstClosingTagIndex > -1) {
                     tempStyledDescription = [post.description().slice(0, afterFirstClosingTagIndex), "<a href =\"" + post.pictureUrl() + "\" data-fancybox data-caption=\"" + post.title() + "\"><img src=\"" + post.pictureUrl() + "\" class=\"post-picture post-preview-picture img-thumbnail\" /></a>", post.description().slice(afterFirstClosingTagIndex)].join("");
@@ -308,12 +308,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
     };
 
     HomeViewModel.prototype.copyRssLink = function () {
-        var self = this;
+        const self = this;
 
-        var clipboadHelper = new brechtbaekelandt.helpers.ClipboardHelper();
+        const clipboardHelper = new brechtbaekelandt.helpers.ClipboardHelper();
 
-        clipboadHelper.copyToClipboard(self.rssLink());
-    }
+        clipboardHelper.copyToClipboard(self.rssLink());
+    };
 
     HomeViewModel.prototype.subscribe = function (subscriber) {
         var self = this;
@@ -366,7 +366,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         } catch (e) {
             console.log("AddThis failed to load.");
         }
-    }
+    };
 
     HomeViewModel.prototype.initFancyBox = function () {
         try {
@@ -384,7 +384,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         } catch (e) {
             console.log("FancyBox failed to load.");
         }
-    }
+    };
 
     HomeViewModel.prototype.createSearchTermsQueryString = function (searchTermsFilter) {
         var searchTermsQueryString = "";
@@ -394,7 +394,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         });
 
         return searchTermsQueryString;
-    }
+    };
 
     HomeViewModel.prototype.createTagsQueryString = function (tagsFilter) {
         var tagsQueryString = "";
@@ -404,23 +404,27 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         });
 
         return tagsQueryString;
-    }
+    };
 
     HomeViewModel.prototype.createCategoryNameQueryString = function (categoryNameFilter) {
         return categoryNameFilter ? "categoryName=" + categoryNameFilter + "&" : "";
-    }
+    };
 
     HomeViewModel.prototype.createCategoryIdQueryString = function (categoryIdFilter) {
         return categoryIdFilter ? "categoryId=" + categoryIdFilter + "&" : "";
-    }
+    };
 
-    HomeViewModel.prototype.createFullQueryString = function (includeCategoryQueryString = false, includeCurrentPage = false, currentPage = 1) {
-        var self = this;
+    HomeViewModel.prototype.createFullQueryString =
+        function (includeCategoryQueryString = false, includeCurrentPage = false, currentPage = 1) {
+            const self = this;
 
-        var query = self.searchTermsQueryString() + self.tagsQueryString() + (includeCategoryQueryString ? self.categoryQueryString() : "") + (includeCurrentPage ? "currentPage=" + currentPage : "");
+            const query = self.searchTermsQueryString() +
+                self.tagsQueryString() +
+                (includeCategoryQueryString ? self.categoryQueryString() : "") +
+                (includeCurrentPage ? "currentPage=" + currentPage : "");
 
-        return query ? "?" + query : "";
-    }
+            return query ? "?" + query : "";
+        };
 
     function throttle(func, wait, scope) {
         wait || (wait = 250);
@@ -447,25 +451,25 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
     function debounce(func, wait, immediate) {
         var timeout;
-        return function() {
+        return function () {
             var context = this, args = arguments;
-            var later = function() {
+            const later = function () {
                 timeout = null;
                 if (!immediate) func.apply(context, args);
             };
-            var callNow = immediate && !timeout;
+            const callNow = immediate && !timeout;
             clearTimeout(timeout);
             timeout = setTimeout(later, wait);
             if (callNow) func.apply(context, args);
         };
-    };
-  
+    }
+
     function init(serverViewModel) {
 
-        var viewModel = new HomeViewModel(serverViewModel);
+        const viewModel = new HomeViewModel(serverViewModel);
 
         ko.applyBindings(viewModel);
-    };
+    }
 
     return {
         HomeViewModel: HomeViewModel,

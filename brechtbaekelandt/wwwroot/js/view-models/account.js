@@ -41,7 +41,7 @@ brechtbaekelandt.account = (function ($, jQuery, ko, undefined) {
         self.userDeleteErrorMessage = ko.observable();
 
         self.userAddErrors = ko.validation.group(self.newUser);
-    };
+    }
 
     AccountViewModel.prototype.addUser = function (user) {
         var self = this;
@@ -97,10 +97,10 @@ brechtbaekelandt.account = (function ($, jQuery, ko, undefined) {
     };
     
     function init(serverViewModel) {
-        var viewModel = new AccountViewModel();
+        const viewModel = new AccountViewModel();
 
         ko.applyBindings(viewModel);
-    };
+    }
 
     return {
         AccountViewModel: AccountViewModel,

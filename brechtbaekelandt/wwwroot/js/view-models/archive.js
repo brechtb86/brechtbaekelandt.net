@@ -11,17 +11,17 @@ brechtbaekelandt.archive = (function ($, jQuery, ko, undefined) {
     "use strict";
 
     function ArchiveViewModel(serverViewModel) {
-        var self = this;
+        const self = this;
 
         ko.mapping.fromJS(serverViewModel, {}, self);
-    };
+    }
   
     function init(serverViewModel) {
 
         var viewModel = new ArchiveViewModel(serverViewModel);
 
         ko.applyBindings(viewModel);
-    };
+    }
 
     return {
         ArchiveViewModel: ArchiveViewModel,

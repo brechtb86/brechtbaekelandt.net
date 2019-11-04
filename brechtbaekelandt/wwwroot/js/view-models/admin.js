@@ -323,14 +323,14 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 imageUploadURL: "../api/blog/upload-picture",
                 imageUploadMethod: "POST"
             });
-    };
+    }
 
     AdminViewModel.prototype.uploadPicture = function (post, picture) {
         var self = this;
 
         self.pictureUploadErrorMessage(null);
 
-        var formData = new FormData();
+        const formData = new FormData();
         formData.append("picture", picture);
 
         $.ajax({
@@ -343,10 +343,10 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             processData: false,
             async: false,
             xhr: function () {
-                var xhr = new window.XMLHttpRequest();
+                const xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function (evt) {
                     if (evt.lengthComputable) {
-                        var progress = Math.round((evt.loaded / evt.total) * 100);
+                        const progress = Math.round((evt.loaded / evt.total) * 100);
                     }
                 }, false);
                 return xhr;
@@ -365,7 +365,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
     };
 
-    AdminViewModel.prototype.deletePicture = function (post) {
+    AdminViewModel.prototype.deletePicture = function(post) {
         var self = this;
 
         self.pictureDeleteErrorMessage(null);
@@ -377,21 +377,21 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         }
 
         $.ajax({
-            url: "../api/blog/delete-picture?picture=" + post.pictureUrl(),
-            type: "POST",
-            success: function (data, textStatus, jqXhr) { },
-            async: false
-        })
-            .done(function (data, textStatus, jqXhr) {
+                url: "../api/blog/delete-picture?picture=" + post.pictureUrl(),
+                type: "POST",
+                success: function(data, textStatus, jqXhr) {},
+                async: false
+            })
+            .done(function(data, textStatus, jqXhr) {
                 post.pictureUrl(null);
             })
-            .fail(function (jqXhr, textStatus, errorThrown) {
+            .fail(function(jqXhr, textStatus, errorThrown) {
                 self.pictureDeleteErrorMessage("there was an error while deleting the file, please try again.");
             })
-            .always(function (data, textStatus, jqXhr) {
+            .always(function(data, textStatus, jqXhr) {
 
             });
-    }
+    };
 
     AdminViewModel.prototype.uploadAttachments = function (attachments) {
         var self = this;
@@ -412,28 +412,28 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
         self.isAttachmentsUploading(true);
 
-        var jqxhr = $.ajax({
-            url: "../api/blog/upload-attachments",
-            type: "POST",
-            contentType: false,
-            data: formData,
-            dataType: "json",
-            cache: false,
-            processData: false,
-            async: false,
-            xhr: function () {
-                var xhr = new window.XMLHttpRequest();
-                xhr.upload.addEventListener("progress",
-                    function (evt) {
-                        if (evt.lengthComputable) {
-                            var progress = Math.round((evt.loaded / evt.total) * 100);
-                            self.attachmentsUploadProgress(progress);
-                        }
-                    },
-                    false);
-                return xhr;
-            }
-        })
+        const jqxhr = $.ajax({
+                url: "../api/blog/upload-attachments",
+                type: "POST",
+                contentType: false,
+                data: formData,
+                dataType: "json",
+                cache: false,
+                processData: false,
+                async: false,
+                xhr: function () {
+                    const xhr = new window.XMLHttpRequest();
+                    xhr.upload.addEventListener("progress",
+                        function (evt) {
+                            if (evt.lengthComputable) {
+                                const progress = Math.round((evt.loaded / evt.total) * 100);
+                                self.attachmentsUploadProgress(progress);
+                            }
+                        },
+                        false);
+                    return xhr;
+                }
+            })
             .done(function (data, textStatus, jqXhr) {
                 self.isAttachmentsUploadingFinished(true);
 
@@ -463,48 +463,50 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     };
 
     AdminViewModel.prototype.abortAttachmentUpload = function () {
-        var self = this;
+        const self = this;
 
-        var xhr = self.attachmentsUploadRequest();
+        const xhr = self.attachmentsUploadRequest();
         xhr.abort();
     };
 
     AdminViewModel.prototype.deleteSelectedAttachmentToUpload = function (item) {
-        var self = this;
+        const self = this;
 
         self.attachmentsToUpload.remove(item);
 
         $(".attachments-drop-zone input:file").val();
     };
 
-    AdminViewModel.prototype.deleteUploadedAttachment = function (post, attachment) {
+    AdminViewModel.prototype.deleteUploadedAttachment = function(post, attachment) {
         var self = this;
 
         self.attachmentDeleteErrorMessage(null);
 
         $.ajax({
-            url: "../api/blog/delete-attachment",
-            type: "POST",
-            contentType: "application/json; charset=UTF-8",
-            data: ko.toJSON(attachment),
-            dataType: "json",
-            cache: false,
-            processData: false,
-            async: false,
-            success: function (data, textStatus, jqXhr) { }
-        })
-            .done(function (data, textStatus, jqXhr) {
-                ko.mapping.fromJS(self.post.attachments().filter(function (a) {
-                    return a.id !== data.id;
-                }), {}, self.post.attachments);
+                url: "../api/blog/delete-attachment",
+                type: "POST",
+                contentType: "application/json; charset=UTF-8",
+                data: ko.toJSON(attachment),
+                dataType: "json",
+                cache: false,
+                processData: false,
+                async: false,
+                success: function(data, textStatus, jqXhr) {}
             })
-            .fail(function (jqXhr, textStatus, errorThrown) {
+            .done(function(data, textStatus, jqXhr) {
+                ko.mapping.fromJS(self.post.attachments().filter(function(a) {
+                        return a.id !== data.id;
+                    }),
+                    {},
+                    self.post.attachments);
+            })
+            .fail(function(jqXhr, textStatus, errorThrown) {
                 self.attachmentDeleteErrorMessage("there was an error while deleting the file, please try again.");
             })
-            .always(function (data, textStatus, jqXhr) {
+            .always(function(data, textStatus, jqXhr) {
 
             });
-    }
+    };
 
     AdminViewModel.prototype.createPost = function (post) {
         var self = this;
@@ -572,7 +574,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.updatePostSucceededMessage("the post was successfully updated!");
 
-                var originalPost = self.posts().find((p) => p.id() === (ko.isObservable(post) ? post().id() : post.id()));
+                const originalPost = self.posts().find((p) => p.id() === (ko.isObservable(post) ? post().id() : post.id()));
 
                 ko.mapping.fromJS(data, {}, originalPost);
                 ko.mapping.fromJS(data, {}, post);
@@ -589,7 +591,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.deletePost = function (post) {
         var self = this;
 
-        var sure = confirm("are you sure you want to delete this post?");
+        const sure = confirm("are you sure you want to delete this post?");
 
         if (!sure) {
             return;
@@ -684,7 +686,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.updateUserSucceededMessage("the user was successfully updated!");
 
-                var originalUser = self.users().find((u) => u.id() === (ko.isObservable(user) ? user().id() : user.id()));
+                const originalUser = self.users().find((u) => u.id() === (ko.isObservable(user) ? user().id() : user.id()));
 
                 ko.mapping.fromJS(data.user, {}, originalUser);
                 ko.mapping.fromJS(data.user, {}, user);
@@ -700,7 +702,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     AdminViewModel.prototype.deleteUser = function (user) {
         var self = this;
 
-        var sure = confirm("are you sure you want to delete this user? all posts will be deleted too!");
+        const sure = confirm("are you sure you want to delete this user? all posts will be deleted too!");
 
         if (!sure) {
             return;
@@ -731,8 +733,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             });
     };
 
-    AdminViewModel.prototype.resetNewPost = function (newPost) {
-        var self = this;
+    AdminViewModel.prototype.resetNewPost = function(newPost) {
+        const self = this;
 
         newPost.title("");
         newPost.description("");
@@ -742,13 +744,13 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         newPost.pictureUrl("");
         newPost.attachments([]);
 
-        self.categories().forEach(function (category) { category.isSelected(false); });
+        self.categories().forEach(function(category) { category.isSelected(false); });
 
         self.createPostErrors.showAllMessages(false);
-    }
+    };
 
-    AdminViewModel.prototype.resetNewUser = function (newUser) {
-        var self = this;
+    AdminViewModel.prototype.resetNewUser = function(newUser) {
+        const self = this;
 
         newUser.userName("");
         newUser.firstName("");
@@ -757,10 +759,10 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         newUser.password("");
 
         self.createUserErrors.showAllMessages(false);
-    }
+    };
 
-    AdminViewModel.prototype.resetMessages = function () {
-        var self = this;
+    AdminViewModel.prototype.resetMessages = function() {
+        const self = this;
 
         self.createPostErrorMessage(null);
         self.createPostSucceededMessage(null);
@@ -774,13 +776,13 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.updateUserSucceededMessage(null);
         self.deleteUserErrorMessage(null);
         self.deleteUserSucceededMessage(null);
-    }
+    };
 
     AdminViewModel.prototype.addCategory = function (category, categories) {
-        var self = this;
+        const self = this;
 
         if (!self.categories().some(function (e) { return e.name().toLowerCase() === category().toLowerCase(); })) {
-            var newCategory = ko.mapping.fromJS({ name: category(), id: "00000000-0000-0000-0000-000000000000", isSelected: true });
+            const newCategory = ko.mapping.fromJS({ name: category(), id: "00000000-0000-0000-0000-000000000000", isSelected: true });
 
             self.categories.push(newCategory);
             categories.push(newCategory);
@@ -790,7 +792,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     };
 
     AdminViewModel.prototype.toggleSelectedCategory = function (category, categories) {
-        var self = this;
+        const self = this;
 
         if (category.isSelected()) {
             
@@ -805,7 +807,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     };
 
     AdminViewModel.prototype.addTag = function (tag, targetTagList) {
-        var self = this;
+        const self = this;
 
         targetTagList.push(tag().toLowerCase());
 
@@ -813,23 +815,23 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
     };
 
     AdminViewModel.prototype.removeTag = function (tag, tags) {
-        var self = this;
+        const self = this;
 
         if (tags.indexOf(tag) > -1) {
             tags = tags.splice(tags.indexOf(tag), 1);
         }
     };
 
-    AdminViewModel.prototype.clone = function (object) {
+    AdminViewModel.prototype.clone = function(object) {
         return ko.mapping.fromJS(ko.toJS(object));
-    }
+    };
 
     function init(serverViewModel) {
 
-        var viewModel = new AdminViewModel(serverViewModel);
+        const viewModel = new AdminViewModel(serverViewModel);
 
         ko.applyBindings(viewModel);
-    };
+    }
 
     return {
         AdminViewModel: AdminViewModel,
