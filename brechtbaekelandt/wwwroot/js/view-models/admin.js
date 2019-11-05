@@ -610,7 +610,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.posts.splice(self.posts.indexOf(post), 1);
 
-                self.deletePostSucceededMessage("the post was sucessfully deleted.");
+                self.deletePostSucceededMessage("the post was successfully deleted.");
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.deletePostErrorMessage("there was an error while deleting the post, please try again.");
@@ -721,7 +721,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
             .done(function (data, textStatus, jqXhr) {
                 self.users.splice(self.users.indexOf(user), 1);
 
-                self.deleteUserSucceededMessage("the user was sucessfully deleted.");
+                self.deleteUserSucceededMessage("the user was successfully deleted.");
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.deleteUserErrorMessage("there was an error while deleting the user, please try again.");
