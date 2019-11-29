@@ -16,6 +16,8 @@ namespace brechtbaekelandt.Controllers
             "frontend", "back-end", "backend", ".net", "c#", "javascript", "angular", "knockout", "mvc", "asp.net"
         };
 
+        public const string BaseUrl = "https://www.brechtbaekelandt.net";
+
         public BaseController(
             ApplicationUserManager userManager)
         {

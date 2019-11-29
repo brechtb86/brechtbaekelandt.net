@@ -21,15 +21,9 @@ namespace brechtbaekelandt.Controllers
     {
         private readonly BlogDbContext _blogDbContext;
 
-        private readonly ApplicationUserManager _applicationUserManager;
-        
-        private CaptchaHelper _captchaHelper;
-
-        public BlogController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager, CaptchaHelper captchaHelper) : base(applicationUserManager)
+        public BlogController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager) : base(applicationUserManager)
         {
             this._blogDbContext = blogDbContext;
-            this._applicationUserManager = applicationUserManager;
-            this._captchaHelper = captchaHelper;
         }
         
         [HttpGet("post/{internalTitle}")]
@@ -92,7 +86,7 @@ namespace brechtbaekelandt.Controllers
                 var urlElement = doc.CreateElement("url");
 
                 var locationElement = doc.CreateElement("loc");
-                locationElement.InnerText = $"https://www.brechtbaekelandt.net/blog/post/{postEntity.InternalTitle}";
+                locationElement.InnerText = $"{BaseUrl}/blog/post/{postEntity.InternalTitle}";
 
                 var lastModifiedElement = doc.CreateElement("lastmod");
                 lastModifiedElement.InnerText = postEntity.LastModified != null ? postEntity.LastModified.Value.ToString("yyyy-MM-ddTHH:mm:sszzz") : postEntity.Created.ToString("yyyy-MM-ddTHH:mm:sszzz");

@@ -17,16 +17,11 @@ namespace brechtbaekelandt.Controllers
     {
         private readonly BlogDbContext _blogDbContext;
 
-        private readonly ApplicationUserManager _applicationUserManager;
-
-        private readonly string _baseUrl = "https://www.brechtbaekelandt.net";
-
         private const int PostsPerPage = 5;
 
         public HomeController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager) : base(applicationUserManager)
         {
             this._blogDbContext = blogDbContext;
-            this._applicationUserManager = applicationUserManager;
         }
 
         [HttpGet]
@@ -61,7 +56,7 @@ namespace brechtbaekelandt.Controllers
             }
 
             var totalPostCount = postEntities.Count();
-            var allPostsUrls = postEntities.Select(p => $"{this._baseUrl}/blog/post/{p.InternalTitle}").ToCollection();
+            var allPostsUrls = postEntities.Select(p => $"{BaseUrl}/blog/post/{p.InternalTitle}").ToCollection();
 
 
             postEntities = postEntities.OrderByDescending(p => p.Created)
@@ -112,7 +107,7 @@ namespace brechtbaekelandt.Controllers
             var homeUrlElement = doc.CreateElement("url");
 
             var homeLocationElement = doc.CreateElement("loc");
-            homeLocationElement.InnerText = $"https://www.brechtbaekelandt.net/";
+            homeLocationElement.InnerText = $"{BaseUrl}";
             var homeLastModifiedElement = doc.CreateElement("lastmod");
             homeLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
             var homePriorityElement = doc.CreateElement("priority");
@@ -130,7 +125,7 @@ namespace brechtbaekelandt.Controllers
             var archiveUrlElement = doc.CreateElement("url");
 
             var archiveLocationElement = doc.CreateElement("loc");
-            archiveLocationElement.InnerText = $"https://www.brechtbaekelandt.net/blog/archive";
+            archiveLocationElement.InnerText = $"{BaseUrl}/blog/archive";
             var archiveLastModifiedElement = doc.CreateElement("lastmod");
             archiveLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
             var archivePriorityElement = doc.CreateElement("priority");
@@ -148,7 +143,7 @@ namespace brechtbaekelandt.Controllers
             var aboutUrlElement = doc.CreateElement("url");
 
             var aboutLocationElement = doc.CreateElement("loc");
-            aboutLocationElement.InnerText = $"https://www.brechtbaekelandt.net/about";
+            aboutLocationElement.InnerText = $"{BaseUrl}/about";
             var aboutLastModifiedElement = doc.CreateElement("lastmod");
             aboutLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
             var aboutPriorityElement = doc.CreateElement("priority");
@@ -166,7 +161,7 @@ namespace brechtbaekelandt.Controllers
             var toolsUrlElement = doc.CreateElement("url");
 
             var toolsLocationElement = doc.CreateElement("loc");
-            toolsLocationElement.InnerText = $"https://www.brechtbaekelandt.net/tools";
+            toolsLocationElement.InnerText = $"{BaseUrl}/tools";
             var toolsLastModifiedElement = doc.CreateElement("lastmod");
             toolsLastModifiedElement.InnerText = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz");
             var toolsPriorityElement = doc.CreateElement("priority");
