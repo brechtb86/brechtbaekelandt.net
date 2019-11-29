@@ -41,7 +41,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        private const int _postsPerPage = 5;
+        private const int PostsPerPage = 5;
 
         private readonly CaptchaHelper _captchaHelper;
 
@@ -91,8 +91,8 @@ namespace brechtbaekelandt.Controllers.WebApi
             var totalPostCount = postEntities.Count();
 
             postEntities = postEntities.OrderByDescending(p => p.Created)
-                .Skip((currentPage - 1) * _postsPerPage)
-                .Take(_postsPerPage);
+                .Skip((currentPage - 1) * PostsPerPage)
+                .Take(PostsPerPage);
 
             if (includeComments)
             {
@@ -106,7 +106,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             {
                 CurrentPage = currentPage,
                 TotalPostCount = totalPostCount,
-                PostsPerPage = _postsPerPage,
+                PostsPerPage = PostsPerPage,
                 Posts = Mapper.Map<ICollection<Models.Post>>(postEntities.ToCollection()),
                 SearchTermsFilter = searchTerms,
                 TagsFilter = tags,

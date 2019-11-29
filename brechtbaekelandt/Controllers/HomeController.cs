@@ -17,16 +17,13 @@ namespace brechtbaekelandt.Controllers
     {
         private readonly BlogDbContext _blogDbContext;
 
-        private readonly ApplicationUserManager _applicationUserManager;
-
-        private readonly string _baseUrl = "https://www.brechtbaekelandt.net";
+        private const string BaseUrl = "https://www.brechtbaekelandt.net";
 
         private const int PostsPerPage = 5;
 
         public HomeController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager) : base(applicationUserManager)
         {
             this._blogDbContext = blogDbContext;
-            this._applicationUserManager = applicationUserManager;
         }
 
         [HttpGet]
@@ -61,7 +58,7 @@ namespace brechtbaekelandt.Controllers
             }
 
             var totalPostCount = postEntities.Count();
-            var allPostsUrls = postEntities.Select(p => $"{this._baseUrl}/blog/post/{p.InternalTitle}").ToCollection();
+            var allPostsUrls = postEntities.Select(p => $"{BaseUrl}/blog/post/{p.InternalTitle}").ToCollection();
 
 
             postEntities = postEntities.OrderByDescending(p => p.Created)
