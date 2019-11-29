@@ -85,11 +85,13 @@ namespace brechtbaekelandt.Services
             await this.SendEmailAsync(this._mailjetSettings.NewsletterFromName, this._mailjetSettings.NewsletterFrom, subscriberEmailAddress, subscriberEmailAddress, "You have subscribed to brechtbaekelandt.net!", emailHtmlString, emailTextString);
         }
 
-        public async Task SendCommentNotificationEmailAsync(string commentorName, string commentorEmailAddress, string commentTitle, string comment)
+        public async Task SendCommentNotificationEmailAsync(string commentorName, string commentorEmailAddress, string commentTitle, string comment, string postTitle)
         {
             var commentNotificationEmailBodyStringBuilder = new StringBuilder();
             commentNotificationEmailBodyStringBuilder.Append($"<h4>You have a new comment from {commentorName} {(!string.IsNullOrEmpty(commentorEmailAddress) ? $"({commentorEmailAddress})" : string.Empty)}</h4>");
-            commentNotificationEmailBodyStringBuilder.Append($"<u>{(!string.IsNullOrEmpty(commentTitle) ? commentTitle : string.Empty)}</u>");
+            commentNotificationEmailBodyStringBuilder.Append($"<span>Post:</span> <u>{postTitle}</u><br/>");
+            commentNotificationEmailBodyStringBuilder.Append($"<span>Comment:</span> <u>{(!string.IsNullOrEmpty(commentTitle) ? commentTitle : "N/A")}</u><br/>");
+            commentNotificationEmailBodyStringBuilder.Append($"<hr/>");
             commentNotificationEmailBodyStringBuilder.Append($"<p>{comment}</p>");
 
             var emailHtmlString = commentNotificationEmailBodyStringBuilder.ToString();

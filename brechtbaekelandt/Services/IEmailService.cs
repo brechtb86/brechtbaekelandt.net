@@ -12,6 +12,6 @@ namespace brechtbaekelandt.Services
 
         Task SendSubscribedEmailAsync(string subscriberEmailAddress, string confirmationLink, ICollection<Category> categories);
 
-        Task SendCommentNotificationEmailAsync(string commentorName, string commentorEmailAddress, string commentTitle, string comment);
+        Task SendCommentNotificationEmailAsync(string commentorName, string commentorEmailAddress, string commentTitle, string comment, string postTitle);
     }
 }
