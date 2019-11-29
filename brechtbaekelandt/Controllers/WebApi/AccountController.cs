@@ -58,7 +58,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             await this._blogDbContext.SaveChangesAsync();
 
-            return this.Ok(new { message = "the user was succesfully addded.", user });
+            return this.Ok(new { message = "the user was successfully added.", user });
         }
 
         [Authorize]
@@ -96,7 +96,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             await this._blogDbContext.SaveChangesAsync();
 
-            return this.Ok(new { message = "the user was succesfully updated.", user });
+            return this.Ok(new { message = "the user was successfully updated.", user });
         }
 
         [Authorize]

@@ -45,10 +45,10 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         private readonly CaptchaHelper _captchaHelper;
 
-        public BlogController(BlogDbContext blogDbcontext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IEmailService emailService, IHostingEnvironment hostingEnvironment)
+        public BlogController(BlogDbContext blogDbContext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IEmailService emailService, IHostingEnvironment hostingEnvironment)
         {
             this._applicationUserManager = userManager;
-            this._blogDbContext = blogDbcontext;
+            this._blogDbContext = blogDbContext;
             this._captchaHelper = captchaHelper;
 
             this._hostingEnvironment = hostingEnvironment;
@@ -123,7 +123,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         {
             var rootPath = $"{this._hostingEnvironment.WebRootPath}";
 
-            var relativePath = "/images/blog";
+            const string relativePath = "/images/blog";
 
             var fullPath = $"{rootPath}{relativePath}";
 
@@ -137,8 +137,6 @@ namespace brechtbaekelandt.Controllers.WebApi
             {
                 await picture.CopyToAsync(stream);
             }
-
-
 
             return this.Json(new { link = $"{relativePath}/{newFileName}" });
         }
@@ -156,10 +154,10 @@ namespace brechtbaekelandt.Controllers.WebApi
             }
             catch (Exception)
             {
-
+                // ignored
             }
 
-            return this.Ok(new { message = "the picture was succesfully deleted." });
+            return this.Ok(new { message = "the picture was successfully deleted." });
         }
 
         [Authorize]
@@ -169,7 +167,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         {
             var rootPath = $"{this._hostingEnvironment.WebRootPath}";
 
-            var relativePath = "/attachments/blog";
+            const string relativePath = "/attachments/blog";
 
             var fullPath = $"{rootPath}{relativePath}";
 
@@ -191,7 +189,7 @@ namespace brechtbaekelandt.Controllers.WebApi
                     await attachment.CopyToAsync(stream);
                 }
 
-                var newAttachement = new Models.Attachment
+                var newAttachment = new Models.Attachment
                 {
                     Id = Guid.NewGuid(),
                     Name = fileName,
@@ -199,7 +197,7 @@ namespace brechtbaekelandt.Controllers.WebApi
                     Size = attachment.Length
                 };
 
-                results.Add(newAttachement);
+                results.Add(newAttachment);
             }
 
             return this.Json(new { attachments = results });
@@ -272,7 +270,7 @@ namespace brechtbaekelandt.Controllers.WebApi
         {
             if (!this._blogDbContext.Posts.Any(p => p.Id == post.Id))
             {
-                return this.NotFound();
+                return this.NotFound($"the post with id '{post.Id}' was not found.");
             }
 
             post.LastModified = DateTime.Now;
@@ -288,19 +286,19 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             await this._blogDbContext.SaveChangesAsync();
 
-            postEntity = this._blogDbContext.Posts.Include(p => p.PostCategories).FirstOrDefault(p => p.Id == post.Id);
+            postEntity = this._blogDbContext.Posts.Include(p => p.PostCategories).First(p => p.Id == post.Id);
 
             foreach (var category in post.Categories)
             {
                 var categoryEntity = this._blogDbContext.Categories.First(c => c.Name == category.Name);
 
-                if (!postEntity.PostCategories.Any(pc => pc.CategoryId == categoryEntity.Id))
+                if (postEntity.PostCategories.All(pc => pc.CategoryId != categoryEntity.Id))
                 {
                     postEntity.PostCategories.Add(new PostCategory() { CategoryId = categoryEntity.Id });
                 }
             }
 
-            foreach (var postCategory in postEntity.PostCategories.Where(pc => !post.Categories.Any(c => c.Id == pc.CategoryId)).ToCollection())
+            foreach (var postCategory in postEntity.PostCategories.Where(pc => post.Categories.All(c => c.Id != pc.CategoryId)).ToCollection())
             {
                 postEntity.PostCategories.Remove(postCategory);
             }
@@ -319,14 +317,14 @@ namespace brechtbaekelandt.Controllers.WebApi
         {
             if (!this._blogDbContext.Posts.Any(p => p.Id == postId))
             {
-                return this.NotFound();
+                return this.NotFound($"the post with id '{postId}' was not found.");
             }
 
             var postEntity = this._blogDbContext.Posts
                 .Include(p => p.PostCategories)
                 .Include(p => p.Attachments)
                 .Include(p => p.Comments)
-                .FirstOrDefault(p => p.Id == postId);
+                .First(p => p.Id == postId);
 
             postEntity.PostCategories?.Clear();
             postEntity.Attachments?.Clear();
@@ -351,7 +349,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             if (postEntity == null)
             {
-                return this.NotFound($"the post with postID {postId} was not found.");
+                return this.NotFound($"the post with id '{postId}' was not found.");
             }
 
             comment.Id = Guid.NewGuid();
@@ -366,7 +364,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
             try
             {
-                await this._emailService.SendCommentNotificationEmailAsync(comment.Name, comment.EmailAddress, comment.Title, comment.Content);
+                await this._emailService.SendCommentNotificationEmailAsync(newCommentEntity.Name, newCommentEntity.EmailAddress, newCommentEntity.Title, newCommentEntity.Content, postEntity.Title);
             }
             catch (Exception e)
             {
@@ -384,11 +382,10 @@ namespace brechtbaekelandt.Controllers.WebApi
         {
             if (!this._blogDbContext.Comments.Any(c => c.Id == commentId))
             {
-                return this.NotFound();
+                return this.NotFound($"the comment with id '{commentId}' was not found.");
             }
 
-            var commentEntity = this._blogDbContext.Comments
-                .FirstOrDefault(c => c.Id == commentId);
+            var commentEntity = this._blogDbContext.Comments.First(c => c.Id == commentId);
 
             this._blogDbContext.Comments.Remove(commentEntity);
 
@@ -403,11 +400,10 @@ namespace brechtbaekelandt.Controllers.WebApi
         {
             if (!this._blogDbContext.Posts.Any(p => p.Id == postId))
             {
-                return this.NotFound();
+                return this.NotFound($"the post with id '{postId}' was not found.");
             }
 
-            var postEntity = this._blogDbContext.Posts
-                .FirstOrDefault(p => p.Id == postId);
+            var postEntity = this._blogDbContext.Posts.First(p => p.Id == postId);
 
             var currentLikesNumber = postEntity.Likes += 1;
 
@@ -427,11 +423,10 @@ namespace brechtbaekelandt.Controllers.WebApi
         {
             if (!this._blogDbContext.Posts.Any(p => p.Id == postId))
             {
-                return this.NotFound();
+                return this.NotFound($"the post with id '{postId}' was not found.");
             }
 
-            var postEntity = this._blogDbContext.Posts
-                .FirstOrDefault(p => p.Id == postId);
+            var postEntity = this._blogDbContext.Posts.First(p => p.Id == postId);
 
             var currentLikesNumber = postEntity.Likes != 0 ? postEntity.Likes -= 1 : 0;
 
