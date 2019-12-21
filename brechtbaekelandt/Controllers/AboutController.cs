@@ -13,6 +13,7 @@ namespace brechtbaekelandt.Controllers
             this._applicationUserManager = applicationUserManager;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             var vm = new AboutViewModel();

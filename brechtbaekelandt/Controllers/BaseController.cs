@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using AutoMapper;
 using brechtbaekelandt.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,24 +17,22 @@ namespace brechtbaekelandt.Controllers
             "frontend", "back-end", "backend", ".net", "c#", "javascript", "angular", "knockout", "mvc", "asp.net"
         };
 
-        public const string BaseUrl = "https://www.brechtbaekelandt.net";
-
+        public string BaseUrl => Debugger.IsAttached ? "http://localhost:52449" : "https://www.brechtbaekelandt.net";
+               
         public BaseController(
             ApplicationUserManager userManager)
         {
             this._userManager = userManager;
-
         }
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            if (HttpContext.User.Identity.IsAuthenticated)
+            if (this.HttpContext.User.Identity.IsAuthenticated)
             {
                 Task
                     .Run(async () =>
                     {
-                        this.ViewData["CurrentUser"] =
-                            Mapper.Map<Models.ApplicationUser>(await this._userManager.FindByNameAsync(HttpContext.User?.Identity.Name));
+                        this.ViewData["CurrentUser"] = Mapper.Map<Models.ApplicationUser>(await this._userManager.FindByNameAsync(HttpContext.User?.Identity.Name));
                     })
                     .Wait();
             }

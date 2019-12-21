@@ -10,7 +10,7 @@ brechtbaekelandt.account = (function ($, jQuery, ko, undefined) {
         self.newUser.userName = ko.observable().extend({
             required: { message: "please enter the username." },
             pattern: {
-                message: "the username cannot contain any spaces or special charachters.",
+                message: "the username cannot contain any spaces or special characters.",
                 params: "^[a-zA-Z0-9]*$"
             }
         });
@@ -28,7 +28,7 @@ brechtbaekelandt.account = (function ($, jQuery, ko, undefined) {
                 message: "please enter the password."
             },
             pattern: {
-                message: "the password must contain at least one digit, one special character and must be minimum 6 charachters long.",
+                message: "the password must contain at least one digit, one special character and must be minimum 6 characters long.",
                 params: "^(?=.*[a-z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,255}$"
             }
         });

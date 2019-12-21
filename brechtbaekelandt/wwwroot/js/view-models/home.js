@@ -158,7 +158,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriberErrors = ko.validation.group(self.subscriber);
 
         self.rssLink = ko.computed(function () {
-            return "https://www.brechtbaekelandt.net/rss/?categories=" + self.subscriber.categories().map(c => c.name()).join();
+            return  self.baseUrl() + "/rss/?categories=" + self.subscriber.categories().map(c => c.name()).join();
         });
 
         self.hasSubscribed = ko.observable(false);

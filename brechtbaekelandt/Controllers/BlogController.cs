@@ -16,7 +16,6 @@ using System.Xml;
 
 namespace brechtbaekelandt.Controllers
 {
-    [Route("blog")]
     public class BlogController : BaseController
     {
         private readonly BlogDbContext _blogDbContext;
