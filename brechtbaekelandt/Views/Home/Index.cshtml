@@ -167,13 +167,7 @@
                     <h3 class="modal-title text-center">subscribe to this blog</h3>
                 </div>
                 <div class="modal-body text-center">
-                    <h4>select the categories you want to subscribe to</h4>
-                    <!-- ko if: atLeastOneCategoryMessage -->
-                    <div class="alert alert-warning alert-dismissable">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        <span data-bind="text: atLeastOneCategoryMessage"></span>
-                    </div>
-                    <!-- /ko -->
+                    <h5>select the categories you want to subscribe to or select none to receive notifications for every category</h5>
                     <form>
                         <div class="text-left">
                             <fieldset class="well well-sm row categories" data-bind="disable: hasSubscribed">
@@ -214,7 +208,7 @@
                             </span>
                             <input type="text" class="form-control" data-bind="value: rssLink" readonly="readonly" onclick="this.focus();this.select();" />
                             <span class="input-group-btn">
-                                <button class="btn btn-primary" type="button" data-bind="click: function(){ copyRssLink($data) }, enable: subscriber.categories().length > 0"><i class="far fa-copy"></i></button>
+                                <button class="btn btn-primary" type="button" data-bind="click: function(){ copyRssLink($data) }"><i class="far fa-copy"></i></button>
                             </span>
                         </div>
                     </form>
