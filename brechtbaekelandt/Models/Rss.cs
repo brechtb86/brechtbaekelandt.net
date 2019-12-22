@@ -10,7 +10,7 @@ namespace brechtbaekelandt.Models
     public class Rss
     {
         [XmlAttribute(AttributeName = "version")]
-        public string Version => "2.0";
+        public string Version { get; set; }
 
         [XmlElement(ElementName = "channel")] 
         public RssChannel Channel { get; set; }

@@ -28,10 +28,13 @@ namespace brechtbaekelandt.Controllers
         {
             var rss = new Rss
             {
+                Version = "2.0",
                 Channel = new RssChannel
                 {
+
                     Title = "blog - brecht|baekelandt",
                     Link = this.BaseUrl,
+                    Language = "en-US",
                     Items = new List<RssChannelItem>()
                 }
             };
