@@ -14,11 +14,5 @@ namespace brechtbaekelandt.Models
 
         [XmlElement(ElementName = "channel")] 
         public RssChannel Channel { get; set; }
-
-        //[XmlIgnore]
-        //public RssChannelItem this[string title] => this.Channel.FindItem(title);
-
-        //[XmlIgnore]
-        //public RssChannelItem this[int index] => this.Channel.FindItem(index);
     }
 }
