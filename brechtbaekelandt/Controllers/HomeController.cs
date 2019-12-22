@@ -13,6 +13,7 @@ using System.Xml;
 
 namespace brechtbaekelandt.Controllers
 {
+    [Route("")]
     public class HomeController : BaseController
     {
         private readonly BlogDbContext _blogDbContext;

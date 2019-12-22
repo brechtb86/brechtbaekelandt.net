@@ -10,6 +10,7 @@ using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace brechtbaekelandt.Controllers
 {
+    [Route("account")]
     public class AccountController : BaseController
     {
         private readonly ApplicationSignInManager _applicationSignInManager;
@@ -28,13 +29,13 @@ namespace brechtbaekelandt.Controllers
             return this.View();
         }
 
-        [HttpGet]
+        [HttpGet("sign-in")]
         public IActionResult SignIn(string returnUrl = null)
         {
             return this.View();
         }
 
-        [HttpPost]
+        [HttpPost("sign-in")]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(SignInViewModel signIn, string returnUrl = null)
@@ -86,7 +87,7 @@ namespace brechtbaekelandt.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("sign-out")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignOut()
         {
@@ -96,15 +97,7 @@ namespace brechtbaekelandt.Controllers
         }
 
         #region Helpers
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
-        }
-
+        
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
