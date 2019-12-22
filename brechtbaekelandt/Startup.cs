@@ -23,6 +23,8 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Buffers;
 using System.Diagnostics;
+using System.Xml;
+using System.Xml.Serialization;
 
 namespace brechtbaekelandt
 {
@@ -177,8 +179,14 @@ namespace brechtbaekelandt
                             options.RequireHttpsPermanent = true;
                         }
 
-                        options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                        options.OutputFormatters.Add(new JsonOutputFormatter(new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), ReferenceLoopHandling = ReferenceLoopHandling.Ignore }, ArrayPool<char>.Shared));
+                        var jsonSerializerSettings = new JsonSerializerSettings
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                        };
+                       
+                        options.OutputFormatters.Add(new JsonOutputFormatter(jsonSerializerSettings, ArrayPool<char>.Shared));
+                        options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
                     })
                 .AddJsonOptions(
                     options =>
