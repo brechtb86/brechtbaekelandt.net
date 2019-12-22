@@ -158,11 +158,19 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
         self.subscriberErrors = ko.validation.group(self.subscriber);
 
         self.rssLink = ko.computed(function () {
-            return encodeURI(self.baseUrl() + "/rss?categories=" + self.subscriber.categories().map(c => c.name()).join());
+
+            var categoryNames = "";
+
+            if (self.subscriber.categories().length) {
+                categoryNames = self.subscriber.categories().map(c => c.name()).join();
+
+                return encodeURI(`${self.baseUrl()}/rss?categories=${categoryNames}`);
+            }
+
+            return encodeURI(`${self.baseUrl()}/rss`);
         });
 
         self.hasSubscribed = ko.observable(false);
-        self.atLeastOneCategoryMessage = ko.observable();
 
         self.getRequests = ko.observableArray();
 
@@ -317,14 +325,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
     HomeViewModel.prototype.subscribe = function (subscriber) {
         var self = this;
-
-        self.atLeastOneCategoryMessage(null);
-
-        if (self.subscriber.categories().length === 0) {
-            self.atLeastOneCategoryMessage("you must select at least one category to subscribe.");
-            return;
-        }
-
+        
         if (self.subscriberErrors().length > 0) {
             self.subscriberErrors.showAllMessages();
             return;
