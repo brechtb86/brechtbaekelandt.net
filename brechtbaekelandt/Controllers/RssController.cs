@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Internal;
 
 namespace brechtbaekelandt.Controllers
 {
+    [Route("rss")]
     [Produces("application/xml")]
     public class RssController : BaseController
     {
@@ -34,12 +35,10 @@ namespace brechtbaekelandt.Controllers
                     Items = new List<RssChannelItem>()
                 }
             };
-
+            
             var categoryNames = string.IsNullOrEmpty(categories) ?
+                this._blogDbContext.Categories.Select(category => category.Name) :
                 this._blogDbContext.Categories.Select(category => category.Name)
-                    .OrderBy(categoryName => categoryName) :
-                this._blogDbContext.Categories.Select(category => category.Name)
-                    .OrderBy(categoryName => categoryName)
                     .Where(categoryName => categories
                         .Split(",",StringSplitOptions.RemoveEmptyEntries)
                         .Select(HttpUtility.UrlDecode)
@@ -47,26 +46,20 @@ namespace brechtbaekelandt.Controllers
 
             rss.Channel.Description = $"blog posts for categories '{categoryNames.OrderBy(categoryName => categoryName).Join(", ")}'";
 
-            foreach (var categoryName in categoryNames)
-            {
-                var categoryEntity = this._blogDbContext.Categories
-                    .Include(category => category.PostCategories)
-                    .ThenInclude(postCategory => postCategory.Post)
-                    .ThenInclude(post => post.User)
-                    .FirstOrDefault(category => category.Name == categoryName);
-
-                if (categoryEntity == null)
-                {
-                    continue;
-                }
-
-                foreach (var postEntity in categoryEntity.PostCategories.Select(postCategory => postCategory.Post).OrderByDescending(post => post.Created).Distinct().Where(post => post.IsPostVisible))
+            var postEntities = this._blogDbContext.Posts
+                .Include(post => post.User)
+                .Include(post => post.PostCategories)
+                .ThenInclude(postCategory => postCategory.Category)
+                .Where(post => post.PostCategories.Select(postCategory => postCategory.Category.Name).Any(categoryName => categoryNames.Contains(categoryName)))
+                .OrderByDescending(post => post.Created);
+            
+                foreach (var postEntity in postEntities)
                 {
                     var post = Mapper.Map<Post>(postEntity);
 
                     var rssItem = new RssChannelItem
                     {
-                        Category = categoryName,
+                        Category = post.Categories.Select(category => category.Name).OrderBy(categoryName => categoryName).Join(", "),
                         Guid = post.InternalTitle,
                         Title = post.Title,
                         Description = post.CleanDescription,
@@ -77,7 +70,7 @@ namespace brechtbaekelandt.Controllers
 
                     rss.Channel.Items.Add(rssItem);
                 }
-            }
+            
 
             return this.Ok(rss);
         }

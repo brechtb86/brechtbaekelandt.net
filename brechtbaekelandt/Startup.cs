@@ -148,9 +148,9 @@ namespace brechtbaekelandt
                         // Cookie settings
                         options.Cookie.HttpOnly = true;
                         options.Cookie.Expiration = TimeSpan.FromDays(150);
-                        options.LoginPath = "/Account/SignIn"; // If the LoginPath is not set here, ASP.NET Core will default to /Account/Login
-                        options.LogoutPath = "/Account/SignOut"; // If the LogoutPath is not set here, ASP.NET Core will default to /Account/Logout
-                        options.AccessDeniedPath = "/Account/AccessDenied"; // If the AccessDeniedPath is not set here, ASP.NET Core will default to /Account/AccessDenied
+                        options.LoginPath = "/account/sign-in";
+                        options.LogoutPath = "/account/sign-out";
+                        options.AccessDeniedPath = "/account/access-denied";
                         options.SlidingExpiration = true;
                     })
                 .AddCookie(IdentityConstants.ExternalScheme,

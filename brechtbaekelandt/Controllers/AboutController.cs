@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace brechtbaekelandt.Controllers
 {
+    [Route("about")]
     public class AboutController : BaseController
     {
         private readonly ApplicationUserManager _applicationUserManager;

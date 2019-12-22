@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace brechtbaekelandt.Controllers
 {
+    [Route("admin")]
     public class AdminController : BaseController
     {
         private readonly BlogDbContext _blogDbContext;
