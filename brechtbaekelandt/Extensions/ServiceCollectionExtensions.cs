@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using AutoMapper;
 using brechtbaekelandt.Identity;
@@ -33,20 +34,13 @@ namespace brechtbaekelandt.Extensions
                 cfg.CreateMap<Identity.Models.ApplicationUser, User>();
 
                 cfg.CreateMap<Data.Entities.Post, Post>()
-                    .ForMember(
-                    dest => dest.Categories,
-                    opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name })))
-                    .ForMember(
-                        dest => dest.Tags,
-                        opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.Tags) ? src.Tags.Split(",", StringSplitOptions.None).ToArray() : new string[0])
-                    );
+                    .ForMember(dest => dest.Categories,opt => opt.MapFrom(src => src.PostCategories.Select(pc => new Category() { Id = pc.CategoryId, Name = pc.Category.Name })))
+                    .ForMember(dest => dest.Tags,opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.Tags) ? src.Tags.Split(",", StringSplitOptions.None).ToArray() : new string[0]));
 
                 cfg.CreateMap<Data.Entities.Post, ArchivedPost>();
 
                 cfg.CreateMap<Data.Entities.Subscriber, Subscriber>()
-                   .ForMember(
-                   dest => dest.Categories,
-                   opt => opt.MapFrom(src => src.SubscriberCategories.Select(sc => new Category() { Id = sc.CategoryId, Name = sc.Category.Name })));
+                   .ForMember(dest => dest.Categories, opt => opt.MapFrom(src => src.SubscriberCategories.Select(sc => new Category() { Id = sc.CategoryId, Name = sc.Category.Name })));
 
                 cfg.CreateMap<Data.Entities.Comment, Comment>();
                 cfg.CreateMap<Data.Entities.Category, Category>();
@@ -57,18 +51,21 @@ namespace brechtbaekelandt.Extensions
 
                 cfg.CreateMap<Post, Data.Entities.Post>()
                     .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>())
-                    .ForMember(
-                        dest => dest.Tags,
-                        opt => opt.MapFrom(src => string.Join(',', src.Tags))
-                    );
-                cfg.CreateMap<Subscriber, Data.Entities.Subscriber>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
-                cfg.CreateMap<Comment, Data.Entities.Comment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
-                cfg.CreateMap<Category, Data.Entities.Category>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
-                cfg.CreateMap<User, Data.Entities.User>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+                    .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => string.Join(',', src.Tags)));
+                cfg.CreateMap<Subscriber, Data.Entities.Subscriber>()
+                    .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+                cfg.CreateMap<Comment, Data.Entities.Comment>()
+                    .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+                cfg.CreateMap<Category, Data.Entities.Category>()
+                    .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+                cfg.CreateMap<User, Data.Entities.User>()
+                    .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
                 cfg.CreateMap<ApplicationUser, Data.Entities.User>();
                 cfg.CreateMap<Identity.Models.ApplicationUser, Data.Entities.User>();
-                cfg.CreateMap<Attachment, Data.Entities.Attachment>().ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
-                
+                cfg.CreateMap<Attachment, Data.Entities.Attachment>()
+                    .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
+
+               
             });
         }
 

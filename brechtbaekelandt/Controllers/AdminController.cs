@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace brechtbaekelandt.Controllers
 {
@@ -17,17 +18,21 @@ namespace brechtbaekelandt.Controllers
         private readonly BlogDbContext _blogDbContext;
 
         private readonly ApplicationUserManager _applicationUserManager;
-
-        private const int _postsPerPage = 5;
-
+        
         public AdminController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager) : base(applicationUserManager)
         {
             this._blogDbContext = blogDbContext;
             this._applicationUserManager = applicationUserManager;
         }
-
+        
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
+            if (!this.HttpContext.User.Identity.IsAuthenticated)
+            {
+                return this.NotFound();
+            }
+
             var viewModel = new AdminViewModel
             {
                 Posts = Mapper.Map<ICollection<Post>>(this._blogDbContext.Posts.Include(p => p.User).Include(p => p.Attachments).Include(p => p.PostCategories).ThenInclude(pc => pc.Category).OrderByDescending(p => p.Created)),
@@ -36,7 +41,7 @@ namespace brechtbaekelandt.Controllers
                 CurrentUser = Mapper.Map<User>(await this._applicationUserManager.FindByNameAsync(HttpContext.User?.Identity.Name))
             };
 
-            return View(viewModel);
+            return this.View(viewModel);
         }
     }
 }

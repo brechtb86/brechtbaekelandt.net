@@ -12,14 +12,12 @@ namespace brechtbaekelandt.Controllers
 {
     public class AccountController : BaseController
     {
-        private readonly ApplicationUserManager _applicationUserManager;
         private readonly ApplicationSignInManager _applicationSignInManager;
         
         public AccountController(
             ApplicationUserManager applicationUserManager,
             ApplicationSignInManager applicationSignInManager) : base(applicationUserManager)
         {
-            this._applicationUserManager = applicationUserManager;
             this._applicationSignInManager = applicationSignInManager;
         }
 
