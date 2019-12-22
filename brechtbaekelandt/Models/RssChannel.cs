@@ -10,8 +10,6 @@ namespace brechtbaekelandt.Models
     [XmlType(TypeName = "channel"), Serializable]
     public class RssChannel
     {
-        private readonly List<RssChannelItem> _items = new List<RssChannelItem>();
-
         [XmlElement(ElementName = "language")] 
         public string Language { get; set; }
 
