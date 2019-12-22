@@ -13,7 +13,7 @@ namespace brechtbaekelandt.Models
         private readonly List<RssChannelItem> _items = new List<RssChannelItem>();
 
         [XmlElement(ElementName = "language")] 
-        public string Language => "en-US";
+        public string Language { get; set; }
 
         [XmlElement(ElementName = "title")]
         public string Title { get; set; }
