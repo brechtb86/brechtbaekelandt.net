@@ -40,6 +40,8 @@ namespace brechtbaekelandt.Models
 
         public int Likes { get; set; }
 
+        public bool SubscriberEmailSent { get; set; }
+
         [Required(ErrorMessage = "you didn't select a category!")]
         public virtual ICollection<Category> Categories { get; set; }
 
