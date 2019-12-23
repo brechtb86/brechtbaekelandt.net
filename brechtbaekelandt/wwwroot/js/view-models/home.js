@@ -38,7 +38,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             const documentHeight = $(document).height();
             var documentBottom = scrollTop + windowHeight;
 
-            if (scrollTop > lastScrollTop && (((window.innerHeight + window.scrollY) >= document.body.offsetHeight || (scrollTop + 10 >= documentHeight - windowHeight))) && !self.isLastPage()) {
+            if (scrollTop > lastScrollTop && (((window.innerHeight + window.scrollY) >= document.body.offsetHeight || (scrollTop + 120 >= documentHeight - windowHeight))) && !self.isLastPage()) {
                 self.getPosts(true);
             }
 
@@ -330,7 +330,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
             self.subscriberErrors.showAllMessages();
             return;
         }
-
+        
         $.ajax({
             url: "../api/blog/subscribe",
             type: "POST",
