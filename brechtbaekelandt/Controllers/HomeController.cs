@@ -94,6 +94,12 @@ namespace brechtbaekelandt.Controllers
             return this.View(vm);
         }
 
+        [HttpGet("archive")]
+        public IActionResult Archive()
+        {
+            return this.RedirectToActionPermanent(nameof(BlogController.Archive), "Blog");
+        }
+
         [HttpGet("sitemap")]
         public IActionResult Sitemap()
         {
