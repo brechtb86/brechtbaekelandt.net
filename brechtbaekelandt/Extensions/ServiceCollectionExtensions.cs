@@ -65,7 +65,8 @@ namespace brechtbaekelandt.Extensions
                 cfg.CreateMap<Attachment, Data.Entities.Attachment>()
                     .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
 
-               
+                cfg.CreateMap<Subscriber, Data.Entities.Subscriber>()
+                    .ForMember(dest => dest.Id, opt => opt.ResolveUsing<EmptyGuidValueResolver>());
             });
         }
 

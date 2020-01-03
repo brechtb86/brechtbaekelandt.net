@@ -48,6 +48,10 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 for (let i = 0; i < postAnchors.length; i++) {
                     const anchor = postAnchors[i];
 
+                    if (anchor == null) {
+                        return;
+                    }
+
                     const elementTop = $(anchor).offset().top;
                     const elementBottom = elementTop + $(anchor).height();
 
