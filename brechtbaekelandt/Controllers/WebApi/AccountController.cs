@@ -15,9 +15,8 @@ using System.Threading.Tasks;
 
 namespace brechtbaekelandt.Controllers.WebApi
 {
-    [Produces("application/json")]
     [Route("api/account")]
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         private readonly ApplicationUserManager _applicationUserManager;
 
@@ -27,6 +26,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             ApplicationUserManager applicationUserManager, BlogDbContext blogDbContext)
         {
             this._applicationUserManager = applicationUserManager;
+
             this._blogDbContext = blogDbContext;
         }
 

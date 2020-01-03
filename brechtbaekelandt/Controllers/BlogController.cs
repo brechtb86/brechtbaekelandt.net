@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using brechtbaekelandt.Services;
 
 namespace brechtbaekelandt.Controllers
 {
@@ -21,9 +22,13 @@ namespace brechtbaekelandt.Controllers
     {
         private readonly BlogDbContext _blogDbContext;
 
-        public BlogController(BlogDbContext blogDbContext, ApplicationUserManager applicationUserManager) : base(applicationUserManager)
+        private readonly ISerializerService _serializerService;
+
+        public BlogController(BlogDbContext blogDbContext, ISerializerService serializerService, ApplicationUserManager applicationUserManager) : base(applicationUserManager)
         {
             this._blogDbContext = blogDbContext;
+
+            this._serializerService = serializerService;
         }
         
         [HttpGet("post/{internalTitle}")]
@@ -66,6 +71,14 @@ namespace brechtbaekelandt.Controllers
             };
 
             return this.View(vm);
+        }
+
+        [HttpGet("confirm-subscription")]
+        public async Task<IActionResult> ConfirmSubscription(string s)
+        {
+            var subscriber = this._serializerService.DeserializeSubscriber(s);
+
+            return this.View();
         }
 
         [HttpGet("sitemap")]

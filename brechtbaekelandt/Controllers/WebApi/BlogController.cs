@@ -30,14 +30,14 @@ using User = brechtbaekelandt.Data.Entities.User;
 namespace brechtbaekelandt.Controllers.WebApi
 {
     [Route("api/blog")]
-    [Produces("application/json")]
-    public class BlogController : Controller
+    public class BlogController : BaseController
     {
         private readonly BlogDbContext _blogDbContext;
 
         private readonly ApplicationUserManager _applicationUserManager;
 
         private readonly IEmailService _emailService;
+        private readonly ISerializerService _serializerService;
 
         private readonly IHostingEnvironment _hostingEnvironment;
 
@@ -45,7 +45,7 @@ namespace brechtbaekelandt.Controllers.WebApi
 
         private readonly CaptchaHelper _captchaHelper;
 
-        public BlogController(BlogDbContext blogDbContext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IEmailService emailService, IHostingEnvironment hostingEnvironment)
+        public BlogController(BlogDbContext blogDbContext, ApplicationUserManager userManager, CaptchaHelper captchaHelper, IEmailService emailService, ISerializerService serializerService, IHostingEnvironment hostingEnvironment)
         {
             this._applicationUserManager = userManager;
             this._blogDbContext = blogDbContext;
@@ -54,6 +54,7 @@ namespace brechtbaekelandt.Controllers.WebApi
             this._hostingEnvironment = hostingEnvironment;
             this._emailService = emailService;
             this._emailService.TemplateRootPath = this._hostingEnvironment.ContentRootPath;
+            this._serializerService = serializerService;
         }
 
         [HttpGet]
@@ -444,38 +445,29 @@ namespace brechtbaekelandt.Controllers.WebApi
         [Validate]
         public async Task<IActionResult> SubscribeAsyncActionResult([FromBody]Models.Subscriber subscriber)
         {
+            var existingSubscriber = this._blogDbContext.Subscribers.FirstOrDefault(s => s.EmailAddress == subscriber.EmailAddress);
+
+            //if (existingSubscriber != null)
+            //{
+            //    return this.BadRequest("this email address has already subscribed.");
+            //}
+
+            var subscriberEntity = Mapper.Map<Data.Entities.Subscriber>(subscriber);
+
+            this._blogDbContext.Subscribers.Add(subscriberEntity);
+
+            await this._blogDbContext.SaveChangesAsync();
+
             await this._emailService.SendSubscribedEmailAsync(subscriber.EmailAddress, this.CreateSubscribeConfirmationLink(subscriber), subscriber.Categories);
 
             return this.Json(new { message = "you have successfully subscribed!" });
         }
-        
+
         private string CreateSubscribeConfirmationLink(Models.Subscriber subscriber)
         {
-            var subscriberString = this.SerializeSubscriber(subscriber);
+            var subscriberString = this._serializerService.SerializeSubscriber(subscriber);
 
-            return $"http://www.brechtbaekelandt.net/subscriber/confirm?subscriber={subscriberString}";
-        }
-
-        private string SerializeSubscriber(Models.Subscriber subscriber)
-        {
-            using (var ms = new MemoryStream())
-            {
-                new BinaryFormatter().Serialize(ms, subscriber);
-                return Convert.ToBase64String(ms.ToArray());
-            }
-        }
-
-        private Models.Subscriber DeserializeSubscriber(string base64String)
-        {
-            var bytes = Convert.FromBase64String(base64String);
-
-            using (var ms = new MemoryStream(bytes, 0, bytes.Length))
-            {
-                ms.Write(bytes, 0, bytes.Length);
-                ms.Position = 0;
-
-                return new BinaryFormatter().Deserialize(ms) as Models.Subscriber;
-            }
+            return $"{this.BaseUrl}/blog/confirm-subscription?s={subscriberString}";
         }
 
         private string EnsureCorrectFilename(string filename)

@@ -6,9 +6,8 @@ using Newtonsoft.Json.Serialization;
 
 namespace brechtbaekelandt.Controllers.WebApi
 {
-    [Produces("application/json")]
     [Route("api/captcha")]
-    public class CaptchaController : Controller
+    public class CaptchaController : BaseController
     {
         private readonly CaptchaHelper _captchaHelper;
 

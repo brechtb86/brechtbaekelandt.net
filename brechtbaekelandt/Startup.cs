@@ -95,6 +95,9 @@ namespace brechtbaekelandt
                .TryAddScoped<IEmailService, EmailService>();
 
             services
+                .TryAddScoped<ISerializerService, SerializerService>();
+
+            services
                 .TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services
                 .TryAddSingleton(Configuration);
