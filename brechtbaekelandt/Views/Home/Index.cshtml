@@ -45,6 +45,9 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-8">
             <h2 class="title">brecht's blog</h2>
             <small>a blog about development, electronics and other stuff.</small>
+            <div class="visible-xs visible-sm visible-md hidden-lg">
+                <button type="button" class="btn btn-lg btn-default btn-subscribe stretch-horizontal" data-bind="click: function() { showSubscribe(true); }"><span class="far fa-paper-plane"></span> subscribe</button>
+            </div>
             <hr />
             <form class="row">
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -150,7 +153,7 @@
             </p>
             <hr />
             <a asp-route-controller="Blog" asp-route-action="Archive" class="btn btn-lg btn-default btn-archive stretch-horizontal">archive</a>
-            <hr/>
+            <hr />
             <!-- ko if : tags().length > 0 -->
             <label>tags:</label>
             <!-- ko foreach: tags -->
@@ -187,20 +190,20 @@
                             </fieldset>
                         </div>
                         @*<label>enter your email address</label>
-                        <div class="text-left">
-                            <div class="form-group" data-bind="validationElement: subscriber.emailAddress">
-                                <div class="input-group" data-bind="css: { 'has-success': subscriber.emailAddress.isValid }">
-                                    <span class="input-group-addon">
-                                        <i class="fas fa-at"></i>
-                                    </span>
-                                    <input type="email" class="form-control" placeholder="your email address" data-bind="textInput: subscriber.emailAddress, disable: hasSubscribed" />
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe(subscriber) }, css: { 'btn-success':  subscriber.emailAddress.isValid }, enable: subscriber.emailAddress.isValid() && !hasSubscribed()"><i class="far fa-paper-plane"></i></button>
-                                    </span>
+                            <div class="text-left">
+                                <div class="form-group" data-bind="validationElement: subscriber.emailAddress">
+                                    <div class="input-group" data-bind="css: { 'has-success': subscriber.emailAddress.isValid }">
+                                        <span class="input-group-addon">
+                                            <i class="fas fa-at"></i>
+                                        </span>
+                                        <input type="email" class="form-control" placeholder="your email address" data-bind="textInput: subscriber.emailAddress, disable: hasSubscribed" />
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-primary" type="button" data-bind="click: function(){ $root.subscribe(subscriber) }, css: { 'btn-success':  subscriber.emailAddress.isValid }, enable: subscriber.emailAddress.isValid() && !hasSubscribed()"><i class="far fa-paper-plane"></i></button>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <p class="line-on-sides"><span>or</span></p>*@
+                            <p class="line-on-sides"><span>or</span></p>*@
                         <label>copy the RSS link</label>
                         <div class="input-group">
                             <span class="input-group-addon">
