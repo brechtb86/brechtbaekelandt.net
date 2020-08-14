@@ -85,7 +85,10 @@
             <!-- ko ifnot: isLoading -->
             <!-- ko if: posts().length === 0 -->
             <div class="text-center">no posts found...</div>
-            <!-- /ko -->
+            <!-- /ko -->            
+            <!-- ko foreach: pinnedPosts -->           
+            <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root }, afterRender: function() { $root.initFancyBox(); $root.initAddThis(); } }"></div>
+            <!-- /ko -->          
             <!-- ko foreach: posts -->
             <a data-bind="attr: { href: '#post' + ($index() + 1)}"></a>
             <div data-bind="template: { name: 'postPreviewTemplate', data: { post: $data, viewModel: $root }, afterRender: function() { $root.initFancyBox(); $root.initAddThis(); } }"></div>

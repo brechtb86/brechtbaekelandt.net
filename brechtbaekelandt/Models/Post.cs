@@ -14,6 +14,8 @@ namespace brechtbaekelandt.Models
 
         public bool IsPostVisible { get; set; }
 
+        public bool IsPostPinned { get; set; }
+
         [Required(ErrorMessage= "you didn't fill in the title!")]
         public string Title { get; set; }
 

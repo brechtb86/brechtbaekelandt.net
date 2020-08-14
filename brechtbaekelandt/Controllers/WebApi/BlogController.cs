@@ -67,6 +67,7 @@ namespace brechtbaekelandt.Controllers.WebApi
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category)
                 .Where(p =>
+                    !p.IsPostPinned &&
                     (categoryId == null ||
                      p.PostCategories.Any(pc => pc.Category.Id == categoryId)) &&
                     (categoryName == null ||

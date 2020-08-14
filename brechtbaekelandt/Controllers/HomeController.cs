@@ -34,6 +34,7 @@ namespace brechtbaekelandt.Controllers
                 .Include(p => p.PostCategories)
                 .ThenInclude(pc => pc.Category)
                 .Where(p =>
+                !p.IsPostPinned &&
                     (categoryId == null ||
                      p.PostCategories.Any(pc => pc.Category.Id == categoryId)) &&
                     (categoryName == null ||
@@ -51,6 +52,16 @@ namespace brechtbaekelandt.Controllers
                     p.IsPostVisible
                 );
 
+            var pinnedPostEntities = this._blogDbContext.Posts
+               .Include(p => p.User)
+               .Include(p => p.Attachments)
+               .Include(p => p.PostCategories)
+               .ThenInclude(pc => pc.Category)
+               .Where(p =>
+               p.IsPostPinned &&
+                   p.IsPostVisible
+               );
+
             if (includeComments)
             {
                 postEntities = postEntities.Include(p => p.Comments);
@@ -62,6 +73,8 @@ namespace brechtbaekelandt.Controllers
 
             postEntities = postEntities.OrderByDescending(p => p.Created)
                 .Take(PostsPerPage * currentPage);
+
+            pinnedPostEntities = pinnedPostEntities.OrderByDescending(p => p.Created);
 
             if (includeComments)
             {
@@ -84,6 +97,7 @@ namespace brechtbaekelandt.Controllers
                 PostsPerPage = PostsPerPage,
                 AllPostsUrls = allPostsUrls,
                 Posts = Mapper.Map<ICollection<Models.Post>>(postEntities.ToCollection()),
+                PinnedPosts = Mapper.Map<ICollection<Models.Post>>(pinnedPostEntities.ToCollection()),
                 Categories = Mapper.Map<ICollection<Models.Category>>(categoryEntities.ToCollection()),
                 Tags = allTags,
                 SearchTermsFilter = searchTerms,

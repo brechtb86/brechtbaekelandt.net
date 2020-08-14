@@ -48,7 +48,7 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                 for (let i = 0; i < postAnchors.length; i++) {
                     const anchor = postAnchors[i];
 
-                    if (anchor == null) {
+                    if (anchor === null) {
                         return;
                     }
 
@@ -68,8 +68,22 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
 
         self.likedPostsIds = $.cookie("likedPostsIds") ? ko.mapping.fromJSON($.cookie("likedPostsIds")) : ko.observableArray();
 
+        function sortPostByDateDescending(post1, post2) {
+            return Date.parse(post2.created) - Date.parse(post1.created);
+        }
+
         if (self.posts) {
             self.posts().forEach(function (post) {
+                post.liked = ko.observable(self.likedPostsIds().filter(function (postId) {
+                    return postId === post.id();
+                }).length > 0);
+
+                self.addStyledDescriptionToPost(post);
+            });            
+        }
+
+        if (self.pinnedPosts) {
+            self.pinnedPosts().forEach(function (post) {
                 post.liked = ko.observable(self.likedPostsIds().filter(function (postId) {
                     return postId === post.id();
                 }).length > 0);

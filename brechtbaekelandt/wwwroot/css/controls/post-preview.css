@@ -1,30 +1,30 @@
 ﻿.post-preview .post-preview-description a, .post-preview .post-preview-content a {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .post-preview {
-    margin: 0 0 40px 0;
+  margin: 0 0 40px 0;
 }
 
-    .post-preview hr {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
+  .post-preview hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
-    .post-preview ul, .post-preview ol {
-        padding-left: 20px;
-    }
+  .post-preview ul, .post-preview ol {
+    padding-left: 20px;
+  }
 
 .post-preview-title {
 }
 
-    .post-preview-title > h3 {
-        margin-bottom: 10px;
-    }
+  .post-preview-title > h3 {
+    margin-bottom: 10px;
+  }
 
-    .post-preview-title a {
-        text-decoration: none;
-    }
+  .post-preview-title a {
+    text-decoration: none;
+  }
 
 /*.post-preview-title > h3 > a {
             border-bottom: 2px solid #540804;
@@ -36,19 +36,19 @@
             }*/
 
 .post-preview-categories {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .post-preview-tags {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 
 .post-picture.post-preview-picture {
-    max-width: 30%;
-    vertical-align: top;
-    float: left;
-    margin: 0 30px 10px 0;
+  max-width: 30%;
+  vertical-align: top;
+  float: left;
+  margin: 0 30px 10px 0;
 }
 
 .post-preview-description {
@@ -58,16 +58,21 @@
 }
 
 .post-preview-comments-likes-share {
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-    -ms-flex-align: center;
-    -webkit-align-items: center;
-    -webkit-box-align: center;
-    align-items: center;
-    justify-content: flex-start;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -webkit-box-align: center;
+  align-items: center;
+  justify-content: flex-start;
 }
 
-    .post-preview-comments-likes-share > .addthis_inline_share_toolbox {
-        margin-top: 9px;
-    }
+  .post-preview-comments-likes-share > .addthis_inline_share_toolbox {
+    margin-top: 9px;
+  }
+
+
+.pinned {
+  color: #9b1d20;
+}
