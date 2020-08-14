@@ -24,6 +24,8 @@ namespace brechtbaekelandt.ViewModels
 
         public ICollection<Post> Posts { get; set; }
 
+        public ICollection<Post> PinnedPosts { get; set; }
+
         public ICollection<Category> Categories { get; set; }
     }
 }

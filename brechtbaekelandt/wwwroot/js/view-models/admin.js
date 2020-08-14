@@ -123,6 +123,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         self.newPost.pictureUrl = ko.observable();
         self.newPost.attachments = ko.observableArray();
         self.newPost.isPostVisible = ko.observable(false);
+        self.newPost.isPostPinned = ko.observable(false);
         self.newPost.url = ko.observable();
         self.newPost.pictureToUpload = ko.observable();
         self.newPost.pictureToUpload.subscribe(function (picture) {

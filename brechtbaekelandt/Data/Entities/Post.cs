@@ -11,6 +11,8 @@ namespace brechtbaekelandt.Data.Entities
 
         public bool IsPostVisible { get; set; }
 
+        public bool IsPostPinned { get; set; }
+
         public string Title { get; set; }
 
         public string InternalTitle { get; set; }
@@ -33,6 +35,6 @@ namespace brechtbaekelandt.Data.Entities
 
         public int Likes { get; set; }
 
-        public bool SubscriberEmailSent { get; set; }
+        public bool SubscriberEmailSent { get; set; }      
     }
 }
