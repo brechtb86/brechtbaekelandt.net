@@ -41,6 +41,9 @@
                 <input type="checkbox" data-bind="checked: isPostVisible, click: function() { $root.updatePost($data); return true; }">
                 <span class="slider"></span>
             </label>
+            <!-- ko if: isPostPinned -->
+            <i class="fas fa-thumbtack pinned"></i>
+            <!-- /ko -->
             <a href="" data-bind="text: title(), click: function() { $root.selectedPost($root.clone($data)); $root.resetMessages(); $root.showPostEdit(true); }"></a>
             <span>|</span>
             <span data-bind="text: moment(created()).format('DD/MM/YYYY, HH:mm:ss')"></span>
