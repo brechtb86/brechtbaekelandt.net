@@ -52,6 +52,12 @@ brechtbaekelandt.home = (function ($, jQuery, ko, undefined) {
                         return;
                     }
 
+                    const $anchor = $(anchor);
+
+                    if ($anchor.length === 0) {
+                        return;
+                    }
+
                     const elementTop = $(anchor).offset().top;
                     const elementBottom = elementTop + $(anchor).height();
 

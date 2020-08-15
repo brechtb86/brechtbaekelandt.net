@@ -540,6 +540,15 @@
                             </label>
                         </label>
                     </div>
+                    <div class="form-group">
+                        <label>
+                            make post pinned:
+                            <label class="switch">
+                                <input type="checkbox" data-bind="checked: post.isPostPinned">
+                                <span class="slider"></span>
+                            </label>
+                        </label>
+                    </div>
                     <!-- ko if: viewModel.attachmentsUploadErrorMessage -->
                     <div class="alert alert-danger">
                         <strong>error!</strong> <span data-bind="text: viewModel.attachmentsUploadErrorMessage"></span>

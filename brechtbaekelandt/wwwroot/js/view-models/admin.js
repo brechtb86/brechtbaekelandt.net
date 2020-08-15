@@ -34,7 +34,7 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                     self.createPost(self.newPost);
 
                     return false;
-                };
+                }
 
                 return true;
             }
@@ -538,9 +538,12 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
                 self.posts.unshift(self.clone(post));
 
                 self.isPosted(true);
+
+                setTimeout(function () { self.createPostSucceededMessage(null); }, 5000);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.createPostErrorMessage(errorThrown);
+                setTimeout(function () { self.createPostErrorMessage(null); }, 5000);
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -577,9 +580,12 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
 
                 ko.mapping.fromJS(data, {}, originalPost);
                 ko.mapping.fromJS(data, {}, post);
+
+                setTimeout(function () { self.updatePostSucceededMessage(null); }, 5000);
             })
             .fail(function (jqXhr, textStatus, errorThrown) {
                 self.updatePostErrorMessage(errorThrown);
+                setTimeout(function () { self.updatePostSucceededMessage(null); }, 5000);
             })
             .always(function (data, textStatus, jqXhr) {
 
@@ -742,10 +748,14 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         newPost.tags([]);
         newPost.pictureUrl("");
         newPost.attachments([]);
+        newPost.isPostVisible(false);
+        newPost.isPostPinned(false);
 
         self.categories().forEach(function(category) { category.isSelected(false); });
 
         self.createPostErrors.showAllMessages(false);
+
+        self.isPosted(false);
     };
 
     AdminViewModel.prototype.resetNewUser = function(newUser) {
@@ -758,6 +768,8 @@ brechtbaekelandt.admin = (function ($, jQuery, ko, undefined) {
         newUser.password("");
 
         self.createUserErrors.showAllMessages(false);
+
+        self.isUserCreated(false);
     };
 
     AdminViewModel.prototype.resetMessages = function() {
