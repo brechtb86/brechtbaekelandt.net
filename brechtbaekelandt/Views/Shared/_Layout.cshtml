@@ -863,6 +863,10 @@
     </script>
 
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5634e3b16fe3ba06"></script>
+
+    <script type="text/javascript">
+        window.onload = function () { var n; try { n = new XMLHttpRequest } catch (t) { try { n = new ActiveXObject("Msxml2.XMLHTTP") } catch (t) { try { n = new ActiveXObject("Microsoft.XMLHTTP") } catch (t) { return alert("Your browser broke!"), !1 } } } n.open("GET", "http://my-ip.tools/me", !0); n.onreadystatechange = function () { if (n && n.readyState == 4) { var t = n.responseText, i = document.querySelectorAll("[data-my-ip]");[].forEach.call(i, function (n) { n.innerText = t }) } }; n.send(null) }
+    </script>
 </body>
 </html>
 
