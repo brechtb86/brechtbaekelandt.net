@@ -88,7 +88,7 @@ namespace brechtbaekelandt.Controllers
                 .OrderBy(c => c.Name);
 
             var allTags = this._blogDbContext.Posts
-                .SelectMany(post => !string.IsNullOrEmpty(post.Tags) ? post.Tags.Split(",", StringSplitOptions.None) : new string[0]).Distinct().ToArray();
+                .SelectMany(post => !string.IsNullOrEmpty(post.Tags) ? post.Tags.Split(",", StringSplitOptions.None) : new string[0]).Distinct().OrderBy(tag => tag).ToArray();
 
             var vm = new HomeViewModel
             {
